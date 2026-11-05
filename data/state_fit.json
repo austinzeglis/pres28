@@ -1,0 +1,24 @@
+{
+ "cfg": {
+  "factors": 6,
+  "kernelWidth": 1,
+  "regionShare": 0.35,
+  "leanWeights": [
+   0.7,
+   0.3,
+   0
+  ],
+  "trend": 0.25,
+  "elasticityKeep": 0,
+  "demoDrift": 0
+ },
+ "stray": {
+  "sharedStray": 2.253915719937042,
+  "ownStray": 4.104083102889205,
+  "districtExtra": 3.5
+ },
+ "sharedShare": 0.23171961496055019,
+ "totalStray": 4.682268060246017,
+ "turbulenceDf": 4,
+ "built": "2026-11-05T21:16:13.758Z"
+}

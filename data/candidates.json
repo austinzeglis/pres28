@@ -1,0 +1,1561 @@
+{
+ "built": "2026-11-05T21:20:03.727Z",
+ "partyMedian": {
+  "D": -0.385,
+  "R": 0.538
+ },
+ "people": {
+  "gavin-newsom": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "CA",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 18.36
+    },
+    {
+     "year": 2018,
+     "state": "CA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 23.9
+    }
+   ],
+   "nominate": null
+  },
+  "kamala-harris": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "josh-shapiro": {
+   "home": [
+    "PA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "PA",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 22.1
+    },
+    {
+     "year": 2022,
+     "state": "PA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 14.78
+    }
+   ],
+   "nominate": null
+  },
+  "pete-buttigieg": {
+   "home": [
+    "IN",
+    "MI"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "alexandria-ocasio-cortez": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.333
+  },
+  "mark-kelly": {
+   "home": [
+    "AZ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "AZ",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 4.88
+    }
+   ],
+   "nominate": -0.274
+  },
+  "jb-pritzker": {
+   "home": [
+    "IL"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "IL",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 22.63
+    },
+    {
+     "year": 2022,
+     "state": "IL",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 12.54
+    }
+   ],
+   "nominate": null
+  },
+  "andy-beshear": {
+   "home": [
+    "KY"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2023,
+     "state": "KY",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 5.07
+    },
+    {
+     "year": 2019,
+     "state": "KY",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 0.35
+    }
+   ],
+   "nominate": null
+  },
+  "wes-moore": {
+   "home": [
+    "MD"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "MD",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 29.57
+    },
+    {
+     "year": 2022,
+     "state": "MD",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 32.41
+    }
+   ],
+   "nominate": null
+  },
+  "raphael-warnock": {
+   "home": [
+    "GA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "GA",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 2.8
+    }
+   ],
+   "nominate": -0.443
+  },
+  "ruben-gallego": {
+   "home": [
+    "AZ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "AZ",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 2.41
+    }
+   ],
+   "nominate": -0.356
+  },
+  "cory-booker": {
+   "home": [
+    "NJ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "NJ",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 26.98
+    },
+    {
+     "year": 2020,
+     "state": "NJ",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 16.31
+    }
+   ],
+   "nominate": -0.556
+  },
+  "chris-murphy": {
+   "home": [
+    "CT"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "CT",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 18.88
+    }
+   ],
+   "nominate": -0.29
+  },
+  "elissa-slotkin": {
+   "home": [
+    "MI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "MI",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 0.34
+    }
+   ],
+   "nominate": -0.367
+  },
+  "ro-khanna": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.458
+  },
+  "gretchen-whitmer": {
+   "home": [
+    "MI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "MI",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 10.53
+    },
+    {
+     "year": 2018,
+     "state": "MI",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 9.56
+    }
+   ],
+   "nominate": null
+  },
+  "jared-polis": {
+   "home": [
+    "CO"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "CO",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 19.35
+    },
+    {
+     "year": 2018,
+     "state": "CO",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 10.62
+    }
+   ],
+   "nominate": null
+  },
+  "tim-walz": {
+   "home": [
+    "MN"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "MN",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 7.66
+    },
+    {
+     "year": 2018,
+     "state": "MN",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 11.41
+    }
+   ],
+   "nominate": null
+  },
+  "amy-klobuchar": {
+   "home": [
+    "MN"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "MN",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 12.83
+    },
+    {
+     "year": 2024,
+     "state": "MN",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 15.7
+    }
+   ],
+   "nominate": -0.278
+  },
+  "rahm-emanuel": {
+   "home": [
+    "IL"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "jon-ossoff": {
+   "home": [
+    "GA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "GA",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 18.05
+    }
+   ],
+   "nominate": -0.464
+  },
+  "tammy-duckworth": {
+   "home": [
+    "IL"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "IL",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 15.32
+    }
+   ],
+   "nominate": -0.347
+  },
+  "brian-schatz": {
+   "home": [
+    "HI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "HI",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 45.17
+    }
+   ],
+   "nominate": -0.441
+  },
+  "chris-van-hollen": {
+   "home": [
+    "MD"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "MD",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 31.7
+    }
+   ],
+   "nominate": null
+  },
+  "tammy-baldwin": {
+   "home": [
+    "WI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "WI",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 0.85
+    }
+   ],
+   "nominate": -0.484
+  },
+  "mark-warner": {
+   "home": [
+    "VA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "VA",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 22.59
+    }
+   ],
+   "nominate": -0.216
+  },
+  "elizabeth-warren": {
+   "home": [
+    "MA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "MA",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 19.81
+    }
+   ],
+   "nominate": -0.745
+  },
+  "john-fetterman": {
+   "home": [
+    "PA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "PA",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 4.9
+    }
+   ],
+   "nominate": -0.177
+  },
+  "jasmine-crockett": {
+   "home": [
+    "TX"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.495
+  },
+  "pramila-jayapal": {
+   "home": [
+    "WA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.607
+  },
+  "maura-healey": {
+   "home": [
+    "MA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "MA",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 27.65
+    },
+    {
+     "year": 2022,
+     "state": "MA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 29.17
+    }
+   ],
+   "nominate": null
+  },
+  "katie-hobbs": {
+   "home": [
+    "AZ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "AZ",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 12.83
+    },
+    {
+     "year": 2022,
+     "state": "AZ",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 0.67
+    }
+   ],
+   "nominate": null
+  },
+  "josh-green": {
+   "home": [
+    "HI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "HI",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 45.29
+    },
+    {
+     "year": 2022,
+     "state": "HI",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 26.32
+    }
+   ],
+   "nominate": null
+  },
+  "josh-stein": {
+   "home": [
+    "NC"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "NC",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 14.82
+    }
+   ],
+   "nominate": null
+  },
+  "roy-cooper": {
+   "home": [
+    "NC"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "NC",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 19.63
+    },
+    {
+     "year": 2020,
+     "state": "NC",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 4.51
+    }
+   ],
+   "nominate": null
+  },
+  "gina-raimondo": {
+   "home": [
+    "RI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2018,
+     "state": "RI",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 15.46
+    }
+   ],
+   "nominate": null
+  },
+  "beto-orourke": {
+   "home": [
+    "TX"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "TX",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -10.89
+    },
+    {
+     "year": 2018,
+     "state": "TX",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": -2.56
+    }
+   ],
+   "nominate": null
+  },
+  "stacey-abrams": {
+   "home": [
+    "GA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "GA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -7.53
+    },
+    {
+     "year": 2018,
+     "state": "GA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -1.39
+    }
+   ],
+   "nominate": null
+  },
+  "xavier-becerra": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "CA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 28.72
+    }
+   ],
+   "nominate": null
+  },
+  "julian-castro": {
+   "home": [
+    "TX"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.403
+  },
+  "phil-murphy": {
+   "home": [
+    "NJ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2021,
+     "state": "NJ",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 3.22
+    }
+   ],
+   "nominate": null
+  },
+  "deval-patrick": {
+   "home": [
+    "MA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "abigail-spanberger": {
+   "home": [
+    "VA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2025,
+     "state": "VA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 15.36
+    }
+   ],
+   "nominate": null
+  },
+  "andy-kim": {
+   "home": [
+    "NJ"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "NJ",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 9.62
+    }
+   ],
+   "nominate": -0.428
+  },
+  "chris-coons": {
+   "home": [
+    "DE"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "DE",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 27.13
+    }
+   ],
+   "nominate": -0.24
+  },
+  "mitch-landrieu": {
+   "home": [
+    "LA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "michelle-lujan-grisham": {
+   "home": [
+    "NM"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "NM",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 6.38
+    }
+   ],
+   "nominate": null
+  },
+  "jason-crow": {
+   "home": [
+    "CO"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.361
+  },
+  "don-lemon": {
+   "home": [
+    "LA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "stephen-a-smith": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "mark-cuban": {
+   "home": [
+    "TX"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "bernie-sanders": {
+   "home": [
+    "VT"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "VT",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 30.9
+    }
+   ],
+   "nominate": null
+  },
+  "catherine-cortez-masto": {
+   "home": [
+    "NV"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2022,
+     "state": "NV",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 0.77
+    }
+   ],
+   "nominate": null
+  },
+  "debbie-stabenow": {
+   "home": [
+    "MI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2018,
+     "state": "MI",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 6.5
+    }
+   ],
+   "nominate": null
+  },
+  "eric-adams": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "eric-swalwell": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.355
+  },
+  "hakeem-jeffries": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.483
+  },
+  "gina-mccarthy": {
+   "home": [
+    "MA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "andrew-yang": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "adam-schiff": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2024,
+     "state": "CA",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 17.8
+    }
+   ],
+   "nominate": -0.353
+  },
+  "sherrod-brown": {
+   "home": [
+    "OH"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "OH",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 4.85
+    },
+    {
+     "year": 2018,
+     "state": "OH",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": 6.82
+    }
+   ],
+   "nominate": -0.476
+  },
+  "jeff-jackson": {
+   "home": [
+    "NC"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "jamie-raskin": {
+   "home": [
+    "MD"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": -0.494
+  },
+  "katie-porter": {
+   "home": [
+    "CA"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "donald-trump": {
+   "home": [
+    "FL"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "jd-vance": {
+   "home": [
+    "OH"
+   ],
+   "tie": 1,
+   "races": [
+    {
+     "year": 2022,
+     "state": "OH",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": -6.11
+    }
+   ],
+   "nominate": 0.85
+  },
+  "marco-rubio": {
+   "home": [
+    "FL"
+   ],
+   "tie": 1,
+   "races": [
+    {
+     "year": 2022,
+     "state": "FL",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -16.41
+    },
+    {
+     "year": 2016,
+     "state": "FL",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -7.67
+    }
+   ],
+   "nominate": 0.616
+  },
+  "ted-cruz": {
+   "home": [
+    "TX"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2024,
+     "state": "TX",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -8.49
+    },
+    {
+     "year": 2018,
+     "state": "TX",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -2.56
+    }
+   ],
+   "nominate": 0.781
+  },
+  "ron-desantis": {
+   "home": [
+    "FL"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2022,
+     "state": "FL",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -19.4
+    },
+    {
+     "year": 2018,
+     "state": "FL",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -0.4
+    }
+   ],
+   "nominate": null
+  },
+  "donald-trump-jr": {
+   "home": [
+    "FL"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "tucker-carlson": {
+   "home": [
+    "FL"
+   ],
+   "tie": 0.5,
+   "races": [],
+   "nominate": null
+  },
+  "pete-hegseth": {
+   "home": [
+    "TN"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "john-kennedy": {
+   "home": [
+    "LA"
+   ],
+   "tie": 0.5,
+   "races": [],
+   "nominate": 0.558
+  },
+  "sarah-huckabee-sanders": {
+   "home": [
+    "AR"
+   ],
+   "tie": 0.75,
+   "races": [
+    {
+     "year": 2026,
+     "state": "AR",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -15.3
+    },
+    {
+     "year": 2022,
+     "state": "AR",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -27.76
+    }
+   ],
+   "nominate": null
+  },
+  "brian-kemp": {
+   "home": [
+    "GA"
+   ],
+   "tie": 0.25,
+   "races": [
+    {
+     "year": 2022,
+     "state": "GA",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -7.53
+    },
+    {
+     "year": 2018,
+     "state": "GA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -1.39
+    }
+   ],
+   "nominate": null
+  },
+  "thomas-massie": {
+   "home": [
+    "KY"
+   ],
+   "tie": 0,
+   "races": [],
+   "nominate": 0.653
+  },
+  "ivanka-trump": {
+   "home": [
+    "FL"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "robert-f-kennedy-jr": {
+   "home": [
+    "CA"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "rand-paul": {
+   "home": [
+    "KY"
+   ],
+   "tie": 0.25,
+   "races": [
+    {
+     "year": 2022,
+     "state": "KY",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -23.61
+    }
+   ],
+   "nominate": 0.878
+  },
+  "don-bacon": {
+   "home": [
+    "NE"
+   ],
+   "tie": 0.25,
+   "races": [],
+   "nominate": 0.277
+  },
+  "glenn-youngkin": {
+   "home": [
+    "VA"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2021,
+     "state": "VA",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -1.94
+    }
+   ],
+   "nominate": null
+  },
+  "chris-christie": {
+   "home": [
+    "NJ"
+   ],
+   "tie": 0,
+   "races": [],
+   "nominate": null
+  },
+  "josh-hawley": {
+   "home": [
+    "MO"
+   ],
+   "tie": 0.75,
+   "races": [
+    {
+     "year": 2024,
+     "state": "MO",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -13.73
+    },
+    {
+     "year": 2018,
+     "state": "MO",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": -5.81
+    }
+   ],
+   "nominate": 0.82
+  },
+  "marjorie-taylor-greene": {
+   "home": [
+    "GA"
+   ],
+   "tie": 0.25,
+   "races": [],
+   "nominate": 0.8
+  },
+  "katie-britt": {
+   "home": [
+    "AL"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2022,
+     "state": "AL",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": -35.74
+    }
+   ],
+   "nominate": 0.583
+  },
+  "tulsi-gabbard": {
+   "home": [
+    "HI"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": null
+  },
+  "nikki-haley": {
+   "home": [
+    "SC"
+   ],
+   "tie": 0.25,
+   "races": [],
+   "nominate": null
+  },
+  "vivek-ramaswamy": {
+   "home": [
+    "OH"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": null
+  },
+  "byron-donalds": {
+   "home": [
+    "FL"
+   ],
+   "tie": 0.75,
+   "races": [
+    {
+     "year": 2026,
+     "state": "FL",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": -1.3
+    }
+   ],
+   "nominate": 0.636
+  },
+  "elise-stefanik": {
+   "home": [
+    "NY"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": 0.309
+  },
+  "elon-musk": {
+   "home": [
+    "TX"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": null
+  },
+  "kristi-noem": {
+   "home": [
+    "SD"
+   ],
+   "tie": 1,
+   "races": [
+    {
+     "year": 2022,
+     "state": "SD",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -26.81
+    }
+   ],
+   "nominate": null
+  },
+  "mike-pence": {
+   "home": [
+    "IN"
+   ],
+   "tie": 0.25,
+   "races": [],
+   "nominate": null
+  },
+  "doug-burgum": {
+   "home": [
+    "ND"
+   ],
+   "tie": 1,
+   "races": [
+    {
+     "year": 2020,
+     "state": "ND",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -40.46
+    }
+   ],
+   "nominate": null
+  },
+  "james-talarico": {
+   "home": [
+    "TX"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "TX",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 12.09
+    }
+   ],
+   "nominate": null
+  },
+  "abdul-el-sayed": {
+   "home": [
+    "MI"
+   ],
+   "tie": null,
+   "races": [
+    {
+     "year": 2026,
+     "state": "MI",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 7.01
+    }
+   ],
+   "nominate": null
+  },
+  "michelle-obama": {
+   "home": [
+    "IL"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "chelsea-clinton": {
+   "home": [
+    "NY"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "jon-stewart": {
+   "home": [
+    "NJ"
+   ],
+   "tie": null,
+   "races": [],
+   "nominate": null
+  },
+  "joe-kent": {
+   "home": [
+    "WA"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": null
+  },
+  "tom-cotton": {
+   "home": [
+    "AR"
+   ],
+   "tie": 0.75,
+   "races": [
+    {
+     "year": 2026,
+     "state": "AR",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -11.85
+    }
+   ],
+   "nominate": 0.577
+  },
+  "john-mcentee": {
+   "home": [
+    "CT"
+   ],
+   "tie": 1,
+   "races": [],
+   "nominate": null
+  },
+  "tim-scott": {
+   "home": [
+    "SC"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2022,
+     "state": "SC",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -25.87
+    }
+   ],
+   "nominate": 0.627
+  },
+  "steve-bannon": {
+   "home": [
+    "VA"
+   ],
+   "tie": 0.75,
+   "races": [],
+   "nominate": null
+  },
+  "greg-abbott": {
+   "home": [
+    "TX"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2026,
+     "state": "TX",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": 7.13
+    },
+    {
+     "year": 2022,
+     "state": "TX",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -10.89
+    }
+   ],
+   "nominate": null
+  },
+  "mike-pompeo": {
+   "home": [
+    "KS"
+   ],
+   "tie": 0.5,
+   "races": [],
+   "nominate": null
+  },
+  "rick-scott": {
+   "home": [
+    "FL"
+   ],
+   "tie": 0.5,
+   "races": [
+    {
+     "year": 2024,
+     "state": "FL",
+     "office": "S",
+     "incumbent": true,
+     "demMargin": -12.78
+    },
+    {
+     "year": 2018,
+     "state": "FL",
+     "office": "S",
+     "incumbent": false,
+     "demMargin": 0
+    }
+   ],
+   "nominate": 0.74
+  },
+  "spencer-cox": {
+   "home": [
+    "UT"
+   ],
+   "tie": 0.25,
+   "races": [
+    {
+     "year": 2024,
+     "state": "UT",
+     "office": "G",
+     "incumbent": true,
+     "demMargin": -24.43
+    }
+   ],
+   "nominate": null
+  },
+  "lee-zeldin": {
+   "home": [
+    "NY"
+   ],
+   "tie": 1,
+   "races": [
+    {
+     "year": 2022,
+     "state": "NY",
+     "office": "G",
+     "incumbent": false,
+     "demMargin": 6.39
+    }
+   ],
+   "nominate": null
+  }
+ }
+}

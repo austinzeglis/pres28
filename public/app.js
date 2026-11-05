@@ -1,3 +1,5 @@
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=10";
+
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
 const TZ = "America/Chicago";
@@ -129,7 +131,7 @@ function drawNews() {
   body.innerHTML = newsBody();
 }
 
-const nav = (here) => `<nav class="nav"><a href="/" class="${here === "home" ? "on" : ""}">Boards</a><a href="/states" class="${here === "states" ? "on" : ""}">States</a></nav>`;
+const nav = (here) => `<nav class="nav"><a href="/" class="${here === "home" ? "on" : ""}">Boards</a><a href="/states" class="${here === "states" ? "on" : ""}">States</a><a href="/matchup" class="${here === "matchup" ? "on" : ""}">Matchup</a></nav>`;
 
 function drawHome() {
   const b = state.board;
@@ -138,16 +140,14 @@ function drawHome() {
   app.innerHTML = `<header class="top">
       <a href="/"><h1>2028</h1></a>
       ${nav("home")}
-      <span class="blend">Mkts ${w.markets * 100} · Polls ${w.polls * 100} · Attention ${w.attention * 100}</span>
-      <span class="blend">+ added</span>
-      <span class="blend">Polls: VoteHub, <a class="credit" href="https://en.wikipedia.org/wiki/Nationwide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</span>
       <span class="when">${stamp(b.updated)}</span>
     </header>
     <main class="home">
       <div class="boards-d">${boardHtml("D")}</div>
       <div class="boards-r">${boardHtml("R")}</div>
       <aside class="news"><header><h2>Headlines</h2><div class="tabs"></div></header><div class="stories"></div></aside>
-    </main>`;
+    </main>
+    <footer class="foot">Score: markets ${w.markets * 100}, polls ${w.polls * 100}, attention ${w.attention * 100} · + added beyond the original list · Polls: VoteHub, <a class="credit" href="https://en.wikipedia.org/wiki/Nationwide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</footer>`;
   drawNews();
 }
 
@@ -392,16 +392,17 @@ function drawPerson(row) {
           <section class="section"><h3>Wikipedia views</h3><div class="chart" id="c-wiki"></div></section>
           <section class="section"><h3>Stories per day</h3><div class="chart" id="c-news"></div></section>
         </div>
-        ${p.statePolls?.length ? `<section class="section"><h3>State polls <span class="right" style="font-weight:400;color:var(--ink2)">Not in the score · Wikipedia (CC BY-SA)</span></h3><div class="scroll"><table><thead><tr><th>Ended</th><th>State</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
+        ${p.statePolls?.length ? `<section class="section"><h3>State polls </h3><div class="scroll"><table><thead><tr><th>Ended</th><th>State</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
           ${p.statePolls.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td class="mono">${esc(x.state)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("")}
         </tbody></table></div></section>` : ""}
-        <section class="section"><h3>Polls <span class="right" style="font-weight:400;color:var(--ink2)">VoteHub, Wikipedia (CC BY-SA)</span></h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
+        <section class="section"><h3>Polls</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
           ${offered.length ? offered.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}${x.discounted ? " *" : ""}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("") : `<tr><td colspan="5" class="none">None</td></tr>`}
         </tbody></table></div></section>
       </div>
       <section class="section news-person" id="stories">${storiesHtml()}</section>
     </div>
-  </main>`;
+  </main>
+  <footer class="foot">State polls are not in the score · Polls: VoteHub, Wikipedia (CC BY-SA)</footer>`;
   drawCharts();
 }
 
@@ -454,21 +455,190 @@ function statesColumn(party, data) {
 async function statesPage() {
   document.title = "States · 2028";
   const data = await getJson("/api/states");
-  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("states")}
-      <span class="blend">Not in the score</span>
-      <span class="blend">Shares exclude undecided</span>
-      <span class="blend">Polls: <a class="credit" href="https://en.wikipedia.org/wiki/Statewide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</span>
-      <span class="when">${stamp(data.updated)}</span></header>
-    <main class="states">${statesColumn("D", data)}${statesColumn("R", data)}</main>`;
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("states")}<span class="when">${stamp(data.updated)}</span></header>
+    <main class="states">${statesColumn("D", data)}${statesColumn("R", data)}</main>
+    <footer class="foot">State polls are not in the score · Shares exclude undecided · Polls: <a class="credit" href="https://en.wikipedia.org/wiki/Statewide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</footer>`;
+}
+
+// ---------- matchup ----------
+
+const DRAWS = 100000;
+const WORKER_PATIENCE_MS = 5000;
+const match = { model: null, map: null, dem: null, rep: null, cache: new Map(), worker: null, waiting: null };
+const SHADE = [[0.9, "#1f4f96"], [0.7, "#5a8bd0"], [0.55, "#aac4e8"], [0.45, "#e4e5e8"], [0.3, "#f0b7ae"], [0.1, "#d9705f"], [0, "#b2331f"]];
+const shadeOf = (p) => SHADE.find(([min]) => p >= min)[1];
+const signed = (x, digits = 1) => `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(digits)}`;
+const leanText = (x) => (Math.abs(x) < 0.05 ? "Even" : x > 0 ? `D+${x.toFixed(1)}` : `R+${(-x).toFixed(1)}`);
+const lastName = (name) => (name.endsWith("Jr.") ? name.split(" ").slice(-2).join(" ") : name.split(" ").at(-1));
+
+// Runs off the page's thread, so the page stays responsive. If the browser can't, or the
+// background thread doesn't answer, it runs here instead: slower to paint, same result.
+function simulateMatchup(key, params) {
+  const seed = hashSeed(`${key}|${match.model.updated}`);
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (result) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(result);
+    };
+    const inPage = () => finish(simulate(params, DRAWS, seed));
+    const timer = setTimeout(inPage, WORKER_PATIENCE_MS);
+    try {
+      match.worker ??= new Worker("/simworker.js?v=10", { type: "module" });
+      match.worker.onmessage = ({ data }) => { if (data.key === key) finish(data.result); };
+      match.worker.onerror = (e) => {
+        console.error("simulation thread", e.message);
+        match.worker = null;
+        inPage();
+      };
+      match.worker.postMessage({ key, params, draws: DRAWS, seed });
+    } catch (err) {
+      console.error("simulation thread", err);
+      inPage();
+    }
+  });
+}
+
+function pickerHtml(party, chosen) {
+  const rows = state.board[party].rows;
+  const options = rows.map((r) => {
+    const flag = match.model.people[r.id]?.ineligible ? " (ineligible)" : "";
+    return `<option value="${r.id}"${r.id === chosen ? " selected" : ""}>${r.rank}. ${esc(r.name)}${flag}</option>`;
+  }).join("");
+  return `<label class="pick ${party}"><i class="swatch"></i><select data-pick="${party}">${options}</select></label>`;
+}
+
+function evChart(r, dem, rep) {
+  const bins = [];
+  for (let e = 0; e <= 530; e += 10) bins.push({ from: e, count: r.evHist.slice(e, e + 10).reduce((a, b) => a + b, 0) });
+  const max = Math.max(...bins.map((b) => b.count)) || 1;
+  const W = 760;
+  const H = 150;
+  const x = (ev) => 4 + (ev / 540) * (W - 8);
+  const bars = bins.map((b) => {
+    const h = (b.count / max) * (H - 24);
+    const fill = b.from + 5 >= 270 ? "var(--D)" : "var(--R)";
+    return `<rect class="evbar" data-tip="${b.from}-${b.from + 9}|${((100 * b.count) / DRAWS).toFixed(1)}" x="${x(b.from).toFixed(1)}" y="${(H - 18 - h).toFixed(1)}" width="${Math.max(1, x(10) - x(0) - 1).toFixed(1)}" height="${h.toFixed(1)}" fill="${fill}"/>`;
+  }).join("");
+  const labels = [0, 100, 200, 270, 400, 538].map((v) => `<text class="label" x="${x(v)}" y="${H - 5}" text-anchor="middle">${v}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Electoral votes for ${esc(dem.name)} across all simulations">${bars}<line x1="${x(270)}" x2="${x(270)}" y1="0" y2="${H - 18}" stroke="var(--ink)" stroke-width="1"/>${labels}</svg>`;
+}
+
+function mapHtml(r) {
+  const byId = new Map(r.states.map((s) => [s.id, s]));
+  const paths = Object.entries(match.map.states).map(([id, g]) => {
+    const s = byId.get(id);
+    if (!s) return "";
+    return `<path class="st-map" data-state="${id}" d="${g.d}" fill="${shadeOf(s.demWin)}"/>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${match.map.w} ${match.map.h}" role="img" aria-label="Win chance by state">${paths}</svg>`;
+}
+
+function drawMatchup(result, built) {
+  const { model } = match;
+  const dem = model.people[match.dem];
+  const rep = model.people[match.rep];
+  const statesById = new Map(model.map.contests.map((c) => [c.id, c]));
+  const box = app.querySelector("#mresult");
+  if (!result) {
+    box.innerHTML = `<div class="none">Simulating</div>`;
+    return;
+  }
+  const rowOf = (party, id) => state.board[party].rows.find((x) => x.id === id);
+  const chance = (rowOf("D", match.dem)?.m ?? 0) * (rowOf("R", match.rep)?.m ?? 0) / 1e4;
+  const tips = [...result.states].sort((a, b) => b.tip - a.tip).slice(0, 9);
+  const flags = (p) => [p.depth === 0 ? "Thin data" : "", p.ineligible ?? ""].filter(Boolean).map((t) => `<span class="flag">${esc(t)}</span>`).join("");
+  const partRow = (p, top) => `<tr class="${top ? "ptop" : "psub"}"><td>${esc(p.label)}</td><td class="r mono">${signed(p.value, 2)}</td></tr>`;
+  const piecesOf = (pieces, sign) => (pieces ?? []).map((x) => partRow({ label: x.label, value: sign * x.value }, false)).join("");
+  const parts = built.parts.map((p) => {
+    const sign = p.pieces && p.value !== 0 ? Math.sign(p.value) * Math.sign(p.pieces.reduce((s, x) => s + x.value, 0) || 1) : 1;
+    return partRow(p, true) + piecesOf(p.pieces, sign);
+  }).join("");
+  const home = (id, who) => (who.home?.includes(statesById.get(id)?.parentId) ? " ·" : "");
+
+  const pollRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(m.state ?? "National")}${m.third ? ` · with ${esc(m.third)}` : ""}</td><td class="r mono">${m.demPct}</td><td class="r mono">${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  const related = built.polls.length ? [] : model.matchups.filter((m) => (m.dem === match.dem || m.rep === match.rep) && !m.state && !m.third).slice(0, 10);
+  const relatedRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(lastName(model.people[m.dem]?.name ?? m.dem))} ${m.demPct}, ${esc(lastName(model.people[m.rep]?.name ?? m.rep))} ${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  const legend = SHADE.map(([min, c], i) => {
+    const top = i === 0 ? 100 : Math.round(SHADE[i - 1][0] * 100);
+    return `<span><i style="background:${c}"></i>${Math.round(min * 100)}–${top}</span>`;
+  }).join("");
+  const districts = result.states.filter((s) => s.id.includes("-")).map((s) => `<span>${esc(s.id)} ${Math.round(100 * s.demWin)}%</span>`).join("");
+
+  box.innerHTML = `
+    <div class="mtop">
+      <div class="D"><div class="mname">${esc(dem.name)} ${flags(dem)}</div><div class="mbig">${(100 * result.demWin).toFixed(1)}%</div><div class="msub">${result.evMedian} electoral votes</div></div>
+      <div class="R right"><div class="mname">${flags(rep)} ${esc(rep.name)}</div><div class="mbig">${(100 * result.repWin).toFixed(1)}%</div><div class="msub">${538 - result.evMedian} electoral votes</div></div>
+    </div>
+    <div class="msplit"><i style="width:${(100 * result.demWin).toFixed(2)}%;background:var(--D)"></i><i style="flex:1;background:var(--R)"></i></div>
+    <div class="mstats">
+      <span>Popular vote <b>${leanText(result.popularMedian)}</b> (${leanText(result.popularLow)} to ${leanText(result.popularHigh)})</span>
+      <span>Electoral range <b>${result.evLow}–${result.evHigh}</b></span>
+      <span>Tie <b>${(100 * result.tie).toFixed(1)}%</b></span>
+      <span>Market chance of this matchup <b>${(100 * chance).toFixed(1)}%</b></span>
+    </div>
+    <div class="mcols">
+      <div>
+        <section class="section"><h3>${esc(lastName(dem.name))} electoral votes</h3><div class="chart" id="evchart">${evChart(result, dem, rep)}</div></section>
+        <section class="section"><h3>${esc(lastName(dem.name))} win chance by state</h3><div class="mapwrap">${mapHtml(result)}</div><div class="mlegend">${legend}</div><div class="mdist">${districts}</div></section>
+      </div>
+      <div>
+        <section class="section"><h3>States most likely to decide it</h3><table><thead><tr><th>State</th><th class="r">Votes</th><th class="r">${esc(lastName(dem.name))} %</th><th class="r">Margin</th><th class="r">Decides %</th></tr></thead><tbody>
+          ${tips.map((s) => `<tr><td>${esc(statesById.get(s.id)?.name ?? s.id)}${home(s.id, dem)}${home(s.id, rep)}</td><td class="r mono">${s.ev}</td><td class="r mono">${(100 * s.demWin).toFixed(0)}</td><td class="r mono">${leanText(s.margin)}</td><td class="r mono">${(100 * s.tip).toFixed(1)}</td></tr>`).join("")}
+        </tbody></table></section>
+        <section class="section"><h3>What went in <span class="right mnote">Points toward ${esc(lastName(dem.name))}</span></h3><table class="parts"><tbody>${parts}</tbody></table></section>
+      </div>
+    </div>
+    <section class="section"><h3>Polls of this matchup <span class="right mnote">${built.polls.length}</span></h3>
+      ${built.polls.length ? `<div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Where</th><th class="r">${esc(lastName(dem.name))}</th><th class="r">${esc(lastName(rep.name))}</th><th class="r">Sample</th></tr></thead><tbody>${built.polls.map(pollRow).join("")}</tbody></table></div>` : `<div class="none">None</div>`}
+    </section>
+    ${related.length ? `<section class="section"><h3>Their polls against others</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Result</th><th class="r">Sample</th></tr></thead><tbody>${related.map(relatedRow).join("")}</tbody></table></div></section>` : ""}`;
+  match.lastResult = result;
+}
+
+async function runMatchup() {
+  const key = `${match.dem}|${match.rep}`;
+  const built = buildMatchup(match.model, match.dem, match.rep);
+  drawMatchup(match.cache.get(key) ?? null, built);
+  if (match.cache.has(key)) return;
+  match.waiting = key;
+  const result = await simulateMatchup(key, built.params);
+  match.cache.set(key, result);
+  if (match.waiting === key) drawMatchup(result, built);
+}
+
+async function matchupPage(demId, repId) {
+  document.title = "Matchup · 2028";
+  const [model, board, map] = await Promise.all([
+    match.model ?? getJson("/api/model"),
+    state.board ?? getJson("/api/board"),
+    match.map ?? getJson("/us-map.json"),
+  ]);
+  Object.assign(match, { model, map });
+  state.board = board;
+  const known = (id, party) => model.people[id]?.party === party && board[party].rows.some((r) => r.id === id);
+  match.dem = known(demId, "D") ? demId : board.D.rows[0].id;
+  match.rep = known(repId, "R") ? repId : board.R.rows[0].id;
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("matchup")}<span class="when">${stamp(model.updated)}</span></header>
+    <main class="matchup">
+      <div class="mpicks">${pickerHtml("D", match.dem)}<span class="mvs">vs</span>${pickerHtml("R", match.rep)}</div>
+      <div id="mresult"></div>
+    </main>
+    <footer class="foot">If these two are the nominees · ${DRAWS.toLocaleString()} simulated elections · National mood ${leanText(model.mood.center)} · Polls: <a class="credit" href="https://en.wikipedia.org/wiki/2028_United_States_presidential_election" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</footer>`;
+  await runMatchup();
 }
 
 // ---------- events and routing ----------
 
 async function route() {
   hideTip();
-  const match = location.pathname.match(/^\/p\/([^/]+)/);
+  const onPerson = location.pathname.match(/^\/p\/([^/]+)/);
+  const onMatchup = location.pathname.match(/^\/matchup(?:\/([^/]+)\/([^/]+))?\/?$/);
   try {
-    if (match) await personPage(decodeURIComponent(match[1]));
+    if (onPerson) await personPage(decodeURIComponent(onPerson[1]));
+    else if (onMatchup) await matchupPage(onMatchup[1], onMatchup[2]);
     else if (location.pathname === "/states") await statesPage();
     else await home();
     window.scrollTo(0, 0);
@@ -514,7 +684,29 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+document.addEventListener("change", (e) => {
+  const pick = e.target.closest?.("[data-pick]");
+  if (!pick) return;
+  if (pick.dataset.pick === "D") match.dem = pick.value;
+  else match.rep = pick.value;
+  history.replaceState(null, "", `/matchup/${match.dem}/${match.rep}`);
+  runMatchup();
+});
+
 document.addEventListener("mousemove", (e) => {
+  const stateShape = e.target.closest?.(".st-map");
+  if (stateShape && match.lastResult) {
+    const s = match.lastResult.states.find((x) => x.id === stateShape.dataset.state);
+    const c = match.model.map.contests.find((x) => x.id === s.id);
+    showTip(`<b>${esc(c.name)}</b><div class="kv"><span>${esc(lastName(match.model.people[match.dem].name))}</span><span>${(100 * s.demWin).toFixed(1)}%</span><span>Margin</span><span>${leanText(s.margin)}</span><span>Votes</span><span>${s.ev}</span><span>Decides</span><span>${(100 * s.tip).toFixed(1)}%</span></div>`, e.clientX, e.clientY);
+    return;
+  }
+  const evBar = e.target.closest?.(".evbar");
+  if (evBar) {
+    const [range, pct] = evBar.dataset.tip.split("|");
+    showTip(`<b>${range} electoral votes</b><div class="kv"><span>Simulations</span><span>${pct}%</span></div>`, e.clientX, e.clientY);
+    return;
+  }
   const row = e.target.closest?.(".row");
   if (!row) {
     if (!e.target.closest?.(".chart svg")) hideTip();
@@ -536,6 +728,7 @@ document.addEventListener("mousemove", (e) => {
 
 window.addEventListener("popstate", route);
 window.addEventListener("resize", () => { if (person.data && location.pathname.startsWith("/p/")) drawCharts(); });
+
 setInterval(refresh, REFRESH_MS);
 document.addEventListener("visibilitychange", refresh);
 route();

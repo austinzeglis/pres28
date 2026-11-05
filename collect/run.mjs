@@ -3,14 +3,26 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildMatcher, fold, slug } from "./names.mjs";
-import { parseStatePolls, parseWikiPolls } from "./wikipolls.mjs";
+import { parseMatchups, parseStatePolls, parseWikiPolls } from "./wikipolls.mjs";
+import { buildPeople } from "./candidates.mjs";
+import { buildMap, finishParams } from "./states_model.mjs";
+import { fundamentals } from "./mood.mjs";
+import { buildMatchup, simulate } from "../public/sim.js";
 import { WEIGHTS, attentionShares, cleanPolls, marketShares, pollShares, rankParty } from "./score.mjs";
 
 const { INGEST_URL, INGEST_KEY } = process.env;
 if (!INGEST_URL || !INGEST_KEY) throw new Error("INGEST_URL and INGEST_KEY are required");
 
-const roster = JSON.parse(readFileSync("data/roster.json", "utf8"));
 const feeds = JSON.parse(readFileSync("data/feeds.json", "utf8")).feeds;
+
+// The roster is the original list plus anyone the collector has added since.
+const roster = JSON.parse(readFileSync("data/roster.json", "utf8"));
+{
+  const res = await fetch(`${INGEST_URL}/export/people`, { headers: { authorization: `Bearer ${INGEST_KEY}` } }).catch(() => null);
+  const stored = res?.ok ? await res.json() : [];
+  const known = new Set(roster.map((p) => p.id));
+  for (const p of stored) if (p.discovered && !known.has(p.id)) roster.push(p);
+}
 const matchPeople = buildMatcher(roster);
 
 const now = new Date();
@@ -331,7 +343,8 @@ async function taskYouTube() {
 // ---------- daily ----------
 
 async function taskPeople() {
-  const rows = roster.map((p) => ({ id: p.id, name: p.name, party: p.party, on_list: p.on_list, data: JSON.stringify(p) }));
+  // Only the original list: anyone added later keeps the record of how they joined.
+  const rows = roster.filter((p) => !p.discovered).map((p) => ({ id: p.id, name: p.name, party: p.party, on_list: p.on_list, data: JSON.stringify(p) }));
   await send("people", rows);
   return { rows: rows.length };
 }
@@ -505,6 +518,88 @@ async function taskBackfill() {
     }
   }
   return { rows: sent, note: `${finished} jobs done, ${failed} failed, ${jobs.length - finished - failed} left` };
+}
+
+// ---------- new people ----------
+
+// Someone joins when markets price them seriously or recent polls keep offering them.
+// From then on they get everything: history, news, polls, a score and a page.
+const JOIN_PRICE = 0.005;
+const JOIN_POLLS = 2;
+const JOIN_POLL_DAYS = 180;
+
+async function lookupPeople(names) {
+  const found = new Map();
+  for (let i = 0; i < names.length; i += 50) {
+    const titles = names.slice(i, i + 50).join("|");
+    const q = new URLSearchParams({ action: "wbgetentities", sites: "enwiki", titles, redirects: "yes", normalize: "1", props: "claims|descriptions|sitelinks", sitefilter: "enwiki", languages: "en", format: "json" });
+    const data = await getJson(`https://www.wikidata.org/w/api.php?${q}`);
+    for (const e of Object.values(data.entities ?? {})) {
+      const title = e.sitelinks?.enwiki?.title;
+      if (title && !/disambiguation/i.test(e.descriptions?.en?.value ?? "")) found.set(title, e);
+    }
+  }
+  const photos = new Map();
+  for (let i = 0; i < names.length; i += 50) {
+    const q = new URLSearchParams({ action: "query", prop: "pageimages", piprop: "thumbnail", pithumbsize: "240", pilimit: "50", redirects: "1", titles: names.slice(i, i + 50).join("|"), format: "json" });
+    const data = await getJson(`https://en.wikipedia.org/w/api.php?${q}`);
+    for (const page of Object.values(data.query?.pages ?? {})) if (page.thumbnail) photos.set(page.title, page.thumbnail.source);
+  }
+  const claim = (e, prop) => {
+    const v = e?.claims?.[prop]?.find((c) => c.rank !== "deprecated")?.mainsnak?.datavalue?.value;
+    return typeof v === "string" ? v : v?.time ?? null;
+  };
+  return (name) => {
+    const e = found.get(name);
+    return {
+      wikidata: e?.id ?? null, wiki: e ? name : null, desc: e?.descriptions?.en?.value ?? null, photo: photos.get(name) ?? null,
+      dob: claim(e, "P569")?.slice(1, 11) ?? null, bluesky: claim(e, "P12361"), youtube: claim(e, "P2397"), x: claim(e, "P2002"), site: claim(e, "P856"),
+    };
+  };
+}
+
+async function taskDiscover() {
+  if (!markets.poly.length) await loadPoly();
+  if (!markets.kalshi.length) await loadKalshi();
+  const known = new Set(roster.map((p) => p.id));
+  const candidates = new Map();
+  const consider = (id, name, party, why, strength) => {
+    if (known.has(id)) return;
+    const held = candidates.get(id);
+    if (!held || strength > held.strength) candidates.set(id, { id, name, party, why, strength });
+  };
+
+  for (const m of [...markets.poly, ...markets.kalshi]) {
+    const party = m.source.match(/_nom_([DR])$/)?.[1];
+    if (party && m.value >= JOIN_PRICE && m.person.includes("-")) consider(m.person, m.name, party, `priced ${(m.value * 100).toFixed(1)}% on ${m.source.startsWith("poly") ? "Polymarket" : "Kalshi"}`, m.value);
+  }
+
+  const rows = await exportJson("polls");
+  const names = new Map();
+  for (const r of rows) for (const a of JSON.parse(r.answers)) names.set(slug(a.choice), a.choice);
+  const offered = new Map();
+  for (const p of cleanPolls(rows.filter((r) => !r.state))) {
+    if ((now - new Date(p.end)) / 864e5 > JOIN_POLL_DAYS) continue;
+    for (const id of Object.keys(p.raw)) {
+      const key = `${p.party}|${id}`;
+      offered.set(key, (offered.get(key) ?? 0) + 1);
+    }
+  }
+  for (const [key, count] of offered) {
+    const [party, id] = key.split("|");
+    if (count >= JOIN_POLLS) consider(id, names.get(id) ?? id, party, `offered in ${count} polls in ${JOIN_POLL_DAYS} days`, count / 1000);
+  }
+
+  const joining = [...candidates.values()];
+  if (!joining.length) return { rows: 0, note: "no new people" };
+  const details = await lookupPeople(joining.map((c) => c.name));
+  const added = joining.map((c) => ({
+    id: c.id, name: c.name, party: c.party, on_list: 0, list: null, ...details(c.name),
+    match: [c.name], keys: [], guard: null, discovered: { date: today, why: c.why },
+  }));
+  await send("people", added.map((p) => ({ id: p.id, name: p.name, party: p.party, on_list: 0, data: JSON.stringify(p) })));
+  roster.push(...added);
+  return { rows: added.length, note: added.map((p) => `${p.name} (${p.party})`).join(", ").slice(0, 280) };
 }
 
 // ---------- scoring ----------
@@ -741,6 +836,156 @@ async function taskBoard() {
   return { rows: 1, note: `leaders ${board.D.rows[0].name}, ${board.R.rows[0].name}` };
 }
 
+// ---------- the matchup model ----------
+
+const ELECTION_DAY = "2028-11-07";
+const ALL_YEARS = [2008, 2012, 2016, 2020, 2024];
+const MOOD_SD = { far: 5.5, near: 3 }; // national spread two years out, and in the final weeks
+const MOOD_MARKET_SHARE = 0.5;
+const STATE_2026_PULL = 0.1;
+
+async function recentAverage(all, type, read, days) {
+  const rows = all.filter((p) => p.poll_type === type && (now - new Date(p.end_date)) / 864e5 <= days).map(read).filter((x) => x != null);
+  return rows.length ? rows.reduce((a, b) => a + b, 0) / rows.length : null;
+}
+
+async function partyMarkets() {
+  const out = {};
+  try {
+    const [event] = await getJson("https://gamma-api.polymarket.com/events?slug=which-party-wins-2028-us-presidential-election");
+    for (const m of event.markets) {
+      const name = m.groupItemTitle ?? m.question ?? "";
+      if (!m.outcomePrices) continue;
+      if (/democrat/i.test(name)) out.polyD = +JSON.parse(m.outcomePrices)[0];
+      if (/republican/i.test(name)) out.polyR = +JSON.parse(m.outcomePrices)[0];
+    }
+  } catch (err) {
+    console.log(`polymarket party: ${err.message}`);
+  }
+  try {
+    const data = await getJson("https://api.elections.kalshi.com/trade-api/v2/events?series_ticker=KXPRESPARTY&with_nested_markets=true&limit=5");
+    const event = data.events?.find((e) => e.event_ticker.endsWith("2028"));
+    for (const m of event?.markets ?? []) {
+      if (/democrat/i.test(m.yes_sub_title)) out.kalshiD = +m.last_price_dollars;
+      if (/republican/i.test(m.yes_sub_title)) out.kalshiR = +m.last_price_dollars;
+    }
+  } catch (err) {
+    console.log(`kalshi party: ${err.message}`);
+  }
+  const shares = [];
+  if (out.polyD && out.polyR) shares.push(out.polyD / (out.polyD + out.polyR));
+  if (out.kalshiD && out.kalshiR) shares.push(out.kalshiD / (out.kalshiD + out.kalshiR));
+  out.demShare = shares.length ? shares.reduce((a, b) => a + b, 0) / shares.length : null;
+  return out;
+}
+
+async function taskModel() {
+  if (!markets.poly.length) await loadPoly();
+  if (!markets.kalshi.length) await loadKalshi();
+  const stateData = JSON.parse(readFileSync("data/states.json", "utf8"));
+  const fit = JSON.parse(readFileSync("data/state_fit.json", "utf8"));
+  const facts = JSON.parse(readFileSync("data/candidates.json", "utf8"));
+  const { national, contests: allContests, house2026 } = stateData;
+  const contestById = new Map(allContests.map((c) => [c.id, c]));
+
+  // The map, with a small pull from how each state just voted in 2026.
+  const map = finishParams(buildMap(allContests, national, ALL_YEARS, fit.cfg), fit.stray);
+  for (const c of map.contests) {
+    const src = contestById.get(c.id);
+    const races = [src.senate26?.margin, src.governor26?.margin].filter((x) => x != null);
+    if (!races.length) continue;
+    const seen = races.reduce((a, b) => a + b, 0) / races.length;
+    const expected = src.results[2024] - national[2024] + house2026;
+    c.base += STATE_2026_PULL * Math.max(-10, Math.min(10, seen - expected));
+  }
+
+  // Polls of pairings.
+  const page = await getJson("https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=2028_United_States_presidential_election", { timeout: 30000, tries: 3 });
+  const partyOf = (id) => roster.find((p) => p.id === id)?.party;
+  const matchups = parseMatchups(page.parse.wikitext["*"], partyOf);
+  if (matchups.length < 20) throw new Error(`only ${matchups.length} matchup polls parsed`);
+
+  // The mood from polling and approval.
+  const votehub = await getJson("https://api.votehub.com/polls", { timeout: 40000 });
+  const pctOf = (p, re) => p.answers.find((a) => re.test(a.choice))?.pct ?? null;
+  const generic = await recentAverage(votehub, "generic-ballot", (p) => {
+    const d = pctOf(p, /^dem/i);
+    const r = pctOf(p, /^rep/i);
+    return d != null && r != null ? d - r : null;
+  }, 60);
+  const netApproval = await recentAverage(votehub.filter((p) => /trump/i.test(p.subject ?? "")), "approval", (p) => {
+    const a = pctOf(p, /^(approve|yes)/i);
+    const b = pctOf(p, /^(disapprove|no)/i);
+    return a != null && b != null ? a - b : null;
+  }, 45);
+
+  const daysLeft = Math.round((new Date(ELECTION_DAY) - now) / 864e5);
+  const people = buildPeople({
+    roster, facts: facts.people, partyMedian: facts.partyMedian,
+    contests: contestById, national, house2026, matchups,
+    quotes: [...markets.poly, ...markets.kalshi], netApproval: netApproval ?? 0, today, daysLeft,
+  });
+
+  const fade = Math.min(1, daysLeft / 730);
+  const moodSd = MOOD_SD.near + (MOOD_SD.far - MOOD_SD.near) * fade;
+  const fund = fundamentals(national, ALL_YEARS, { midterm: house2026, inPartyTerms: 1, inParty: "R" });
+  const party = await partyMarkets();
+
+  const lightContests = map.contests.map((c) => ({
+    id: c.id, ev: c.ev, name: c.name, division: c.division, district: c.district, parentId: c.parentId, parent: c.parent,
+    base: Math.round(c.base * 100) / 100, elasticity: c.elasticity, sigma: Math.round(c.sigma * 100) / 100,
+    load: c.load.map((x) => Math.round(x * 1000) / 1000), weight: c.weight,
+  }));
+  const model = {
+    updated: stamp, election: ELECTION_DAY, daysLeft,
+    map: { nRef: map.nRef, factorSd: map.factorSd, districtShare: map.districtShare, turbulenceDf: fit.turbulenceDf, contests: lightContests },
+    mood: { center: fund, sd: moodSd, df: 5, fundamentals: fund, market: null, marketShare: party.demShare, party, generic, netApproval, house2026 },
+    people,
+    matchups,
+  };
+
+  // What national mood makes a typical nomination-weighted pairing match the party markets?
+  if (party.demShare) {
+    const top = (side) => {
+      const list = [...markets.poly, ...markets.kalshi].filter((m) => m.source.endsWith(`_nom_${side}`) && people[m.person]);
+      const totals = new Map();
+      for (const m of list) totals.set(m.person, (totals.get(m.person) ?? 0) + m.value);
+      const sum = [...totals.values()].reduce((a, b) => a + b, 0);
+      return [...totals].map(([id, v]) => ({ id, w: v / sum })).sort((a, b) => b.w - a.w).slice(0, 5);
+    };
+    const dems = top("D");
+    const reps = top("R");
+    const chance = (center) => {
+      let total = 0;
+      let weight = 0;
+      model.mood.center = center;
+      for (const d of dems) {
+        for (const r of reps) {
+          const w = d.w * r.w;
+          const { params } = buildMatchup(model, d.id, r.id);
+          total += w * simulate(params, 3000, 11).demWin;
+          weight += w;
+        }
+      }
+      return total / weight;
+    };
+    let low = -12;
+    let high = 14;
+    for (let i = 0; i < 9; i++) {
+      const mid = (low + high) / 2;
+      if (chance(mid) < party.demShare) low = mid;
+      else high = mid;
+    }
+    model.mood.market = (low + high) / 2;
+    model.mood.center = MOOD_MARKET_SHARE * model.mood.market + (1 - MOOD_MARKET_SHARE) * fund;
+  }
+  model.mood.center = Math.round(model.mood.center * 100) / 100;
+
+  await send("snapshots", [{ key: "model", json: JSON.stringify(model), updated: stamp }], 1);
+  const m = model.mood;
+  return { rows: 1, note: `mood D${m.center >= 0 ? "+" : ""}${m.center} (fundamentals ${m.fundamentals.toFixed(1)}, markets ${m.market?.toFixed(1)}), ${matchups.length} matchup polls` };
+}
+
 // ---------- schedule ----------
 
 const TASKS = {
@@ -757,8 +1002,10 @@ const TASKS = {
   wikipedia: taskWikipedia,
   fec: taskFec,
   backfill: taskBackfill,
+  discover: taskDiscover,
   rescore: taskRescore,
   board: taskBoard,
+  model: taskModel,
 };
 
 function chosen() {
@@ -767,7 +1014,7 @@ function chosen() {
   if (asked) return asked.split(",").map((s) => s.trim());
   const list = ["polymarket", "kalshi", "feeds", "gnews", "bluesky", "youtube"];
   if (hour === 6) list.push("people", "wikipedia", "fec");
-  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "statepolls", "backfill", "rescore");
+  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "statepolls", "discover", "backfill", "rescore", "model");
   list.push("board");
   return list;
 }

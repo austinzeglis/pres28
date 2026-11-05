@@ -55,6 +55,7 @@ async function exported(env, path) {
     ]);
     return json({ obs: obs.results, news: news.results });
   }
+  if (what === "people") return json((await env.DB.prepare("SELECT data FROM people").all()).results.map((r) => JSON.parse(r.data)));
   if (what === "polls") return json((await env.DB.prepare("SELECT * FROM polls").all()).results);
   if (what === "filings") return json((await env.DB.prepare("SELECT id, name, party, first_file, has_funds, person FROM filings WHERE person IS NOT NULL").all()).results);
   if (what === "snapshot") {
@@ -112,6 +113,10 @@ export default {
     }
     if (request.method === "GET" && url.pathname === "/api/states") {
       const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'states'").first();
+      return row ? site(row.json) : json({ error: "not ready" }, 503);
+    }
+    if (request.method === "GET" && url.pathname === "/api/model") {
+      const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'model'").first();
       return row ? site(row.json) : json({ error: "not ready" }, 503);
     }
     if (request.method === "GET" && url.pathname === "/api/feed") return feed(env, url.searchParams.get("scope"));

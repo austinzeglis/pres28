@@ -224,3 +224,53 @@ export function parseWikiPolls(wikitext, party, state = null) {
   }
   return { polls, skipped };
 }
+
+// The presidential page keeps one table per pairing under "General election".
+export function parseMatchups(wikitext, partyOf) {
+  const text = wikitext.replace(/<ref[^>]*\/>/g, "").replace(/<ref[\s\S]*?<\/ref>/g, "");
+  const start = text.search(/^==+\s*General election\s*==+\s*$/m);
+  if (start < 0) return [];
+  const notes = text.search(/^==\s*Notes\s*==\s*$/m);
+  const body = text.slice(start, notes > start ? notes : undefined);
+  const parts = body.split(/^(=+)[ ]*([^=\n]+?)[ ]*\1[ ]*$/m);
+  const rows = [];
+  let state = null;
+  for (let i = 1; i < parts.length; i += 3) {
+    const title = parts[i + 1];
+    const content = parts[i + 2];
+    if (/^nationwide$/i.test(title)) { state = null; continue; }
+    if (/^statewide$/i.test(title)) continue;
+    if (STATE_CODES[title]) { state = STATE_CODES[title]; continue; }
+    if (!/\bvs\.?\s/i.test(title)) continue;
+    const names = title.split(/\s+vs\.?\s+/i).map((n) => n.replace(/\s+as an? .*$/i, "").trim());
+    const dem = names.map((n) => slug(n)).find((id) => partyOf(id) === "D");
+    const rep = names.map((n) => slug(n)).find((id) => partyOf(id) === "R");
+    if (!dem || !rep) continue;
+    const third = names.length > 2 ? names[2] : null;
+    const table = content.match(/\{\|[\s\S]*?\n\|\}/)?.[0];
+    if (!table) continue;
+    const blocks = table.split(/\n\|-[^\n]*/);
+    const head = blocks.find((b) => /Poll source/i.test(b));
+    if (!head) continue;
+    const heads = head.split(/\n\s*!/).slice(1).map((h) => plain(h));
+    const colOf = (id) => heads.findIndex((h) => id.split("-").filter((w) => w !== "jr").some((w) => w.length > 2 && h.toLowerCase().includes(w)) );
+    const demAt = colOf(dem);
+    const repAt = colOf(rep);
+    if (demAt < 0 || repAt < 0 || demAt === repAt) continue;
+    for (const row of blocks) {
+      if (row === head || /colspan/i.test(row) || /^\s*!/.test(row.trim())) continue;
+      const cells = `\n${row}`.split(/\n\s*\|(?![-}])/).slice(1);
+      if (cells.length < Math.max(demAt, repAt) + 1) continue;
+      const source = cellBody(cells[0]);
+      const link = source.match(/\[(https?:\/\/\S+)\s+([^\]]+)\]/);
+      const dates = parseDates(plain(cellBody(cells[1])));
+      const pollster = plain(link ? link[2] : source);
+      const demPct = parsePct(cellBody(cells[demAt]));
+      const repPct = parsePct(cellBody(cells[repAt]));
+      if (!pollster || !dates || demPct == null || repPct == null) continue;
+      const { n, population } = parseSample(cellBody(cells[2]));
+      rows.push({ dem, rep, third, state, pollster, url: link?.[1] ?? null, end: dates.end, n, population, demPct, repPct });
+    }
+  }
+  return rows.sort((a, b) => (a.end < b.end ? 1 : -1));
+}

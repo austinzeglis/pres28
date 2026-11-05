@@ -1,0 +1,1977 @@
+{
+ "built": "2026-11-05T21:12:04.434Z",
+ "national": {
+  "2008": 7.27,
+  "2012": 3.86,
+  "2016": 2.1,
+  "2020": 4.45,
+  "2024": -1.48
+ },
+ "house2026": 11.23,
+ "contests": [
+  {
+   "id": "AL",
+   "ev": 9,
+   "parent": "AL",
+   "name": "Alabama",
+   "district": false,
+   "division": "East South Central",
+   "results": {
+    "2008": -21.58,
+    "2012": -22.19,
+    "2016": -27.72,
+    "2020": -25.46,
+    "2024": -30.47
+   },
+   "senate26": {
+    "margin": -9.42,
+    "dem": "Wess",
+    "rep": "Moore",
+    "eevp": 98.97
+   },
+   "governor26": {
+    "margin": -4.12,
+    "dem": "Jones",
+    "rep": "Tuberville",
+    "eevp": 98.72
+   },
+   "demo": {
+    "pop": 5108468,
+    "white": 0.6410469831659903,
+    "black": 0.2662784615661682,
+    "hispanic": 0.05685540165857944,
+    "asian": 0.015986201734061952,
+    "native": 0.007493636056837392,
+    "meanAge": 39.69811516877467,
+    "over65": 0.18250324754897163,
+    "college": 0.2743,
+    "urban": 0.5770000000000001
+   }
+  },
+  {
+   "id": "AK",
+   "ev": 3,
+   "parent": "AK",
+   "name": "Alaska",
+   "district": false,
+   "division": "Pacific",
+   "results": {
+    "2008": -21.53,
+    "2012": -13.99,
+    "2016": -14.73,
+    "2020": -10.06,
+    "2024": -13.13
+   },
+   "senate26": {
+    "margin": -1.97,
+    "dem": "Peltola",
+    "rep": "Sullivan",
+    "eevp": 74.09
+   },
+   "governor26": {
+    "margin": -1.73,
+    "dem": "Kreiss-Tomkins",
+    "rep": "Wilson",
+    "eevp": 73.81
+   },
+   "demo": {
+    "pop": 733406,
+    "white": 0.5901615203584372,
+    "black": 0.03669318222103446,
+    "hispanic": 0.07458215504100048,
+    "asian": 0.06772510723937356,
+    "native": 0.15596545433225253,
+    "meanAge": 37.15738213213418,
+    "over65": 0.14359168046075435,
+    "college": 0.32789999999999997,
+    "urban": 0.649
+   }
+  },
+  {
+   "id": "AZ",
+   "ev": 11,
+   "parent": "AZ",
+   "name": "Arizona",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": -8.52,
+    "2012": -9.06,
+    "2016": -3.54,
+    "2020": 0.3,
+    "2024": -5.53
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 12.83,
+    "dem": "Hobbs",
+    "rep": "Biggs",
+    "eevp": 86.39
+   },
+   "demo": {
+    "pop": 7431344,
+    "white": 0.5337240477630965,
+    "black": 0.05686696780555442,
+    "hispanic": 0.31579832665531293,
+    "asian": 0.0408662282354309,
+    "native": 0.051618657405712885,
+    "meanAge": 40.05574886588482,
+    "over65": 0.19303627984386135,
+    "college": 0.3243,
+    "urban": 0.893
+   }
+  },
+  {
+   "id": "AR",
+   "ev": 6,
+   "parent": "AR",
+   "name": "Arkansas",
+   "district": false,
+   "division": "West South Central",
+   "results": {
+    "2008": -19.86,
+    "2012": -23.69,
+    "2016": -26.92,
+    "2020": -27.62,
+    "2024": -30.64
+   },
+   "senate26": {
+    "margin": -11.85,
+    "dem": "Shoffner",
+    "rep": "Cotton",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": -15.3,
+    "dem": "Love",
+    "rep": "Huckabee Sanders",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 3067732,
+    "white": 0.7024228322421906,
+    "black": 0.15589595179761465,
+    "hispanic": 0.09245755496242827,
+    "asian": 0.018822700288030375,
+    "native": 0.011308354184785372,
+    "meanAge": 39.228649699517426,
+    "over65": 0.17970735383664543,
+    "college": 0.2527,
+    "urban": 0.555
+   }
+  },
+  {
+   "id": "CA",
+   "ev": 54,
+   "parent": "CA",
+   "name": "California",
+   "district": false,
+   "division": "Pacific",
+   "results": {
+    "2008": 24.06,
+    "2012": 23.12,
+    "2016": 30.11,
+    "2020": 29.16,
+    "2024": 20.14
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 28.72,
+    "dem": "Becerra",
+    "rep": "Hilton",
+    "eevp": 61.39
+   },
+   "demo": {
+    "pop": 38965193,
+    "white": 0.3429133278000189,
+    "black": 0.06488080272052034,
+    "hispanic": 0.404474757766502,
+    "asian": 0.165221201393767,
+    "native": 0.017385105727565624,
+    "meanAge": 38.93599618510808,
+    "over65": 0.16198900901119623,
+    "college": 0.3619,
+    "urban": 0.9420000000000001
+   }
+  },
+  {
+   "id": "CO",
+   "ev": 10,
+   "parent": "CO",
+   "name": "Colorado",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": 8.95,
+    "2012": 5.36,
+    "2016": 4.91,
+    "2020": 13.5,
+    "2024": 10.99
+   },
+   "senate26": {
+    "margin": 23.95,
+    "dem": "Hickenlooper",
+    "rep": "Baisley",
+    "eevp": 89.24
+   },
+   "governor26": {
+    "margin": 26.49,
+    "dem": "Weiser",
+    "rep": "Marx",
+    "eevp": 88.85
+   },
+   "demo": {
+    "pop": 5877610,
+    "white": 0.6605453577219312,
+    "black": 0.04809914233846751,
+    "hispanic": 0.22735907962590238,
+    "asian": 0.03835827827977698,
+    "native": 0.016784883651688356,
+    "meanAge": 38.855857227682684,
+    "over65": 0.1604419143155126,
+    "college": 0.44420000000000004,
+    "urban": 0.86
+   }
+  },
+  {
+   "id": "CT",
+   "ev": 7,
+   "parent": "CT",
+   "name": "Connecticut",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 22.37,
+    "2012": 17.33,
+    "2016": 13.64,
+    "2020": 20.07,
+    "2024": 14.51
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 18.71,
+    "dem": "Lamont",
+    "rep": "Fazio",
+    "eevp": 98.11
+   },
+   "demo": {
+    "pop": 3617176,
+    "white": 0.63254234795321,
+    "black": 0.13093805775555295,
+    "hispanic": 0.1861255852631998,
+    "asian": 0.0518971153186906,
+    "native": 0.007787566875374602,
+    "meanAge": 41.04903410837626,
+    "over65": 0.19097052507259807,
+    "college": 0.4213,
+    "urban": 0.863
+   }
+  },
+  {
+   "id": "DE",
+   "ev": 3,
+   "parent": "DE",
+   "name": "Delaware",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 24.99,
+    "2012": 18.63,
+    "2016": 11.38,
+    "2020": 18.97,
+    "2024": 14.7
+   },
+   "senate26": {
+    "margin": 27.13,
+    "dem": "Coons",
+    "rep": "Katz",
+    "eevp": 99
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 1031890,
+    "white": 0.5893690218918683,
+    "black": 0.24075628216185835,
+    "hispanic": 0.11107966934460069,
+    "asian": 0.04421886053746039,
+    "native": 0.007331207783775402,
+    "meanAge": 41.56257643741097,
+    "over65": 0.21254009632809698,
+    "college": 0.35619999999999996,
+    "urban": 0.826
+   }
+  },
+  {
+   "id": "DC",
+   "ev": 3,
+   "parent": "DC",
+   "name": "District of Columbia",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 85.93,
+    "2012": 83.63,
+    "2016": 86.77,
+    "2020": 86.75,
+    "2024": 83.81
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 678972,
+    "white": 0.37650889874692917,
+    "black": 0.44361770441196396,
+    "hispanic": 0.11997254673241312,
+    "asian": 0.049130155588153854,
+    "native": 0.0067867305279157315,
+    "meanAge": 36.99451818337133,
+    "over65": 0.13068580147634953,
+    "college": 0.6305,
+    "urban": 1
+   }
+  },
+  {
+   "id": "FL",
+   "ev": 30,
+   "parent": "FL",
+   "name": "Florida",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 2.81,
+    "2012": 0.88,
+    "2016": -1.2,
+    "2020": -3.36,
+    "2024": -13.1
+   },
+   "senate26": {
+    "margin": -2.89,
+    "dem": "Nixon",
+    "rep": "Moody",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": -1.3,
+    "dem": "Jolly",
+    "rep": "Donalds",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 22610726,
+    "white": 0.5193490469965449,
+    "black": 0.1693627174996504,
+    "hispanic": 0.2740940295327094,
+    "asian": 0.03220705960525107,
+    "native": 0.0057231687297435736,
+    "meanAge": 42.32232388292176,
+    "over65": 0.21744954142560483,
+    "college": 0.33159999999999995,
+    "urban": 0.915
+   }
+  },
+  {
+   "id": "GA",
+   "ev": 16,
+   "parent": "GA",
+   "name": "Georgia",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": -5.21,
+    "2012": -7.82,
+    "2016": -5.13,
+    "2020": 0.23,
+    "2024": -2.19
+   },
+   "senate26": {
+    "margin": 18.05,
+    "dem": "Ossoff",
+    "rep": "Collins",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": 8.66,
+    "dem": "Bottoms",
+    "rep": "Jackson",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 11029227,
+    "white": 0.49556501103839823,
+    "black": 0.33200440973787193,
+    "hispanic": 0.11137979116759497,
+    "asian": 0.04873297104139755,
+    "native": 0.005884727914295354,
+    "meanAge": 38.26700085146493,
+    "over65": 0.15379291767229017,
+    "college": 0.34630000000000005,
+    "urban": 0.741
+   }
+  },
+  {
+   "id": "HI",
+   "ev": 4,
+   "parent": "HI",
+   "name": "Hawaii",
+   "district": false,
+   "division": "Pacific",
+   "results": {
+    "2008": 45.27,
+    "2012": 42.71,
+    "2016": 32.18,
+    "2020": 29.46,
+    "2024": 23.11
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 45.29,
+    "dem": "Green",
+    "rep": "Cordery",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 1435138,
+    "white": 0.2152043914940584,
+    "black": 0.021878035422377498,
+    "hispanic": 0.10111292433201546,
+    "asian": 0.37332716435631974,
+    "native": 0.0039292388606531215,
+    "meanAge": 41.41204121136783,
+    "over65": 0.21078530427039072,
+    "college": 0.353,
+    "urban": 0.861
+   }
+  },
+  {
+   "id": "ID",
+   "ev": 4,
+   "parent": "ID",
+   "name": "Idaho",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": -25.43,
+    "2012": -31.69,
+    "2016": -31.77,
+    "2020": -30.77,
+    "2024": -36.49
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": -24.73,
+    "dem": "Pickens",
+    "rep": "Little",
+    "eevp": 98.94
+   },
+   "demo": {
+    "pop": 1964726,
+    "white": 0.8026416915132186,
+    "black": 0.01006043590811136,
+    "hispanic": 0.13826762612191215,
+    "asian": 0.01744009088290174,
+    "native": 0.01719018326219534,
+    "meanAge": 38.47148202853731,
+    "over65": 0.17362726405615847,
+    "college": 0.3072,
+    "urban": 0.6920000000000001
+   }
+  },
+  {
+   "id": "IL",
+   "ev": 19,
+   "parent": "IL",
+   "name": "Illinois",
+   "district": false,
+   "division": "East North Central",
+   "results": {
+    "2008": 25.14,
+    "2012": 16.87,
+    "2016": 17.07,
+    "2020": 16.99,
+    "2024": 10.9
+   },
+   "senate26": {
+    "margin": 23.33,
+    "dem": "Stratton",
+    "rep": "Tracy",
+    "eevp": 93.28
+   },
+   "governor26": {
+    "margin": 22.63,
+    "dem": "Pritzker",
+    "rep": "Bailey",
+    "eevp": 93.23
+   },
+   "demo": {
+    "pop": 12549689,
+    "white": 0.58793026663848,
+    "black": 0.1463068128620558,
+    "hispanic": 0.18990789333504599,
+    "asian": 0.06324937613991868,
+    "native": 0.006475538955586868,
+    "meanAge": 39.685755798410625,
+    "over65": 0.17561566665118156,
+    "college": 0.3714,
+    "urban": 0.8690000000000001
+   }
+  },
+  {
+   "id": "IN",
+   "ev": 11,
+   "parent": "IN",
+   "name": "Indiana",
+   "district": false,
+   "division": "East North Central",
+   "results": {
+    "2008": 1.04,
+    "2012": -10.2,
+    "2016": -19.17,
+    "2020": -16.07,
+    "2024": -18.96
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 6862199,
+    "white": 0.7602906881598741,
+    "black": 0.1042167386868262,
+    "hispanic": 0.08773980468942973,
+    "asian": 0.02874180710877082,
+    "native": 0.004670514509998908,
+    "meanAge": 38.8433631843087,
+    "over65": 0.17183238201048964,
+    "college": 0.2888,
+    "urban": 0.7120000000000001
+   }
+  },
+  {
+   "id": "IA",
+   "ev": 6,
+   "parent": "IA",
+   "name": "Iowa",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": 9.54,
+    "2012": 5.81,
+    "2016": -9.41,
+    "2020": -8.2,
+    "2024": -13.21
+   },
+   "senate26": {
+    "margin": 4.11,
+    "dem": "Turek",
+    "rep": "Hinson",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": 10.98,
+    "dem": "Sand",
+    "rep": "Lahn",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 3207004,
+    "white": 0.8310516606776917,
+    "black": 0.04511001545367577,
+    "hispanic": 0.07439342139891313,
+    "asian": 0.027275301184532356,
+    "native": 0.006303390953051508,
+    "meanAge": 39.44279926061832,
+    "over65": 0.18579240936400454,
+    "college": 0.3054,
+    "urban": 0.632
+   }
+  },
+  {
+   "id": "KS",
+   "ev": 6,
+   "parent": "KS",
+   "name": "Kansas",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": -14.96,
+    "2012": -21.72,
+    "2016": -20.6,
+    "2020": -14.63,
+    "2024": -16.12
+   },
+   "senate26": {
+    "margin": 5,
+    "dem": "Hamilton",
+    "rep": "Marshall",
+    "eevp": 98.52
+   },
+   "governor26": {
+    "margin": 0.64,
+    "dem": "Holscher",
+    "rep": "Masterson",
+    "eevp": 98.52
+   },
+   "demo": {
+    "pop": 2940546,
+    "white": 0.7371345321583135,
+    "black": 0.06201977455887444,
+    "hispanic": 0.1372404988733385,
+    "asian": 0.03187129193013814,
+    "native": 0.012566373727872306,
+    "meanAge": 38.577443100703064,
+    "over65": 0.17459138540937635,
+    "college": 0.354,
+    "urban": 0.723
+   }
+  },
+  {
+   "id": "KY",
+   "ev": 8,
+   "parent": "KY",
+   "name": "Kentucky",
+   "district": false,
+   "division": "East South Central",
+   "results": {
+    "2008": -16.23,
+    "2012": -22.69,
+    "2016": -29.84,
+    "2020": -25.94,
+    "2024": -30.53
+   },
+   "senate26": {
+    "margin": -12.09,
+    "dem": "Booker",
+    "rep": "Barr",
+    "eevp": 99
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 4526154,
+    "white": 0.8235729495726394,
+    "black": 0.08750144162129703,
+    "hispanic": 0.05036903295822458,
+    "asian": 0.017992759415609808,
+    "native": 0.003406865961697282,
+    "meanAge": 39.49597737947052,
+    "over65": 0.17824338279254306,
+    "college": 0.2698,
+    "urban": 0.5870000000000001
+   }
+  },
+  {
+   "id": "LA",
+   "ev": 8,
+   "parent": "LA",
+   "name": "Louisiana",
+   "district": false,
+   "division": "West South Central",
+   "results": {
+    "2008": -18.63,
+    "2012": -17.2,
+    "2016": -19.64,
+    "2020": -18.61,
+    "2024": -22.01
+   },
+   "senate26": {
+    "margin": -1.76,
+    "dem": "Davis",
+    "rep": "Letlow",
+    "eevp": 99
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 4573749,
+    "white": 0.5664727119918473,
+    "black": 0.3259929655081641,
+    "hispanic": 0.07253196447815567,
+    "asian": 0.019309979625029706,
+    "native": 0.008857503986335936,
+    "meanAge": 38.87219937080063,
+    "over65": 0.17352395157670436,
+    "college": 0.2645,
+    "urban": 0.715
+   }
+  },
+  {
+   "id": "ME",
+   "ev": 2,
+   "parent": "ME",
+   "name": "Maine",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 17.33,
+    "2012": 15.29,
+    "2016": 2.96,
+    "2020": 9.07,
+    "2024": 6.94
+   },
+   "senate26": {
+    "margin": 6.44,
+    "dem": "Jackson",
+    "rep": "Collins",
+    "eevp": 93.04
+   },
+   "governor26": {
+    "margin": 17.14,
+    "dem": "Pingree",
+    "rep": "Charles",
+    "eevp": 93.05
+   },
+   "demo": {
+    "pop": 1395722,
+    "white": 0.9180932879183678,
+    "black": 0.021391795787413254,
+    "hispanic": 0.02284337425361211,
+    "asian": 0.01394833641656433,
+    "native": 0.007103850193663208,
+    "meanAge": 43.43017878918581,
+    "over65": 0.22987457387645963,
+    "college": 0.3599,
+    "urban": 0.386
+   }
+  },
+  {
+   "id": "MD",
+   "ev": 10,
+   "parent": "MD",
+   "name": "Maryland",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 25.45,
+    "2012": 26.07,
+    "2016": 26.42,
+    "2020": 33.21,
+    "2024": 28.54
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 29.57,
+    "dem": "Moore",
+    "rep": "Cox",
+    "eevp": 78.48
+   },
+   "demo": {
+    "pop": 6180253,
+    "white": 0.47269424083447714,
+    "black": 0.31562850258719183,
+    "hispanic": 0.12641440407051296,
+    "asian": 0.07082266696848818,
+    "native": 0.007765539695543208,
+    "meanAge": 39.70034996949154,
+    "over65": 0.17254698149088718,
+    "college": 0.4855,
+    "urban": 0.856
+   }
+  },
+  {
+   "id": "MA",
+   "ev": 11,
+   "parent": "MA",
+   "name": "Massachusetts",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 25.81,
+    "2012": 23.14,
+    "2016": 27.2,
+    "2020": 33.46,
+    "2024": 25.2
+   },
+   "senate26": {
+    "margin": 31.27,
+    "dem": "Markey",
+    "rep": "Deaton",
+    "eevp": 98.3
+   },
+   "governor26": {
+    "margin": 27.65,
+    "dem": "Healey",
+    "rep": "Minogue",
+    "eevp": 98.31
+   },
+   "demo": {
+    "pop": 7001399,
+    "white": 0.6883260045599459,
+    "black": 0.09645258040571605,
+    "hispanic": 0.13488489943224205,
+    "asian": 0.07868198912817281,
+    "native": 0.0055241816671211,
+    "meanAge": 40.68108645143635,
+    "over65": 0.1847736430961869,
+    "college": 0.5062,
+    "urban": 0.9129999999999999
+   }
+  },
+  {
+   "id": "MI",
+   "ev": 15,
+   "parent": "MI",
+   "name": "Michigan",
+   "district": false,
+   "division": "East North Central",
+   "results": {
+    "2008": 16.47,
+    "2012": 9.5,
+    "2016": -0.23,
+    "2020": 2.78,
+    "2024": -1.42
+   },
+   "senate26": {
+    "margin": 7.01,
+    "dem": "El-Sayed",
+    "rep": "Rogers",
+    "eevp": 97.55
+   },
+   "governor26": {
+    "margin": 10.76,
+    "dem": "Benson",
+    "rep": "James",
+    "eevp": 97.56
+   },
+   "demo": {
+    "pop": 10037261,
+    "white": 0.7365457568553812,
+    "black": 0.14108998460835082,
+    "hispanic": 0.05978742607171419,
+    "asian": 0.035689716547173574,
+    "native": 0.007527950105113338,
+    "meanAge": 40.476155795888936,
+    "over65": 0.1919599380747397,
+    "college": 0.31670000000000004,
+    "urban": 0.735
+   }
+  },
+  {
+   "id": "MN",
+   "ev": 10,
+   "parent": "MN",
+   "name": "Minnesota",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": 10.24,
+    "2012": 7.69,
+    "2016": 1.52,
+    "2020": 7.12,
+    "2024": 4.24
+   },
+   "senate26": {
+    "margin": 10.15,
+    "dem": "Flanagan",
+    "rep": "Tafoya",
+    "eevp": 98.85
+   },
+   "governor26": {
+    "margin": 12.83,
+    "dem": "Klobuchar",
+    "rep": "Demuth",
+    "eevp": 98.84
+   },
+   "demo": {
+    "pop": 5737915,
+    "white": 0.7688764995647374,
+    "black": 0.0785105739628419,
+    "hispanic": 0.06460726587967928,
+    "asian": 0.055180496748383344,
+    "native": 0.01418808051356634,
+    "meanAge": 39.44463973411945,
+    "over65": 0.17833080483067457,
+    "college": 0.389,
+    "urban": 0.7190000000000001
+   }
+  },
+  {
+   "id": "MS",
+   "ev": 6,
+   "parent": "MS",
+   "name": "Mississippi",
+   "district": false,
+   "division": "East South Central",
+   "results": {
+    "2008": -13.18,
+    "2012": -11.5,
+    "2016": -17.83,
+    "2020": -16.54,
+    "2024": -22.89
+   },
+   "senate26": {
+    "margin": 0.18,
+    "dem": "Colom",
+    "rep": "Hyde-Smith",
+    "eevp": 95.61
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 2939690,
+    "white": 0.5564678588558658,
+    "black": 0.37816368392585614,
+    "hispanic": 0.03882280104364746,
+    "asian": 0.011946157588044999,
+    "native": 0.006582326707918182,
+    "meanAge": 39.081775289231174,
+    "over65": 0.17609407794699442,
+    "college": 0.24780000000000002,
+    "urban": 0.46299999999999997
+   }
+  },
+  {
+   "id": "MO",
+   "ev": 10,
+   "parent": "MO",
+   "name": "Missouri",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": -0.14,
+    "2012": -9.38,
+    "2016": -18.63,
+    "2020": -15.39,
+    "2024": -18.41
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 6196156,
+    "white": 0.7789589222737452,
+    "black": 0.1170813000834711,
+    "hispanic": 0.05341682811084808,
+    "asian": 0.02328136993322957,
+    "native": 0.0063398984789924595,
+    "meanAge": 39.71914119011852,
+    "over65": 0.18343873201384858,
+    "college": 0.3172,
+    "urban": 0.695
+   }
+  },
+  {
+   "id": "MT",
+   "ev": 4,
+   "parent": "MT",
+   "name": "Montana",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": -2.26,
+    "2012": -13.65,
+    "2016": -20.42,
+    "2020": -16.37,
+    "2024": -19.93
+   },
+   "senate26": {
+    "margin": -36.17,
+    "dem": "Bankhead",
+    "rep": "Alme",
+    "eevp": 97.17
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 1132812,
+    "white": 0.851082968753862,
+    "black": 0.0064176580050352575,
+    "hispanic": 0.04736178642175401,
+    "asian": 0.010572804666617232,
+    "native": 0.06434165598528264,
+    "meanAge": 40.78841855488819,
+    "over65": 0.20478596625035753,
+    "college": 0.348,
+    "urban": 0.534
+   }
+  },
+  {
+   "id": "NE",
+   "ev": 2,
+   "parent": "NE",
+   "name": "Nebraska",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": -14.93,
+    "2012": -21.77,
+    "2016": -25.05,
+    "2020": -19.05,
+    "2024": -20.46
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": -8.58,
+    "dem": "Walz",
+    "rep": "Pillen",
+    "eevp": 94.22
+   },
+   "demo": {
+    "pop": 1978379,
+    "white": 0.7618737360232797,
+    "black": 0.05461137628331073,
+    "hispanic": 0.12941453583969503,
+    "asian": 0.028493529298481233,
+    "native": 0.016809216029891137,
+    "meanAge": 38.26056382523268,
+    "over65": 0.17162838869599809,
+    "college": 0.34450000000000003,
+    "urban": 0.73
+   }
+  },
+  {
+   "id": "NV",
+   "ev": 6,
+   "parent": "NV",
+   "name": "Nevada",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": 12.5,
+    "2012": 6.68,
+    "2016": 2.42,
+    "2020": 2.39,
+    "2024": -3.1
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 7.08,
+    "dem": "Ford",
+    "rep": "Lombardo",
+    "eevp": 90.51
+   },
+   "demo": {
+    "pop": 3194176,
+    "white": 0.4544470937105532,
+    "black": 0.10999581738764551,
+    "hispanic": 0.2994202573684105,
+    "asian": 0.09723634514816967,
+    "native": 0.01712084744234507,
+    "meanAge": 39.685030192450256,
+    "over65": 0.17397569827085296,
+    "college": 0.2757,
+    "urban": 0.941
+   }
+  },
+  {
+   "id": "NH",
+   "ev": 4,
+   "parent": "NH",
+   "name": "New Hampshire",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 9.61,
+    "2012": 5.58,
+    "2016": 0.37,
+    "2020": 7.35,
+    "2024": 2.78
+   },
+   "senate26": {
+    "margin": 14.12,
+    "dem": "Pappas",
+    "rep": "Sununu",
+    "eevp": 96.42
+   },
+   "governor26": {
+    "margin": -3.92,
+    "dem": "Warmington",
+    "rep": "Ayotte",
+    "eevp": 96.41
+   },
+   "demo": {
+    "pop": 1402054,
+    "white": 0.8852918646500063,
+    "black": 0.02052987973359086,
+    "hispanic": 0.04841468302932697,
+    "asian": 0.03128838118931225,
+    "native": 0.0032516579247304314,
+    "meanAge": 42.538534179140036,
+    "over65": 0.20792779736015873,
+    "college": 0.40979999999999994,
+    "urban": 0.583
+   }
+  },
+  {
+   "id": "NJ",
+   "ev": 14,
+   "parent": "NJ",
+   "name": "New Jersey",
+   "district": false,
+   "division": "Mid Atlantic",
+   "results": {
+    "2008": 15.57,
+    "2012": 17.79,
+    "2016": 14.1,
+    "2020": 15.93,
+    "2024": 5.91
+   },
+   "senate26": {
+    "margin": 26.98,
+    "dem": "Booker",
+    "rep": "Murphy",
+    "eevp": 95.11
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 9290841,
+    "white": 0.5202939109602672,
+    "black": 0.15530348651968104,
+    "hispanic": 0.22660521259593183,
+    "asian": 0.10644773707783826,
+    "native": 0.007784871143527265,
+    "meanAge": 40.12300124391322,
+    "over65": 0.1774160164833302,
+    "college": 0.431,
+    "urban": 0.938
+   }
+  },
+  {
+   "id": "NM",
+   "ev": 5,
+   "parent": "NM",
+   "name": "New Mexico",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": 15.13,
+    "2012": 10.15,
+    "2016": 8.22,
+    "2020": 10.79,
+    "2024": 6
+   },
+   "senate26": {
+    "margin": 26.47,
+    "dem": "Luján",
+    "rep": "Marker",
+    "eevp": 98.48
+   },
+   "governor26": {
+    "margin": 14.66,
+    "dem": "Haaland",
+    "rep": "Hull",
+    "eevp": 98.48
+   },
+   "demo": {
+    "pop": 2114371,
+    "white": 0.36767293913887394,
+    "black": 0.028397097765718506,
+    "hispanic": 0.4859397901314386,
+    "asian": 0.02035167905727046,
+    "native": 0.11401168479893074,
+    "meanAge": 40.29952406649542,
+    "over65": 0.19795532572098273,
+    "college": 0.3005,
+    "urban": 0.745
+   }
+  },
+  {
+   "id": "NY",
+   "ev": 28,
+   "parent": "NY",
+   "name": "New York",
+   "district": false,
+   "division": "Mid Atlantic",
+   "results": {
+    "2008": 26.85,
+    "2012": 28.18,
+    "2016": 22.49,
+    "2020": 23.13,
+    "2024": 12.6
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 19.39,
+    "dem": "Hochul",
+    "rep": "Blakeman",
+    "eevp": 92.01
+   },
+   "demo": {
+    "pop": 19571216,
+    "white": 0.5404455706788991,
+    "black": 0.17666030562434137,
+    "hispanic": 0.19789930273111286,
+    "asian": 0.09729896190405338,
+    "native": 0.01066239317986169,
+    "meanAge": 40.49967937607965,
+    "over65": 0.18568600949476005,
+    "college": 0.409,
+    "urban": 0.8740000000000001
+   }
+  },
+  {
+   "id": "NC",
+   "ev": 16,
+   "parent": "NC",
+   "name": "North Carolina",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 0.32,
+    "2012": -2.04,
+    "2016": -3.66,
+    "2020": -1.34,
+    "2024": -3.21
+   },
+   "senate26": {
+    "margin": 19.63,
+    "dem": "Cooper",
+    "rep": "Whatley",
+    "eevp": 99
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 10835491,
+    "white": 0.606653727089986,
+    "black": 0.2207945168336165,
+    "hispanic": 0.11429302096231726,
+    "asian": 0.036856474708898745,
+    "native": 0.015948238986124394,
+    "meanAge": 39.59242151555476,
+    "over65": 0.1761331350835878,
+    "college": 0.34909999999999997,
+    "urban": 0.667
+   }
+  },
+  {
+   "id": "ND",
+   "ev": 3,
+   "parent": "ND",
+   "name": "North Dakota",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": -8.63,
+    "2012": -19.63,
+    "2016": -35.73,
+    "2020": -33.34,
+    "2024": -36.45
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 783926,
+    "white": 0.8262131884897299,
+    "black": 0.037563494513512756,
+    "hispanic": 0.04870995476613864,
+    "asian": 0.017458280500965654,
+    "native": 0.05279835086474999,
+    "meanAge": 37.84202590550639,
+    "over65": 0.1700619701349362,
+    "college": 0.31739999999999996,
+    "urban": 0.61
+   }
+  },
+  {
+   "id": "OH",
+   "ev": 17,
+   "parent": "OH",
+   "name": "Ohio",
+   "district": false,
+   "division": "East North Central",
+   "results": {
+    "2008": 4.59,
+    "2012": 2.98,
+    "2016": -8.13,
+    "2020": -8.03,
+    "2024": -11.21
+   },
+   "senate26": {
+    "margin": 4.85,
+    "dem": "Brown",
+    "rep": "Husted",
+    "eevp": 97.99
+   },
+   "governor26": {
+    "margin": 7.93,
+    "dem": "Acton",
+    "rep": "Ramaswamy",
+    "eevp": 97.99
+   },
+   "demo": {
+    "pop": 11785935,
+    "white": 0.7673561749661779,
+    "black": 0.13424280721045892,
+    "hispanic": 0.048474389176590575,
+    "asian": 0.02808771641791678,
+    "native": 0.003206533889759277,
+    "meanAge": 40.024114336283034,
+    "over65": 0.18742255069283853,
+    "college": 0.3072,
+    "urban": 0.763
+   }
+  },
+  {
+   "id": "OK",
+   "ev": 7,
+   "parent": "OK",
+   "name": "Oklahoma",
+   "district": false,
+   "division": "West South Central",
+   "results": {
+    "2008": -31.3,
+    "2012": -33.54,
+    "2016": -36.39,
+    "2020": -33.08,
+    "2024": -34.26
+   },
+   "senate26": {
+    "margin": -17.93,
+    "dem": "Thomas",
+    "rep": "Hern",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": -6.01,
+    "dem": "Munson",
+    "rep": "Mazzei",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 4053824,
+    "white": 0.6264129868489604,
+    "black": 0.0792651580335012,
+    "hispanic": 0.12908527849260354,
+    "asian": 0.026352402077643233,
+    "native": 0.09543951587439416,
+    "meanAge": 38.176938614009885,
+    "over65": 0.16617346979049905,
+    "college": 0.2792,
+    "urban": 0.6459999999999999
+   }
+  },
+  {
+   "id": "OR",
+   "ev": 8,
+   "parent": "OR",
+   "name": "Oregon",
+   "district": false,
+   "division": "Pacific",
+   "results": {
+    "2008": 16.35,
+    "2012": 12.09,
+    "2016": 10.98,
+    "2020": 16.08,
+    "2024": 14.3
+   },
+   "senate26": {
+    "margin": 16.48,
+    "dem": "Merkley",
+    "rep": "Smith",
+    "eevp": 79.48
+   },
+   "governor26": {
+    "margin": 6.63,
+    "dem": "Kotek",
+    "rep": "Drazan",
+    "eevp": 79.28
+   },
+   "demo": {
+    "pop": 4233358,
+    "white": 0.7283688268273083,
+    "black": 0.023943167575244048,
+    "hispanic": 0.14918629607984962,
+    "asian": 0.05192639035016646,
+    "native": 0.01914272310539293,
+    "meanAge": 40.89337707796033,
+    "over65": 0.19589035465462643,
+    "college": 0.36329999999999996,
+    "urban": 0.805
+   }
+  },
+  {
+   "id": "PA",
+   "ev": 19,
+   "parent": "PA",
+   "name": "Pennsylvania",
+   "district": false,
+   "division": "Mid Atlantic",
+   "results": {
+    "2008": 10.32,
+    "2012": 5.38,
+    "2016": -0.72,
+    "2020": 1.16,
+    "2024": -1.71
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 22.1,
+    "dem": "Shapiro",
+    "rep": "Garrity",
+    "eevp": 98.72
+   },
+   "demo": {
+    "pop": 12961683,
+    "white": 0.7406613786188105,
+    "black": 0.1225550725164317,
+    "hispanic": 0.08900695997579944,
+    "asian": 0.04183191334026608,
+    "native": 0.004708339187125623,
+    "meanAge": 41.097874635570086,
+    "over65": 0.20025748199520077,
+    "college": 0.3454,
+    "urban": 0.765
+   }
+  },
+  {
+   "id": "RI",
+   "ev": 4,
+   "parent": "RI",
+   "name": "Rhode Island",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 27.8,
+    "2012": 27.46,
+    "2016": 15.51,
+    "2020": 20.78,
+    "2024": 13.78
+   },
+   "senate26": {
+    "margin": 37.48,
+    "dem": "Reed",
+    "rep": "McKay",
+    "eevp": 98.03
+   },
+   "governor26": {
+    "margin": 44.52,
+    "dem": "Foulkes",
+    "rep": "Guckian",
+    "eevp": 98.03
+   },
+   "demo": {
+    "pop": 1095962,
+    "white": 0.6924838634916174,
+    "black": 0.09254335460536041,
+    "hispanic": 0.1801193837012597,
+    "asian": 0.03739545714176221,
+    "native": 0.01268565880933828,
+    "meanAge": 41.14485812464301,
+    "over65": 0.19302494064575232,
+    "college": 0.365,
+    "urban": 0.9109999999999999
+   }
+  },
+  {
+   "id": "SC",
+   "ev": 9,
+   "parent": "SC",
+   "name": "South Carolina",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": -8.97,
+    "2012": -10.47,
+    "2016": -14.27,
+    "2020": -11.68,
+    "2024": -17.87
+   },
+   "senate26": {
+    "margin": 4.47,
+    "dem": "Andrews",
+    "rep": "Graham",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": -4.48,
+    "dem": "Johnson",
+    "rep": "Wilson",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 5373555,
+    "white": 0.6287818771744218,
+    "black": 0.2595678280021327,
+    "hispanic": 0.07454059742572654,
+    "asian": 0.020383898555053404,
+    "native": 0.006053534392036557,
+    "meanAge": 40.42402134155136,
+    "over65": 0.19315536921088552,
+    "college": 0.3153,
+    "urban": 0.679
+   }
+  },
+  {
+   "id": "SD",
+   "ev": 3,
+   "parent": "SD",
+   "name": "South Dakota",
+   "district": false,
+   "division": "West North Central",
+   "results": {
+    "2008": -8.41,
+    "2012": -18.02,
+    "2016": -29.79,
+    "2020": -26.16,
+    "2024": -29.19
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": -26.99,
+    "dem": "Ahlers",
+    "rep": "Rhoden",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 919318,
+    "white": 0.8047520009398271,
+    "black": 0.02618897922155337,
+    "hispanic": 0.05087358237302,
+    "asian": 0.017896962748472238,
+    "native": 0.08523274862452383,
+    "meanAge": 38.8920830441697,
+    "over65": 0.18365462223082762,
+    "college": 0.31670000000000004,
+    "urban": 0.5720000000000001
+   }
+  },
+  {
+   "id": "TN",
+   "ev": 11,
+   "parent": "TN",
+   "name": "Tennessee",
+   "district": false,
+   "division": "East South Central",
+   "results": {
+    "2008": -15.07,
+    "2012": -20.4,
+    "2016": -26,
+    "2020": -23.21,
+    "2024": -29.72
+   },
+   "senate26": {
+    "margin": -12.17,
+    "dem": "Bradshaw",
+    "rep": "Hagerty",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": -2.51,
+    "dem": "Green",
+    "rep": "Blackburn",
+    "eevp": 98.91
+   },
+   "demo": {
+    "pop": 7126489,
+    "white": 0.7198729977693082,
+    "black": 0.1652420988792658,
+    "hispanic": 0.07518442812442425,
+    "asian": 0.021174943229407918,
+    "native": 0.005700282425188617,
+    "meanAge": 39.40933550869159,
+    "over65": 0.17427880685706523,
+    "college": 0.3048,
+    "urban": 0.662
+   }
+  },
+  {
+   "id": "TX",
+   "ev": 40,
+   "parent": "TX",
+   "name": "Texas",
+   "district": false,
+   "division": "West South Central",
+   "results": {
+    "2008": -11.77,
+    "2012": -15.79,
+    "2016": -8.99,
+    "2020": -5.58,
+    "2024": -13.68
+   },
+   "senate26": {
+    "margin": 12.09,
+    "dem": "Talarico",
+    "rep": "Paxton",
+    "eevp": 99
+   },
+   "governor26": {
+    "margin": 7.13,
+    "dem": "Hinojosa",
+    "rep": "Abbott",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 30503301,
+    "white": 0.39630281325945677,
+    "black": 0.13630606733349943,
+    "hispanic": 0.3978484164713845,
+    "asian": 0.05963951245801233,
+    "native": 0.010857480637915222,
+    "meanAge": 36.71063846499761,
+    "over65": 0.1372986812148626,
+    "college": 0.3312,
+    "urban": 0.8370000000000001
+   }
+  },
+  {
+   "id": "UT",
+   "ev": 6,
+   "parent": "UT",
+   "name": "Utah",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": -28.17,
+    "2012": -48.04,
+    "2016": -18.08,
+    "2020": -20.48,
+    "2024": -21.59
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 3417734,
+    "white": 0.7570913944736484,
+    "black": 0.016116233738494568,
+    "hispanic": 0.16003234891890358,
+    "asian": 0.028532355063325583,
+    "native": 0.01565862059481516,
+    "meanAge": 34.54649220799512,
+    "over65": 0.12205045799351266,
+    "college": 0.36810000000000004,
+    "urban": 0.898
+   }
+  },
+  {
+   "id": "VT",
+   "ev": 3,
+   "parent": "VT",
+   "name": "Vermont",
+   "district": false,
+   "division": "New England",
+   "results": {
+    "2008": 37.01,
+    "2012": 35.6,
+    "2016": 26.41,
+    "2020": 35.42,
+    "2024": 31.51
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": -6.96,
+    "dem": "Janoo",
+    "rep": "Scott",
+    "eevp": 99
+   },
+   "demo": {
+    "pop": 647464,
+    "white": 0.9145419668120545,
+    "black": 0.016132171055070244,
+    "hispanic": 0.026233118752548405,
+    "asian": 0.02098803948945424,
+    "native": 0.004038834591575747,
+    "meanAge": 42.68517786317077,
+    "over65": 0.22105167237097353,
+    "college": 0.44439999999999996,
+    "urban": 0.35100000000000003
+   }
+  },
+  {
+   "id": "VA",
+   "ev": 13,
+   "parent": "VA",
+   "name": "Virginia",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": 6.3,
+    "2012": 3.88,
+    "2016": 5.32,
+    "2020": 10.11,
+    "2024": 5.78
+   },
+   "senate26": {
+    "margin": 22.59,
+    "dem": "Warner",
+    "rep": "Mizusawa",
+    "eevp": 97.5
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 8715698,
+    "white": 0.5910507683951417,
+    "black": 0.20014151477024558,
+    "hispanic": 0.1118461194961092,
+    "asian": 0.07400749773569483,
+    "native": 0.006151888236604802,
+    "meanAge": 39.47866286785063,
+    "over65": 0.17197463702849733,
+    "college": 0.4181,
+    "urban": 0.7559999999999999
+   }
+  },
+  {
+   "id": "WA",
+   "ev": 12,
+   "parent": "WA",
+   "name": "Washington",
+   "district": false,
+   "division": "Pacific",
+   "results": {
+    "2008": 17.17,
+    "2012": 14.87,
+    "2016": 15.71,
+    "2020": 19.2,
+    "2024": 18.22
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 7812880,
+    "white": 0.6418505083912719,
+    "black": 0.04667254584736998,
+    "hispanic": 0.14616633046968597,
+    "asian": 0.10750990671813723,
+    "native": 0.020122541239594106,
+    "meanAge": 39.36354442919897,
+    "over65": 0.1712248236245789,
+    "college": 0.4097,
+    "urban": 0.8340000000000001
+   }
+  },
+  {
+   "id": "WV",
+   "ev": 4,
+   "parent": "WV",
+   "name": "West Virginia",
+   "district": false,
+   "division": "South Atlantic",
+   "results": {
+    "2008": -13.12,
+    "2012": -26.76,
+    "2016": -42.07,
+    "2020": -38.93,
+    "2024": -41.87
+   },
+   "senate26": {
+    "margin": -20.42,
+    "dem": "Anderson",
+    "rep": "Capito",
+    "eevp": 99
+   },
+   "governor26": null,
+   "demo": {
+    "pop": 1770071,
+    "white": 0.9092945989172185,
+    "black": 0.03804706138906293,
+    "hispanic": 0.022441472686688838,
+    "asian": 0.009289457880503098,
+    "native": 0.002867116629784907,
+    "meanAge": 41.90628737491321,
+    "over65": 0.21506425448470712,
+    "college": 0.2412,
+    "urban": 0.446
+   }
+  },
+  {
+   "id": "WI",
+   "ev": 10,
+   "parent": "WI",
+   "name": "Wisconsin",
+   "district": false,
+   "division": "East North Central",
+   "results": {
+    "2008": 13.91,
+    "2012": 6.94,
+    "2016": -0.77,
+    "2020": 0.63,
+    "2024": -0.86
+   },
+   "senate26": null,
+   "governor26": {
+    "margin": 7.99,
+    "dem": "Crowley",
+    "rep": "Tiffany",
+    "eevp": 98.85
+   },
+   "demo": {
+    "pop": 5910955,
+    "white": 0.7951281984044879,
+    "black": 0.06637387697926984,
+    "hispanic": 0.08091568959668953,
+    "asian": 0.03311985965042874,
+    "native": 0.012398842488227368,
+    "meanAge": 40.47900601510246,
+    "over65": 0.1911369651773698,
+    "college": 0.32539999999999997,
+    "urban": 0.6709999999999999
+   }
+  },
+  {
+   "id": "WY",
+   "ev": 3,
+   "parent": "WY",
+   "name": "Wyoming",
+   "district": false,
+   "division": "Mountain",
+   "results": {
+    "2008": -32.24,
+    "2012": -40.82,
+    "2016": -46.29,
+    "2020": -43.39,
+    "2024": -45.76
+   },
+   "senate26": {
+    "margin": -30.47,
+    "dem": "Byrd",
+    "rep": "Hageman",
+    "eevp": 96.95
+   },
+   "governor26": {
+    "margin": -53.91,
+    "dem": "Casner",
+    "rep": "Barlow",
+    "eevp": 96.97
+   },
+   "demo": {
+    "pop": 584057,
+    "white": 0.8307151528018669,
+    "black": 0.012067315347645864,
+    "hispanic": 0.10752032763925438,
+    "asian": 0.011510862809623034,
+    "native": 0.028067466017871544,
+    "meanAge": 39.91993932099093,
+    "over65": 0.19153096358745808,
+    "college": 0.2924,
+    "urban": 0.62
+   }
+  },
+  {
+   "id": "ME-1",
+   "ev": 1,
+   "parent": "ME",
+   "name": "Maine 1",
+   "district": true,
+   "division": "New England",
+   "results": {
+    "2008": 22.82,
+    "2012": 21.39,
+    "2016": 14.81,
+    "2020": 23.09,
+    "2024": 21.6
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 1395722,
+    "white": 0.9180932879183678,
+    "black": 0.021391795787413254,
+    "hispanic": 0.02284337425361211,
+    "asian": 0.01394833641656433,
+    "native": 0.007103850193663208,
+    "meanAge": 43.43017878918581,
+    "over65": 0.22987457387645963,
+    "college": 0.3599,
+    "urban": 0.386
+   }
+  },
+  {
+   "id": "ME-2",
+   "ev": 1,
+   "parent": "ME",
+   "name": "Maine 2",
+   "district": true,
+   "division": "New England",
+   "results": {
+    "2008": 11.26,
+    "2012": 8.56,
+    "2016": -10.28,
+    "2020": -7.44,
+    "2024": -9.04
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 1395722,
+    "white": 0.9180932879183678,
+    "black": 0.021391795787413254,
+    "hispanic": 0.02284337425361211,
+    "asian": 0.01394833641656433,
+    "native": 0.007103850193663208,
+    "meanAge": 43.43017878918581,
+    "over65": 0.22987457387645963,
+    "college": 0.3599,
+    "urban": 0.386
+   }
+  },
+  {
+   "id": "NE-1",
+   "ev": 1,
+   "parent": "NE",
+   "name": "Nebraska 1",
+   "district": true,
+   "division": "West North Central",
+   "results": {
+    "2008": -9.77,
+    "2012": -16.6,
+    "2016": -20.72,
+    "2020": -14.92,
+    "2024": -12.97
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 1978379,
+    "white": 0.7618737360232797,
+    "black": 0.05461137628331073,
+    "hispanic": 0.12941453583969503,
+    "asian": 0.028493529298481233,
+    "native": 0.016809216029891137,
+    "meanAge": 38.26056382523268,
+    "over65": 0.17162838869599809,
+    "college": 0.34450000000000003,
+    "urban": 0.73
+   }
+  },
+  {
+   "id": "NE-2",
+   "ev": 1,
+   "parent": "NE",
+   "name": "Nebraska 2",
+   "district": true,
+   "division": "West North Central",
+   "results": {
+    "2008": 1.22,
+    "2012": -7.15,
+    "2016": -2.24,
+    "2020": 6.5,
+    "2024": 4.59
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 1978379,
+    "white": 0.7618737360232797,
+    "black": 0.05461137628331073,
+    "hispanic": 0.12941453583969503,
+    "asian": 0.028493529298481233,
+    "native": 0.016809216029891137,
+    "meanAge": 38.26056382523268,
+    "over65": 0.17162838869599809,
+    "college": 0.34450000000000003,
+    "urban": 0.73
+   }
+  },
+  {
+   "id": "NE-3",
+   "ev": 1,
+   "parent": "NE",
+   "name": "Nebraska 3",
+   "district": true,
+   "division": "West North Central",
+   "results": {
+    "2008": -39.01,
+    "2012": -42.41,
+    "2016": -54.19,
+    "2020": -53.02,
+    "2024": -53.59
+   },
+   "senate26": null,
+   "governor26": null,
+   "demo": {
+    "pop": 1978379,
+    "white": 0.7618737360232797,
+    "black": 0.05461137628331073,
+    "hispanic": 0.12941453583969503,
+    "asian": 0.028493529298481233,
+    "native": 0.016809216029891137,
+    "meanAge": 38.26056382523268,
+    "over65": 0.17162838869599809,
+    "college": 0.34450000000000003,
+    "urban": 0.73
+   }
+  }
+ ]
+}
