@@ -40,21 +40,13 @@ const hideTip = () => { tip.hidden = true; };
 
 // ---------- home ----------
 
-function rowHtml(r, xMax) {
-  const at = (v) => (v == null ? null : (100 * v) / xMax);
-  const m = at(r.m);
-  const p = at(r.p);
+function rowHtml(r) {
   const rise = r.r7 == null ? "" : r.r7 > 0 ? `▲${r.r7}` : r.r7 < 0 ? `▼${-r.r7}` : "=";
   return `<a class="row grid${r.thin ? " thin" : ""}" href="/p/${r.id}" data-id="${r.id}">
     <span class="rk">${r.rank}</span>
     <span class="nm">${esc(r.name)}${r.on_list ? "" : "<sup>+</sup>"}</span>
     <span class="st ${r.status}">${STATUS[r.status]}</span>
-    <span class="plot">
-      <i class="bar" style="width:${at(r.blend).toFixed(1)}%"></i>
-      ${m != null && p != null ? `<i class="span" style="left:${Math.min(m, p).toFixed(1)}%;width:${Math.abs(m - p).toFixed(1)}%"></i>` : ""}
-      ${m != null ? `<i class="m" style="left:${m.toFixed(1)}%"></i>` : ""}
-      ${p != null ? `<i class="p" style="left:${p.toFixed(1)}%"></i>` : ""}
-    </span>
+    <span class="plot"><i class="bar" style="width:${r.score}%"></i></span>
     <span class="num sc">${r.score >= 10 ? r.score.toFixed(0) : r.score.toFixed(1)}</span>
     <span class="num src${r.m == null ? " nil" : ""}">${fmt1(r.m)}</span>
     <span class="num src${r.p == null ? " nil" : ""}">${fmt1(r.p)}</span>
@@ -64,15 +56,14 @@ function rowHtml(r, xMax) {
 
 function boardHtml(party) {
   const { rows } = state.board[party];
-  const xMax = Math.max(...rows.map((r) => Math.max(r.blend ?? 0, r.m ?? 0, r.p ?? 0))) || 1;
   return `<section class="board ${party}">
     <h2><i class="swatch"></i>${PARTY[party]}</h2>
     <div class="grid head">
       <span></span><span></span><span class="st-h">Status</span>
-      <span class="key"><span><i class="m"></i>Mkts</span><span><i class="p"></i>Polls</span></span>
+      <span></span>
       <span class="num">Score</span><span class="num">Mkts</span><span class="num">Polls</span><span class="num">7d</span>
     </div>
-    ${rows.map((r) => rowHtml(r, xMax)).join("")}
+    ${rows.map(rowHtml).join("")}
   </section>`;
 }
 
