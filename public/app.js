@@ -1,4 +1,4 @@
-import { buildMatchup, hashSeed, simulate } from "./sim.js?v=12";
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=13";
 
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
@@ -282,8 +282,8 @@ function ageOf(p) {
 }
 
 function storiesHtml() {
-  const { stories, posts } = person.data;
-  const plans = stories.filter((s) => PLANS_A.test(s.title) && PLANS_B.test(s.title));
+  const { stories, posts, running } = person.data;
+  const plans = (running ?? []).filter((s) => PLANS_A.test(s.title) && PLANS_B.test(s.title));
   const list = person.tab === "plans" ? plans : person.tab === "posts" ? posts : stories;
   const tab = (key, label, n) => `<button data-tab="${key}" class="${person.tab === key ? "on" : ""}">${label} ${n}</button>`;
   const seen = new Set();
@@ -479,7 +479,7 @@ const answers = new Map();
 
 function startWorker() {
   if (match.worker) return match.worker;
-  match.worker = new Worker("/simworker.js?v=12", { type: "module" });
+  match.worker = new Worker("/simworker.js?v=13", { type: "module" });
   match.worker.onmessage = ({ data }) => answers.get(data.key)?.(data.result);
   match.worker.onerror = (e) => {
     console.error("simulation thread", e.message);

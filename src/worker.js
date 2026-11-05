@@ -68,8 +68,12 @@ async function person(env, id) {
   const query = (kinds) => env.DB
     .prepare(`SELECT ${STORY_COLUMNS} FROM item_people p JOIN items i ON i.id = p.id WHERE p.person = ? AND p.published <= ? AND p.kind IN (${kinds}) ORDER BY p.published DESC LIMIT 150`)
     .bind(id, now);
-  const [stories, posts] = await env.DB.batch([query("'feed','gnews'"), query("'bluesky','youtube'")]);
-  return site(`{"person":${snap.json},"stories":${JSON.stringify(stories.results)},"posts":${JSON.stringify(posts.results)}}`);
+  // Stories about running get their own search, or a busy name's newest news would crowd them out.
+  const about = env.DB
+    .prepare(`SELECT ${STORY_COLUMNS} FROM item_people p JOIN items i ON i.id = p.id WHERE p.person = ? AND p.published <= ? AND p.kind IN ('feed', 'gnews') AND (i.title LIKE '%2028%' OR i.title LIKE '%president%' OR i.title LIKE '%white house%') ORDER BY p.published DESC LIMIT 150`)
+    .bind(id, now);
+  const [stories, posts, running] = await env.DB.batch([query("'feed','gnews'"), query("'bluesky','youtube'"), about]);
+  return site(`{"person":${snap.json},"stories":${JSON.stringify(stories.results)},"posts":${JSON.stringify(posts.results)},"running":${JSON.stringify(running.results)}}`);
 }
 
 async function exported(env, path) {
