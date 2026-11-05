@@ -55,7 +55,7 @@ function studentT(normal, df) {
 }
 
 // params: { nationalMean, nationalSd, nationalDf, candidateSd, nRef, factorSd: [..], districtShare,
-//   contests: [{ id, ev, base, elasticity, sigma, load: [..], parent: index|null, weight }] }
+//   contests: [{ id, ev, base, sigma, load: [..], parent: index|null, weight }] }
 export function simulate(params, draws = 100000, seed = 1) {
   const normal = normals(rng(seed));
   const { contests, factorSd } = params;
@@ -94,7 +94,7 @@ export function simulate(params, draws = 100000, seed = 1) {
       } else {
         shock = idio[c.parent] * params.districtShare + normal() * c.sigma * turbulence;
       }
-      let m = c.base + c.elasticity * (N - params.nRef) + shock;
+      let m = c.base + (N - params.nRef) + shock;
       for (let j = 0; j < k; j++) m += c.load[j] * f[j];
       margins[i] = m;
       stateMargin[i] += m;
@@ -173,19 +173,21 @@ export function buildMatchup(model, demId, repId) {
   // about nine fresh polls to outweigh everything else we know.
   const trust = 1 + model.daysLeft / 90;
 
-  const parts = [{ label: "National mood", value: model.mood.center }];
+  const parts = [{ label: "National mood", value: model.mood.center, pieces: model.mood.pieces }];
   let mean = model.mood.center + dem.strength - rep.strength;
   parts.push({ label: `${dem.name} edge`, value: dem.strength, pieces: dem.pieces });
-  parts.push({ label: `${rep.name} edge`, value: -rep.strength, pieces: rep.pieces });
+  parts.push({ label: `${rep.name} edge`, value: -rep.strength, pieces: rep.pieces, against: true });
 
-  const two = polls.filter((m) => !m.state && !m.third);
+  // Each person's edge already reflects these polls. Only what's special about this
+  // exact pairing, beyond the two edges, is new information.
+  const two = polls.filter((m) => !m.state && !m.third && m.residual != null);
   if (two.length) {
     const w = two.map((m) => 2 ** (-ageOf(m) / 90));
     const total = w.reduce((a, b) => a + b, 0);
-    const avg = two.reduce((s, m, i) => s + w[i] * (m.demPct - m.repPct), 0) / total;
-    const pull = (total / (total + trust)) * (avg - mean);
+    const avg = two.reduce((s, m, i) => s + w[i] * m.residual, 0) / total;
+    const pull = (total / (total + trust)) * avg;
     mean += pull;
-    parts.push({ label: `Polls of this matchup (${two.length})`, value: pull });
+    parts.push({ label: `This exact pairing in polls (${two.length})`, value: pull });
   }
 
   const statePolls = polls.filter((m) => m.state && !m.third);
@@ -203,7 +205,7 @@ export function buildMatchup(model, demId, repId) {
         const w = here.map((m) => 2 ** (-ageOf(m) / 90));
         const total = w.reduce((a, b) => a + b, 0);
         const avg = here.reduce((s, m, i) => s + w[i] * (m.demPct - m.repPct), 0) / total;
-        const expected = base + c.elasticity * (mean - model.map.nRef);
+        const expected = base + (mean - model.map.nRef);
         base += (total / (total + trust)) * (avg - expected);
       }
     }

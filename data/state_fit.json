@@ -1,24 +1,22 @@
 {
  "cfg": {
-  "factors": 6,
-  "kernelWidth": 1,
-  "regionShare": 0.35,
   "leanWeights": [
    0.7,
    0.3,
    0
   ],
   "trend": 0.25,
-  "elasticityKeep": 0,
-  "demoDrift": 0
+  "factors": 12,
+  "kernelWidth": 1,
+  "regionShare": 0.15
  },
+ "sharedShare": 0.4,
+ "totalStray": 4.940658531005759,
  "stray": {
-  "sharedStray": 2.253915719937042,
-  "ownStray": 4.104083102889205,
+  "sharedStray": 3.124746819823967,
+  "ownStray": 3.8270176419765813,
   "districtExtra": 3.5
  },
- "sharedShare": 0.23171961496055019,
- "totalStray": 4.682268060246017,
  "turbulenceDf": 4,
- "built": "2026-11-05T21:16:13.758Z"
+ "built": "2026-11-05T21:49:18.621Z"
 }

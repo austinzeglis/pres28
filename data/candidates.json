@@ -1,5 +1,5 @@
 {
- "built": "2026-11-05T21:20:03.727Z",
+ "built": "2026-11-05T21:48:59.933Z",
  "partyMedian": {
   "D": -0.385,
   "R": 0.538
@@ -47,7 +47,7 @@
      "state": "PA",
      "office": "G",
      "incumbent": true,
-     "demMargin": 22.1
+     "demMargin": 22.11
     },
     {
      "year": 2022,
@@ -204,7 +204,7 @@
      "state": "NJ",
      "office": "S",
      "incumbent": true,
-     "demMargin": 26.98
+     "demMargin": 27.05
     },
     {
      "year": 2020,
@@ -418,7 +418,7 @@
      "demMargin": 31.7
     }
    ],
-   "nominate": null
+   "nominate": -0.399
   },
   "tammy-baldwin": {
    "home": [
@@ -511,7 +511,7 @@
      "state": "MA",
      "office": "G",
      "incumbent": true,
-     "demMargin": 27.65
+     "demMargin": 27.67
     },
     {
      "year": 2022,
@@ -692,7 +692,7 @@
    ],
    "tie": null,
    "races": [],
-   "nominate": -0.403
+   "nominate": null
   },
   "phil-murphy": {
    "home": [
@@ -852,7 +852,7 @@
      "demMargin": 0.77
     }
    ],
-   "nominate": null
+   "nominate": -0.345
   },
   "debbie-stabenow": {
    "home": [
@@ -947,7 +947,7 @@
      "demMargin": 6.82
     }
    ],
-   "nominate": -0.476
+   "nominate": null
   },
   "jeff-jackson": {
    "home": [

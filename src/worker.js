@@ -14,6 +14,7 @@ const TABLES = {
 };
 
 const MAX_ROWS = 100;
+const QUIET_MINUTES = 100;
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
@@ -22,18 +23,43 @@ const json = (body, status = 200) =>
 const site = (text, maxAge = 120) =>
   new Response(text, { headers: { "content-type": "application/json", "cache-control": `public, max-age=${maxAge}` } });
 
+// A short memory per Worker instance, so a burst of visits doesn't repeat the same reads.
+const memory = new Map();
+async function remembered(key, seconds, make) {
+  const hit = memory.get(key);
+  if (hit && hit.until > Date.now()) return hit.value;
+  const value = await make();
+  if (memory.size > 300) memory.clear();
+  memory.set(key, { value, until: Date.now() + seconds * 1000 });
+  return value;
+}
+
 const STORY_COLUMNS = "i.title, i.url, i.source, i.published, i.kind";
 
-async function feed(env, scope) {
+async function feed(env, scope, who) {
   const now = new Date().toISOString();
-  const where = scope === "all"
-    ? "kind IN ('feed', 'gnews')"
-    : "(kind = 'gnews' OR (kind = 'feed' AND (title LIKE '%2028%' OR text LIKE '%2028%')))";
-  const { results } = await env.DB
-    .prepare(`SELECT title, url, source, published, kind, people, substr(text, 1, 200) AS text FROM items WHERE published <= ? AND ${where} ORDER BY published DESC LIMIT 400`)
-    .bind(now).all();
-  return site(JSON.stringify(results));
+  const text = await remembered(`feed|${scope}|${who}`, 120, async () => {
+    if (who) {
+      const { results } = await env.DB
+        .prepare("SELECT i.title, i.url, i.source, i.published, i.kind, i.people, substr(i.text, 1, 200) AS text FROM item_people p JOIN items i ON i.id = p.id WHERE p.person = ? AND p.published <= ? AND p.kind IN ('feed', 'gnews') ORDER BY p.published DESC LIMIT 200")
+        .bind(who, now).all();
+      return JSON.stringify(results);
+    }
+    const where = scope === "all"
+      ? "kind IN ('feed', 'gnews')"
+      : "(kind = 'gnews' OR (kind = 'feed' AND (title LIKE '%2028%' OR text LIKE '%2028%')))";
+    const { results } = await env.DB
+      .prepare(`SELECT title, url, source, published, kind, people, substr(text, 1, 200) AS text FROM items WHERE published <= ? AND ${where} ORDER BY published DESC LIMIT 400`)
+      .bind(now).all();
+    return JSON.stringify(results);
+  });
+  return site(text);
 }
+
+const snapshot = async (env, key) => remembered(`snap|${key}`, 60, async () => {
+  const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = ?").bind(key).first();
+  return row?.json ?? null;
+});
 
 async function person(env, id) {
   const snap = await env.DB.prepare("SELECT json FROM snapshots WHERE key = ?").bind(`person:${id}`).first();
@@ -51,7 +77,8 @@ async function exported(env, path) {
   if (what === "person") {
     const [obs, news] = await env.DB.batch([
       env.DB.prepare("SELECT source, substr(ts, 1, 10) AS d, avg(value) AS v FROM obs WHERE person = ? GROUP BY source, d").bind(arg),
-      env.DB.prepare("SELECT substr(published, 1, 10) AS d, count(*) AS n FROM item_people WHERE person = ? AND kind IN ('feed', 'gnews') GROUP BY d").bind(arg),
+      // One wire story on fifty local sites is one story.
+      env.DB.prepare("SELECT substr(p.published, 1, 10) AS d, count(DISTINCT substr(i.title, 1, 60)) AS n FROM item_people p JOIN items i ON i.id = p.id WHERE p.person = ? AND p.kind IN ('feed', 'gnews') GROUP BY d").bind(arg),
     ]);
     return json({ obs: obs.results, news: news.results });
   }
@@ -77,6 +104,31 @@ async function ingest(env, table, rows) {
   return json({ written: results.reduce((n, x) => n + (x.meta?.rows_written ?? 0), 0) });
 }
 
+// Keeps the price table small: old hourly prices become one row a day.
+async function compact(env, { before, runsBefore }) {
+  const [merged] = await env.DB.batch([
+    env.DB.prepare("INSERT OR REPLACE INTO obs(person, source, ts, value, volume) SELECT person, source, substr(ts, 1, 10), avg(value), max(volume) FROM obs WHERE length(ts) = 13 AND ts < ? GROUP BY person, source, substr(ts, 1, 10)").bind(before),
+    env.DB.prepare("DELETE FROM obs WHERE length(ts) = 13 AND ts < ?").bind(before),
+    env.DB.prepare("DELETE FROM runs WHERE ts < ?").bind(runsBefore),
+  ]);
+  return json({ merged: merged.meta?.rows_written ?? 0 });
+}
+
+// If collection has gone quiet, ask GitHub to run it. A backstop for GitHub's own schedule,
+// which can run late or skip. Does nothing until a GITHUB_TOKEN secret is set.
+async function watchdog(env) {
+  if (!env.GITHUB_TOKEN) return;
+  const row = await env.DB.prepare("SELECT max(ts) AS last FROM runs").first();
+  const quietMinutes = row?.last ? (Date.now() - Date.parse(row.last)) / 6e4 : Infinity;
+  if (quietMinutes < QUIET_MINUTES) return;
+  const res = await fetch("https://api.github.com/repos/austinzeglis/pres28/actions/workflows/collect.yml/dispatches", {
+    method: "POST",
+    headers: { authorization: `Bearer ${env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "user-agent": "pres28-watchdog", "content-type": "application/json" },
+    body: JSON.stringify({ ref: "main" }),
+  });
+  console.log(`watchdog: quiet ${Math.round(quietMinutes)} min, GitHub answered ${res.status}`);
+}
+
 async function status(env, deep) {
   const runs = await env.DB.prepare("SELECT ts, source, ok, rows_sent, note FROM runs ORDER BY ts DESC LIMIT 60").all();
   const backfill = await env.DB.prepare("SELECT count(*) AS jobs, coalesce(sum(rows_sent), 0) AS rows_sent FROM backfill").first();
@@ -94,9 +146,18 @@ async function status(env, deep) {
 }
 
 export default {
+  async scheduled(_event, env, ctx) {
+    ctx.waitUntil(watchdog(env));
+  },
+
   async fetch(request, env) {
     const url = new URL(request.url);
-    const authed = request.headers.get("authorization") === `Bearer ${env.INGEST_KEY}`;
+    const authed = Boolean(env.INGEST_KEY) && request.headers.get("authorization") === `Bearer ${env.INGEST_KEY}`;
+
+    if (request.method === "POST" && url.pathname === "/compact") {
+      if (!authed) return json({ error: "unauthorized" }, 401);
+      return compact(env, await request.json());
+    }
 
     if (request.method === "POST" && url.pathname.startsWith("/ingest/")) {
       if (!authed) return json({ error: "unauthorized" }, 401);
@@ -107,19 +168,12 @@ export default {
       if (!authed) return json({ error: "unauthorized" }, 401);
       return exported(env, url.pathname.slice("/export/".length));
     }
-    if (request.method === "GET" && url.pathname === "/api/board") {
-      const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'board'").first();
-      return row ? site(row.json) : json({ error: "not ready" }, 503);
+    const named = { "/api/board": "board", "/api/states": "states", "/api/model": "model" }[url.pathname];
+    if (request.method === "GET" && named) {
+      const text = await snapshot(env, named);
+      return text ? site(text) : json({ error: "not ready" }, 503);
     }
-    if (request.method === "GET" && url.pathname === "/api/states") {
-      const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'states'").first();
-      return row ? site(row.json) : json({ error: "not ready" }, 503);
-    }
-    if (request.method === "GET" && url.pathname === "/api/model") {
-      const row = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'model'").first();
-      return row ? site(row.json) : json({ error: "not ready" }, 503);
-    }
-    if (request.method === "GET" && url.pathname === "/api/feed") return feed(env, url.searchParams.get("scope"));
+    if (request.method === "GET" && url.pathname === "/api/feed") return feed(env, url.searchParams.get("scope"), url.searchParams.get("person"));
     if (request.method === "GET" && url.pathname.startsWith("/api/person/")) {
       return person(env, decodeURIComponent(url.pathname.slice("/api/person/".length)));
     }

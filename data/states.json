@@ -1,5 +1,5 @@
 {
- "built": "2026-11-05T21:12:04.434Z",
+ "built": "2026-11-05T21:48:51.197Z",
  "national": {
   "2008": 7.27,
   "2012": 3.86,
@@ -7,7 +7,7 @@
   "2020": 4.45,
   "2024": -1.48
  },
- "house2026": 11.23,
+ "house2026": 11.26,
  "contests": [
   {
    "id": "AL",
@@ -30,10 +30,10 @@
     "eevp": 98.97
    },
    "governor26": {
-    "margin": -4.12,
+    "margin": -3.99,
     "dem": "Jones",
     "rep": "Tuberville",
-    "eevp": 98.72
+    "eevp": 98.9
    },
    "demo": {
     "pop": 5108468,
@@ -748,7 +748,7 @@
     "margin": 29.57,
     "dem": "Moore",
     "rep": "Cox",
-    "eevp": 78.48
+    "eevp": 78.59
    },
    "demo": {
     "pop": 6180253,
@@ -784,7 +784,7 @@
     "eevp": 98.3
    },
    "governor26": {
-    "margin": 27.65,
+    "margin": 27.67,
     "dem": "Healey",
     "rep": "Minogue",
     "eevp": 98.31
@@ -820,13 +820,13 @@
     "margin": 7.01,
     "dem": "El-Sayed",
     "rep": "Rogers",
-    "eevp": 97.55
+    "eevp": 97.71
    },
    "governor26": {
     "margin": 10.76,
     "dem": "Benson",
     "rep": "James",
-    "eevp": 97.56
+    "eevp": 97.72
    },
    "demo": {
     "pop": 10037261,
@@ -895,10 +895,10 @@
     "2024": -22.89
    },
    "senate26": {
-    "margin": 0.18,
+    "margin": 0.19,
     "dem": "Colom",
     "rep": "Hyde-Smith",
-    "eevp": 95.61
+    "eevp": 95.69
    },
    "governor26": null,
    "demo": {
@@ -1060,16 +1060,16 @@
     "2024": 2.78
    },
    "senate26": {
-    "margin": 14.12,
+    "margin": 13.94,
     "dem": "Pappas",
     "rep": "Sununu",
-    "eevp": 96.42
+    "eevp": 97.01
    },
    "governor26": {
-    "margin": -3.92,
+    "margin": -4.09,
     "dem": "Warmington",
     "rep": "Ayotte",
-    "eevp": 96.41
+    "eevp": 97
    },
    "demo": {
     "pop": 1402054,
@@ -1099,10 +1099,10 @@
     "2024": 5.91
    },
    "senate26": {
-    "margin": 26.98,
+    "margin": 27.05,
     "dem": "Booker",
     "rep": "Murphy",
-    "eevp": 95.11
+    "eevp": 95.32
    },
    "governor26": null,
    "demo": {
@@ -1173,10 +1173,10 @@
    },
    "senate26": null,
    "governor26": {
-    "margin": 19.39,
+    "margin": 19.4,
     "dem": "Hochul",
     "rep": "Blakeman",
-    "eevp": 92.01
+    "eevp": 90.43
    },
    "demo": {
     "pop": 19571216,
@@ -1387,10 +1387,10 @@
    },
    "senate26": null,
    "governor26": {
-    "margin": 22.1,
+    "margin": 22.11,
     "dem": "Shapiro",
     "rep": "Garrity",
-    "eevp": 98.72
+    "eevp": 98.73
    },
    "demo": {
     "pop": 12961683,
@@ -1676,7 +1676,7 @@
     "margin": 22.59,
     "dem": "Warner",
     "rep": "Mizusawa",
-    "eevp": 97.5
+    "eevp": 97.57
    },
    "governor26": null,
    "demo": {

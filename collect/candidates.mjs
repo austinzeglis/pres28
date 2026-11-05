@@ -23,7 +23,9 @@ const BASE_SD = { far: 2.5, near: 1 };
 // from its edge, so the score says the opposite of what voters see.
 const VOTING_SCORE_MISLEADS = new Set(["alexandria-ocasio-cortez", "bernie-sanders", "ro-khanna", "thomas-massie", "marjorie-taylor-greene", "rand-paul", "john-fetterman"]);
 
-export const INELIGIBLE = { "donald-trump": "Two-term limit", "elon-musk": "Born abroad" };
+export const INELIGIBLE = {
+  "donald-trump": "Two-term limit", "barack-obama": "Two-term limit", "elon-musk": "Born abroad", "zohran-mamdani": "Born abroad",
+};
 
 function leanOf(contest, national, year) {
   const years = [2008, 2012, 2016, 2020, 2024];
@@ -42,7 +44,9 @@ export function overperformance(races, party, contests, national, house2026) {
     if (!c) continue;
     const env = r.year === 2026 ? house2026 : ENVIRONMENT[r.year] ?? 0;
     const expected = leanOf(c, national, r.year) + env;
-    const beat = (party === "D" ? 1 : -1) * (r.demMargin - expected) - (r.incumbent ? INCUMBENT_EDGE : 0);
+    // 2026 races read from the latest count, since those margins are still moving.
+    const margin = r.year === 2026 ? c[r.office === "G" ? "governor26" : "senate26"]?.margin ?? r.demMargin : r.demMargin;
+    const beat = (party === "D" ? 1 : -1) * (margin - expected) - (r.incumbent ? INCUMBENT_EDGE : 0);
     const w = 0.8 ** (2026 - r.year);
     total += w * beat;
     weight += w;
@@ -54,7 +58,7 @@ export function overperformance(races, party, contests, national, house2026) {
 // Asking the same voters about several pairings is what separates candidates from the mood.
 export function pollEdges(rows, today) {
   const polls = rows.filter((r) => !r.state && !r.third && r.demPct != null && r.repPct != null);
-  if (!polls.length) return {};
+  if (!polls.length) return { people: {}, level: null };
   const keyOf = (r) => `${r.pollster}|${r.end}`;
   const w = polls.map((r) => 2 ** (-(new Date(today) - new Date(r.end)) / 864e5 / 240));
   const edge = {};
@@ -94,8 +98,16 @@ export function pollEdges(rows, today) {
       edge[k] = num / den;
     }
   }
-  const out = {};
-  for (const [k, v] of Object.entries(edge)) out[k.slice(2)] = { edge: v, polls: count[k.slice(2)] };
+  // What each poll says beyond the two people's edges and that poll's mood.
+  polls.forEach((r) => {
+    r.residual = Math.round((r.demPct - r.repPct - mood[keyOf(r)] - edge[`D:${r.dem}`] + edge[`R:${r.rep}`]) * 100) / 100;
+  });
+  const out = { people: {} };
+  for (const [k, v] of Object.entries(edge)) out.people[k.slice(2)] = { edge: v, polls: count[k.slice(2)] };
+  // The level these polls put the race at, with each pairing's edges taken out.
+  const recent = Object.entries(mood).map(([key, v]) => ({ v, age: (new Date(today) - new Date(key.split("|").at(-1))) / 864e5 }));
+  const weight = recent.map((x) => 2 ** (-x.age / 120));
+  out.level = recent.reduce((s, x, i) => s + weight[i] * x.v, 0) / weight.reduce((a, b) => a + b, 0);
   return out;
 }
 
@@ -150,7 +162,7 @@ export function buildPeople({ roster, facts, partyMedian, contests, national, ho
   const fade = Math.min(1, daysLeft / 730);
   const share = FAR_OUT_SHARE + (1 - FAR_OUT_SHARE) * (1 - fade);
   const baseSd = BASE_SD.near + (BASE_SD.far - BASE_SD.near) * fade;
-  const polled = pollEdges(matchups, today);
+  const polled = pollEdges(matchups, today).people;
   const marketed = marketEdges(quotes);
   const distance = Math.max(0, -netApproval) * TRUMP_DISTANCE_PER_POINT;
   const inauguration = new Date("2029-01-20");
@@ -161,7 +173,7 @@ export function buildPeople({ roster, facts, partyMedian, contests, national, ho
     const add = (label, value) => {
       if (value != null && Number.isFinite(value) && Math.abs(value) >= 0.01) pieces.push({ label, value: Math.round(value * 100) / 100 });
     };
-    if (polled[p.id]) add(`Matchup polls (${polled[p.id].polls})`, (p.party === "D" ? 1 : 1) * clamp(polled[p.id].edge, -4, 4));
+    if (polled[p.id]) add(`Matchup polls (${polled[p.id].polls})`, clamp(polled[p.id].edge, -4, 4));
     add("Market odds if nominated", marketed[p.id] ?? null);
     const beat = overperformance(f.races, p.party, contests, national, house2026);
     if (beat != null) add("Past races", clamp(beat * RECORD_TRANSFER, -3, 3));

@@ -50,6 +50,9 @@ const KEYS = {
   "Josh Hawley": ["Hawley"], "Tulsi Gabbard": ["Gabbard"], "Vivek Ramaswamy": ["Ramaswamy"],
   "Elise Stefanik": ["Stefanik"], "Kristi Noem": ["Noem"], "Doug Burgum": ["Burgum"],
   "Mike Pompeo": ["Pompeo"], "Steve Bannon": ["Bannon"], "Lee Zeldin": ["Zeldin"],
+  "Ted Cruz": ["Cruz"], "Nikki Haley": ["Haley"], "Mike Pence": ["Pence"], "Brian Kemp": ["Kemp"], "Chris Christie": ["Christie"],
+  "Josh Shapiro": ["Shapiro"], "Cory Booker": ["Booker"], "Tucker Carlson": ["Tucker"], "Bernie Sanders": ["Bernie"], "Hakeem Jeffries": ["Jeffries"],
+  "Sherrod Brown": ["Sherrod"], "Rand Paul": ["Rand Paul"], "Elissa Slotkin": ["Slotkin"], "Byron Donalds": ["Donalds"], "Thomas Massie": ["Massie"],
 };
 
 // Would otherwise match most political news, so it needs one of these words too.

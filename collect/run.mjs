@@ -2,11 +2,12 @@
 // TASKS=markets,feeds overrides the schedule, TASKS=all runs everything.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { buildMatcher, fold, slug } from "./names.mjs";
+import { buildMatcher, fold, recordMatches, slug } from "./names.mjs";
+import { fetchResults2026 } from "./results2026.mjs";
 import { parseMatchups, parseStatePolls, parseWikiPolls } from "./wikipolls.mjs";
-import { buildPeople } from "./candidates.mjs";
+import { buildPeople, pollEdges } from "./candidates.mjs";
 import { buildMap, finishParams } from "./states_model.mjs";
-import { fundamentals } from "./mood.mjs";
+import { blendMood, fundamentals } from "./mood.mjs";
 import { buildMatchup, simulate } from "../public/sim.js";
 import { WEIGHTS, attentionShares, cleanPolls, marketShares, pollShares, rankParty } from "./score.mjs";
 
@@ -44,14 +45,18 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function get(url, { timeout = 15000, headers = UA, tries = 2 } = {}) {
   for (let attempt = 1; ; attempt++) {
     let wait = 1500 * attempt;
+    let res;
     try {
-      const res = await fetch(url, { headers, signal: AbortSignal.timeout(timeout), redirect: "follow" });
-      if (res.ok) return res;
+      res = await fetch(url, { headers, signal: AbortSignal.timeout(timeout), redirect: "follow" });
+    } catch (err) {
+      if (attempt >= tries) throw err;
+    }
+    if (res?.ok) return res;
+    if (res) {
+      // A refusal won't change on retry, unlike being rate-limited or a server hiccup.
       if (attempt >= tries || (res.status !== 429 && res.status < 500)) throw new Error(`HTTP ${res.status}`);
       const after = +res.headers.get("retry-after");
       if (after > 0) wait = Math.min(after, 65) * 1000;
-    } catch (err) {
-      if (attempt >= tries) throw err;
     }
     await sleep(wait);
   }
@@ -70,7 +75,6 @@ async function pool(items, size, work) {
 async function send(table, rows, size = 100) {
   const batches = [];
   for (let i = 0; i < rows.length; i += size) batches.push(rows.slice(i, i + size));
-  let written = 0;
   await pool(batches, 4, async (batch) => {
     for (let attempt = 1; ; attempt++) {
       const res = await fetch(`${INGEST_URL}/ingest/${table}`, {
@@ -79,15 +83,11 @@ async function send(table, rows, size = 100) {
         body: JSON.stringify({ rows: batch }),
         signal: AbortSignal.timeout(30000),
       }).catch((err) => ({ ok: false, status: err.message }));
-      if (res.ok) {
-        written += (await res.json()).written;
-        return;
-      }
+      if (res.ok) return;
       if (attempt >= 4) throw new Error(`ingest ${table}: ${res.status}`);
       await sleep(2000 * attempt);
     }
   });
-  return written;
 }
 
 const report = [];
@@ -428,32 +428,41 @@ async function taskWikipedia() {
 }
 
 async function taskFec() {
-  const byName = new Map(roster.map((p) => [slug(p.name), p.id]));
   const rows = [];
   for (let page = 1; page <= 30; page++) {
     const u = `https://api.open.fec.gov/v1/candidates/?election_year=2028&office=P&per_page=100&page=${page}&api_key=${process.env.FEC_KEY ?? "DEMO_KEY"}`;
     const data = await getJson(u, { timeout: 25000, tries: 3 });
     for (const c of data.results ?? []) {
-      const [last = "", rest = ""] = c.name.split(",");
-      const first = rest.trim().split(/\s+/)[0] ?? "";
+      // Legal names differ from common ones, and a shared name isn't proof, so this only
+      // marks a possible match on the person's page. It never changes their status.
       rows.push({
         id: c.candidate_id, name: c.name, party: c.party, first_file: c.first_file_date,
-        has_funds: c.has_raised_funds ? 1 : 0, person: byName.get(slug(`${first} ${last}`)) ?? null, seen: stamp,
+        has_funds: c.has_raised_funds ? 1 : 0, person: roster.find((p) => recordMatches(p.name, c.name))?.id ?? null, seen: stamp,
       });
     }
     if (page >= (data.pagination?.pages ?? 0)) break;
   }
   if (!rows.length) throw new Error("no FEC filers returned");
   await send("filings", rows);
-  return { rows: rows.length, note: `${rows.filter((r) => r.person).length} match the roster` };
+  const hits = rows.filter((r) => r.person);
+  return { rows: rows.length, note: `${hits.length} possible roster matches: ${hits.map((r) => r.name).join("; ").slice(0, 200)}` };
 }
 
 // ---------- history ----------
 
+// A thin market's early prices can be anything. Drop a day far above the days around it.
+function withoutSpikes(rows) {
+  return rows.filter((r, i) => {
+    const near = rows.slice(Math.max(0, i - 3), i + 4).filter((_, j, a) => a[j] !== r).map((x) => x.value).sort((a, b) => a - b);
+    if (near.length < 2) return r.value < 0.1;
+    return !(r.value >= 0.1 && r.value > 3 * near[near.length >> 1]);
+  });
+}
+
 async function polyHistory(m) {
   const { history } = await getJson(`https://clob.polymarket.com/prices-history?market=${m.token}&interval=max&fidelity=1440`);
   const byDay = new Map((history ?? []).map((h) => [new Date(h.t * 1000).toISOString().slice(0, 10), h.p]));
-  return [...byDay].map(([ts, value]) => ({ person: m.person, source: m.source, ts, value, volume: null }));
+  return withoutSpikes([...byDay].map(([ts, value]) => ({ person: m.person, source: m.source, ts, value, volume: null })));
 }
 
 async function kalshiHistory(m) {
@@ -469,7 +478,7 @@ async function kalshiHistory(m) {
     if (value == null) continue;
     rows.push({ person: m.person, source: m.source, ts: new Date((c.end_period_ts - 1) * 1000).toISOString().slice(0, 10), value, volume: +(c.volume_fp ?? 0) });
   }
-  return rows;
+  return withoutSpikes(rows);
 }
 
 async function taskBackfill() {
@@ -528,31 +537,43 @@ const JOIN_PRICE = 0.005;
 const JOIN_POLLS = 2;
 const JOIN_POLL_DAYS = 180;
 
+// Finds a person's page, following redirects ("Greg Bovino" lives at "Gregory Bovino").
 async function lookupPeople(names) {
-  const found = new Map();
+  const titleOf = new Map();
+  const photos = new Map();
   for (let i = 0; i < names.length; i += 50) {
-    const titles = names.slice(i, i + 50).join("|");
-    const q = new URLSearchParams({ action: "wbgetentities", sites: "enwiki", titles, redirects: "yes", normalize: "1", props: "claims|descriptions|sitelinks", sitefilter: "enwiki", languages: "en", format: "json" });
+    const q = new URLSearchParams({ action: "query", prop: "pageimages", piprop: "thumbnail", pithumbsize: "240", pilimit: "50", redirects: "1", titles: names.slice(i, i + 50).join("|"), format: "json" });
+    const data = await getJson(`https://en.wikipedia.org/w/api.php?${q}`);
+    const hop = new Map([...(data.query?.normalized ?? []), ...(data.query?.redirects ?? [])].map((x) => [x.from, x.to]));
+    for (const name of names.slice(i, i + 50)) {
+      let t = name;
+      for (let n = 0; n < 3 && hop.has(t); n++) t = hop.get(t);
+      titleOf.set(name, t);
+    }
+    for (const page of Object.values(data.query?.pages ?? {})) {
+      if (page.missing !== undefined) for (const [name, t] of titleOf) if (t === page.title) titleOf.delete(name);
+      if (page.thumbnail) photos.set(page.title, page.thumbnail.source);
+    }
+  }
+  const found = new Map();
+  const titles = [...new Set(titleOf.values())];
+  for (let i = 0; i < titles.length; i += 50) {
+    const q = new URLSearchParams({ action: "wbgetentities", sites: "enwiki", titles: titles.slice(i, i + 50).join("|"), props: "claims|descriptions|sitelinks", sitefilter: "enwiki", languages: "en", format: "json" });
     const data = await getJson(`https://www.wikidata.org/w/api.php?${q}`);
     for (const e of Object.values(data.entities ?? {})) {
       const title = e.sitelinks?.enwiki?.title;
       if (title && !/disambiguation/i.test(e.descriptions?.en?.value ?? "")) found.set(title, e);
     }
   }
-  const photos = new Map();
-  for (let i = 0; i < names.length; i += 50) {
-    const q = new URLSearchParams({ action: "query", prop: "pageimages", piprop: "thumbnail", pithumbsize: "240", pilimit: "50", redirects: "1", titles: names.slice(i, i + 50).join("|"), format: "json" });
-    const data = await getJson(`https://en.wikipedia.org/w/api.php?${q}`);
-    for (const page of Object.values(data.query?.pages ?? {})) if (page.thumbnail) photos.set(page.title, page.thumbnail.source);
-  }
   const claim = (e, prop) => {
     const v = e?.claims?.[prop]?.find((c) => c.rank !== "deprecated")?.mainsnak?.datavalue?.value;
     return typeof v === "string" ? v : v?.time ?? null;
   };
   return (name) => {
-    const e = found.get(name);
+    const title = titleOf.get(name);
+    const e = found.get(title);
     return {
-      wikidata: e?.id ?? null, wiki: e ? name : null, desc: e?.descriptions?.en?.value ?? null, photo: photos.get(name) ?? null,
+      wikidata: e?.id ?? null, wiki: e ? title : null, desc: e?.descriptions?.en?.value ?? null, photo: e ? photos.get(title) ?? null : null,
       dob: claim(e, "P569")?.slice(1, 11) ?? null, bluesky: claim(e, "P12361"), youtube: claim(e, "P2397"), x: claim(e, "P2002"), site: claim(e, "P856"),
     };
   };
@@ -590,20 +611,25 @@ async function taskDiscover() {
     if (count >= JOIN_POLLS) consider(id, names.get(id) ?? id, party, `offered in ${count} polls in ${JOIN_POLL_DAYS} days`, count / 1000);
   }
 
+  // Earlier additions whose page wasn't found get another look too.
+  const unfinished = roster.filter((p) => p.discovered && !p.wiki);
   const joining = [...candidates.values()];
-  if (!joining.length) return { rows: 0, note: "no new people" };
-  const details = await lookupPeople(joining.map((c) => c.name));
+  if (!joining.length && !unfinished.length) return { rows: 0, note: "no new people" };
+  const details = await lookupPeople([...joining.map((c) => c.name), ...unfinished.map((p) => p.name)]);
+  for (const p of unfinished) Object.assign(p, details(p.name));
   const added = joining.map((c) => ({
     id: c.id, name: c.name, party: c.party, on_list: 0, list: null, ...details(c.name),
     match: [c.name], keys: [], guard: null, discovered: { date: today, why: c.why },
   }));
-  await send("people", added.map((p) => ({ id: p.id, name: p.name, party: p.party, on_list: 0, data: JSON.stringify(p) })));
+  const changed = [...added, ...unfinished];
+  await send("people", changed.map((p) => ({ id: p.id, name: p.name, party: p.party, on_list: 0, data: JSON.stringify(p) })));
   roster.push(...added);
-  return { rows: added.length, note: added.map((p) => `${p.name} (${p.party})`).join(", ").slice(0, 280) };
+  return { rows: changed.length, note: changed.map((p) => `${p.name} (${p.party}${p.wiki ? "" : ", no page"})`).join(", ").slice(0, 280) };
 }
 
 // ---------- scoring ----------
 
+const FIXED_JOBS = { "stacey-abrams": "former Georgia state legislator" };
 const HISTORY_FIRST_DAY = "2025-07-20"; // both markets are open from here
 const RECOMPUTE_POLLS_EVERY = 7; // days, or when a new poll arrives
 
@@ -750,16 +776,35 @@ async function taskRescore() {
 
     const latest = partyRows.at(-1).rows;
     inputs[party] = {
-      polled: polled, // includes people off the roster, so shares stay honest
       members: Object.fromEntries(latest.map((r) => {
         const x = series.get(r.id);
         const at = x.days.length - 8;
-        return [r.id, { p: r.p, a: r.a, score7: at >= 0 ? x.score[at] : null, rank7: at >= 0 ? x.rank[at] : null, spark: x.score.slice(-60) }];
+        return [r.id, { p: r.p, a: r.a, score7: at >= 0 ? x.score[at] : null, rank7: at >= 0 ? x.rank[at] : null }];
       })),
     };
   }
 
   const statuses = loadStatuses();
+  const facts = JSON.parse(readFileSync("data/candidates.json", "utf8")).people;
+  const stateFacts = JSON.parse(readFileSync("data/states.json", "utf8")).contests;
+  const live2026 = await exportJson("snapshot/results2026");
+  const stateNames = new Map(stateFacts.map((c) => [c.id, c]));
+  // The job in the original list goes stale when someone wins or loses.
+  const currentJob = (p) => {
+    if (FIXED_JOBS[p.id]) return FIXED_JOBS[p.id];
+    for (const r of facts[p.id]?.races ?? []) {
+      if (r.year !== 2026) continue;
+      const office = r.office === "G" ? "governor" : "senate";
+      const margin = live2026?.[office]?.[r.state]?.margin ?? stateNames.get(r.state)?.[`${office}26`]?.margin;
+      if (margin == null) continue;
+      const won = p.party === "D" ? margin > 0 : margin < 0;
+      const title = r.office === "G" ? "Governor" : "Senator";
+      const state = stateNames.get(r.state)?.name ?? r.state;
+      if (won && !r.incumbent) return `${title}-elect, ${state}`;
+      if (!won && r.incumbent) return `Outgoing ${title.toLowerCase()}, ${state}`;
+    }
+    return p.list?.currently ?? p.desc ?? null;
+  };
   const snapshots = [
     { key: "inputs", json: JSON.stringify(inputs), updated: stamp },
     { key: "states", json: JSON.stringify(statesSnapshot(statePolls)), updated: stamp },
@@ -772,7 +817,7 @@ async function taskRescore() {
       key: `person:${p.id}`,
       updated: stamp,
       json: JSON.stringify({
-        id: p.id, name: p.name, party: p.party, on_list: p.on_list, list: p.list, dob: p.dob, wiki: p.wiki, desc: p.desc, photo: p.photo,
+        id: p.id, name: p.name, party: p.party, on_list: p.on_list, list: p.list, currently: currentJob(p), dob: p.dob, wiki: p.wiki, desc: p.desc, photo: p.photo,
         bluesky: p.bluesky, youtube: p.youtube, x: p.x, site: p.site,
         status: statuses[p.id] ?? { status: "mentioned" },
         filings: filings.filter((f) => f.person === p.id),
@@ -812,9 +857,8 @@ async function taskBoard() {
     const mkt = marketShares(live);
     const one = {};
     for (const [id, x] of Object.entries(inputs[party].members)) one[id] = { m: mkt[id] ?? null, p: x.p, a: x.a };
-    const { rows, top } = rankParty(one);
+    const { rows } = rankParty(one);
     board[party] = {
-      top: pct(top),
       rows: rows.map((r) => {
         const x = inputs[party].members[r.id];
         const p = meta.get(r.id);
@@ -827,7 +871,6 @@ async function taskBoard() {
           d7: x.score7 == null ? null : round1(r.score - x.score7),
           r7: x.rank7 == null ? null : x.rank7 - r.rank,
           status: st?.status ?? "mentioned", statusDate: st?.date ?? null,
-          spark: [...x.spark, round1(r.score)],
         };
       }),
     };
@@ -841,7 +884,6 @@ async function taskBoard() {
 const ELECTION_DAY = "2028-11-07";
 const ALL_YEARS = [2008, 2012, 2016, 2020, 2024];
 const MOOD_SD = { far: 5.5, near: 3 }; // national spread two years out, and in the final weeks
-const MOOD_MARKET_SHARE = 0.5;
 const STATE_2026_PULL = 0.1;
 
 async function recentAverage(all, type, read, days) {
@@ -885,8 +927,17 @@ async function taskModel() {
   const stateData = JSON.parse(readFileSync("data/states.json", "utf8"));
   const fit = JSON.parse(readFileSync("data/state_fit.json", "utf8"));
   const facts = JSON.parse(readFileSync("data/candidates.json", "utf8"));
-  const { national, contests: allContests, house2026 } = stateData;
+  const { national, contests: allContests } = stateData;
   const contestById = new Map(allContests.map((c) => [c.id, c]));
+
+  // The file holds the count from when it was built. The latest count wins.
+  const live = await exportJson("snapshot/results2026");
+  const house2026 = live?.houseMargin ?? stateData.house2026;
+  for (const c of allContests) {
+    if (c.district) continue;
+    c.senate26 = live?.senate?.[c.id] ?? c.senate26;
+    c.governor26 = live?.governor?.[c.id] ?? c.governor26;
+  }
 
   // The map, with a small pull from how each state just voted in 2026.
   const map = finishParams(buildMap(allContests, national, ALL_YEARS, fit.cfg), fit.stray);
@@ -928,18 +979,19 @@ async function taskModel() {
 
   const fade = Math.min(1, daysLeft / 730);
   const moodSd = MOOD_SD.near + (MOOD_SD.far - MOOD_SD.near) * fade;
-  const fund = fundamentals(national, ALL_YEARS, { midterm: house2026, inPartyTerms: 1, inParty: "R" });
+  const fund = fundamentals(national, ALL_YEARS, { midterm: house2026, generic, netApproval, daysLeft, inPartyTerms: 1, inParty: "R" });
+  const pollLevel = pollEdges(matchups, today).level;
   const party = await partyMarkets();
 
   const lightContests = map.contests.map((c) => ({
     id: c.id, ev: c.ev, name: c.name, division: c.division, district: c.district, parentId: c.parentId, parent: c.parent,
-    base: Math.round(c.base * 100) / 100, elasticity: c.elasticity, sigma: Math.round(c.sigma * 100) / 100,
+    base: Math.round(c.base * 100) / 100, sigma: Math.round(c.sigma * 100) / 100,
     load: c.load.map((x) => Math.round(x * 1000) / 1000), weight: c.weight,
   }));
   const model = {
     updated: stamp, election: ELECTION_DAY, daysLeft,
     map: { nRef: map.nRef, factorSd: map.factorSd, districtShare: map.districtShare, turbulenceDf: fit.turbulenceDf, contests: lightContests },
-    mood: { center: fund, sd: moodSd, df: 5, fundamentals: fund, market: null, marketShare: party.demShare, party, generic, netApproval, house2026 },
+    mood: { center: fund, sd: moodSd, df: 5, fundamentals: fund, market: null, pollLevel, marketShare: party.demShare, modelShare: null, party, generic, netApproval, house2026, pieces: [] },
     people,
     matchups,
   };
@@ -977,52 +1029,83 @@ async function taskModel() {
       else high = mid;
     }
     model.mood.market = (low + high) / 2;
-    model.mood.center = MOOD_MARKET_SHARE * model.mood.market + (1 - MOOD_MARKET_SHARE) * fund;
+    const LABELS = { fundamentals: "Past results, midterm, approval", markets: "Party markets", polls: "Matchup polls" };
+    const blended = blendMood({ fundamentals: fund, markets: model.mood.market, polls: pollLevel });
+    model.mood.pieces = blended.pieces.map((p) => ({ label: `${LABELS[p.key]} (${Math.round(p.weight * 100)}%)`, value: Math.round(p.value * 100) / 100 }));
+    model.mood.modelShare = chance(blended.center);
+    model.mood.center = blended.center;
   }
   model.mood.center = Math.round(model.mood.center * 100) / 100;
 
   await send("snapshots", [{ key: "model", json: JSON.stringify(model), updated: stamp }], 1);
   const m = model.mood;
-  return { rows: 1, note: `mood D${m.center >= 0 ? "+" : ""}${m.center} (fundamentals ${m.fundamentals.toFixed(1)}, markets ${m.market?.toFixed(1)}), ${matchups.length} matchup polls` };
+  return { rows: 1, note: `mood D${m.center >= 0 ? "+" : ""}${m.center} (fundamentals ${m.fundamentals.toFixed(1)}, markets ${m.market?.toFixed(1)}, polls ${m.pollLevel?.toFixed(1)}); likely pairings D ${(100 * (m.modelShare ?? 0)).toFixed(1)}% vs markets ${(100 * (m.marketShare ?? 0)).toFixed(1)}%; ${matchups.length} matchup polls` };
+}
+
+// ---------- upkeep ----------
+
+async function taskResults2026() {
+  if (today > RESULTS_FINAL_BY) return { note: "counts final" };
+  const results = await fetchResults2026((u) => getJson(u, { timeout: 40000, tries: 3 }));
+  await send("snapshots", [{ key: "results2026", json: JSON.stringify(results), updated: stamp }], 1);
+  return { rows: Object.keys(results.senate).length + Object.keys(results.governor).length, note: `House D${results.houseMargin >= 0 ? "+" : ""}${results.houseMargin}` };
+}
+
+async function taskCompact() {
+  const before = new Date(now - KEEP_HOURLY_DAYS * 864e5).toISOString().slice(0, 13);
+  const res = await fetch(`${INGEST_URL}/compact`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${INGEST_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({ before, runsBefore: new Date(now - 60 * 864e5).toISOString() }),
+    signal: AbortSignal.timeout(60000),
+  });
+  if (!res.ok) throw new Error(`compact: ${res.status}`);
+  const { merged } = await res.json();
+  return { rows: merged, note: `hourly prices before ${before} now daily` };
 }
 
 // ---------- schedule ----------
 
-const TASKS = {
-  polymarket: taskPolymarket,
-  kalshi: taskKalshi,
-  feeds: taskFeeds,
-  gnews: taskGoogleNews,
-  bluesky: taskBluesky,
-  youtube: taskYouTube,
-  people: taskPeople,
-  polls: taskPolls,
-  wikipolls: taskWikiPolls,
-  statepolls: taskStatePolls,
-  wikipedia: taskWikipedia,
-  fec: taskFec,
-  backfill: taskBackfill,
-  discover: taskDiscover,
-  rescore: taskRescore,
-  board: taskBoard,
-  model: taskModel,
-};
+const RESULTS_FINAL_BY = "2027-02-01";
+const KEEP_HOURLY_DAYS = 14;
 
-function chosen() {
-  const asked = process.env.TASKS?.trim();
-  if (asked === "all") return Object.keys(TASKS);
-  if (asked) return asked.split(",").map((s) => s.trim());
-  const list = ["polymarket", "kalshi", "feeds", "gnews", "bluesky", "youtube"];
-  if (hour === 6) list.push("people", "wikipedia", "fec");
-  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "statepolls", "discover", "backfill", "rescore", "model");
-  list.push("board");
-  return list;
-}
+// Each task's job, in the order they must run. A task with a gap runs when it's due, so a
+// late or dropped run catches up on the next one instead of depending on a particular hour.
+const TASKS = [
+  ["polymarket", taskPolymarket, 0],
+  ["kalshi", taskKalshi, 0],
+  ["feeds", taskFeeds, 0],
+  ["gnews", taskGoogleNews, 0],
+  ["bluesky", taskBluesky, 0],
+  ["youtube", taskYouTube, 0],
+  ["people", taskPeople, 23],
+  ["wikipedia", taskWikipedia, 23],
+  ["fec", taskFec, 23],
+  ["results2026", taskResults2026, 11],
+  ["polls", taskPolls, 11],
+  ["wikipolls", taskWikiPolls, 11],
+  ["statepolls", taskStatePolls, 11],
+  ["discover", taskDiscover, 11],
+  ["backfill", taskBackfill, 11],
+  ["compact", taskCompact, 23],
+  ["rescore", taskRescore, 11],
+  ["model", taskModel, 11],
+  ["board", taskBoard, 0],
+];
 
-for (const name of chosen()) {
-  if (!TASKS[name]) throw new Error(`unknown task ${name}`);
-  await task(name, TASKS[name]);
+const lastDone = (await exportJson("snapshot/schedule").catch(() => null)) ?? {};
+const hoursSince = (iso) => (iso ? (now - new Date(iso)) / 36e5 : Infinity);
+const asked = process.env.TASKS?.trim();
+const wanted = new Set(asked === "all" ? TASKS.map((t) => t[0]) : asked ? asked.split(",").map((s) => s.trim()) : []);
+for (const name of wanted) if (!TASKS.some((t) => t[0] === name)) throw new Error(`unknown task ${name}`);
+
+for (const [name, work, everyHours] of TASKS) {
+  const due = asked ? wanted.has(name) : hoursSince(lastDone[name]) >= everyHours;
+  if (!due) continue;
+  await task(name, work);
+  if (report.at(-1).ok) lastDone[name] = stamp;
 }
+await send("snapshots", [{ key: "schedule", json: JSON.stringify(lastDone), updated: stamp }], 1);
 
 // Only a total failure fails the job, which is what makes GitHub send an email.
 if (report.every((r) => !r.ok)) process.exit(1);

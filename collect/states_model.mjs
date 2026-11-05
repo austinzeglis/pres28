@@ -1,9 +1,7 @@
-// Turns past results and demographics into each contest's starting point, how hard
-// it moves with the country, how far it strays, and which states stray together.
-// Pure functions, so the back-test can rebuild it using only pre-election years.
+// Turns past results and demographics into each contest's starting point, how far
+// it strays, and which states stray together. Pure functions, so the back-test can
+// rebuild it using only pre-election years.
 
-const YEARS = [2008, 2012, 2016, 2020, 2024];
-const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const mean = (a) => a.reduce((x, y) => x + y, 0) / a.length;
 
 const leanIn = (contest, year, national) => contest.results[year] - national[year];
@@ -17,22 +15,6 @@ export function projectedLean(contest, national, asOfYears, cfg) {
   ys.forEach((y, i) => { lean += (weights[i] / total) * leanIn(contest, y, national); });
   if (ys.length >= 2) lean += cfg.trend * (leanIn(contest, ys[0], national) - leanIn(contest, ys[1], national));
   return lean;
-}
-
-// How much a state moves when the country moves. Most states are near 1. Places
-// with few persuadable voters move less. Estimated from history, pulled hard toward 1.
-export function elasticity(contest, national, asOfYears, cfg) {
-  let num = 0;
-  let den = 0;
-  for (let i = 1; i < asOfYears.length; i++) {
-    const a = asOfYears[i - 1];
-    const b = asOfYears[i];
-    const dN = national[b] - national[a];
-    num += dN * (contest.results[b] - contest.results[a]);
-    den += dN * dN;
-  }
-  if (!den) return 1;
-  return clamp(1 + cfg.elasticityKeep * (num / den - 1), 0.6, 1.3);
 }
 
 function features(contests) {
@@ -52,7 +34,7 @@ function features(contests) {
 }
 
 // How alike two states are, from 0 to 1: demographics, and a bump for the same region.
-export function similarity(contests, cfg) {
+function similarity(contests, cfg) {
   const f = features(contests);
   const n = contests.length;
   const K = Array.from({ length: n }, () => new Float64Array(n));
@@ -68,6 +50,7 @@ export function similarity(contests, cfg) {
   return K;
 }
 
+// Centered, because what all states share is the national mood, which is modeled separately.
 function centered(K) {
   const n = K.length;
   const row = K.map((r) => r.reduce((a, b) => a + b, 0) / n);
@@ -76,7 +59,7 @@ function centered(K) {
 }
 
 // The largest few independent patterns in a similarity matrix, by repeated power iteration.
-export function topFactors(K, count) {
+function topFactors(K, count) {
   const n = K.length;
   const A = K.map((r) => Float64Array.from(r));
   const factors = [];
@@ -96,65 +79,33 @@ export function topFactors(K, count) {
   return factors;
 }
 
-// What the last shift in state leans says about the kind of place that's moving:
-// regress it on demographics, so a state follows places like it, not just its own past.
-function demographicDrift(statewide, national, asOfYears) {
-  if (asOfYears.length < 2) return new Map();
-  const [a, b] = asOfYears.slice(-2);
-  const y = statewide.map((c) => leanIn(c, b, national) - leanIn(c, a, national));
-  const X = features(statewide);
-  const dims = X[0].length;
-  const A = Array.from({ length: dims }, (_, i) => Array.from({ length: dims }, (_, j) => X.reduce((s, r) => s + r[i] * r[j], 0) + (i === j ? statewide.length * 0.5 : 0)));
-  const v = Array.from({ length: dims }, (_, i) => X.reduce((s, r, n) => s + r[i] * y[n], 0));
-  for (let i = 0; i < dims; i++) {
-    for (let j = i + 1; j < dims; j++) {
-      const f = A[j][i] / A[i][i];
-      for (let c = i; c < dims; c++) A[j][c] -= f * A[i][c];
-      v[j] -= f * v[i];
-    }
-  }
-  const beta = Array(dims).fill(0);
-  for (let i = dims - 1; i >= 0; i--) {
-    let t = v[i];
-    for (let j = i + 1; j < dims; j++) t -= A[i][j] * beta[j];
-    beta[i] = t / A[i][i];
-  }
-  return new Map(statewide.map((c, n) => [c.id, X[n].reduce((s, x, i) => s + x * beta[i], 0)]));
-}
-
-export function factorVectors(allContests, cfg) {
+// Each state's unit-length row of factor loadings: what it shares with similar states.
+export function stateLoadings(allContests, cfg) {
   const statewide = allContests.filter((c) => !c.district);
-  return { ids: statewide.map((c) => c.id), factors: topFactors(centered(similarity(statewide, cfg)), cfg.factors) };
+  const factors = topFactors(centered(similarity(statewide, cfg)), cfg.factors);
+  return new Map(statewide.map((c, i) => {
+    const row = factors.map((f) => f.vector[i] * Math.sqrt(Math.max(f.value, 0)));
+    const scale = Math.sqrt(row.reduce((s, x) => s + x * x, 0)) || 1;
+    return [c.id, row.map((x) => x / scale)];
+  }));
 }
 
 // Everything the simulator needs about the map, using only the years given.
 export function buildMap(allContests, national, asOfYears, cfg) {
-  const statewide = allContests.filter((c) => !c.district);
-  const drift = cfg.demoDrift ? demographicDrift(statewide, national, asOfYears) : new Map();
-  // Centered, because what all states share is the national mood, which is modeled separately.
-  const K = centered(similarity(statewide, cfg));
-  const factors = topFactors(K, cfg.factors);
-  const index = new Map(statewide.map((c, i) => [c.id, i]));
+  const loadings = stateLoadings(allContests, cfg);
   const nRef = national[asOfYears.at(-1)];
-
-  const contests = allContests.map((c) => {
-    const home = index.get(c.parent);
-    const parentRow = factors.map((f) => f.vector[home] * Math.sqrt(f.value));
-    const scale = Math.sqrt(parentRow.reduce((s, x) => s + x * x, 0)) || 1;
-    return {
-      id: c.id,
-      ev: c.ev,
-      name: c.name,
-      division: c.division,
-      district: c.district,
-      parentId: c.parent,
-      // Lean plus the reference year's national margin gives the margin at that national margin.
-      base: projectedLean(c, national, asOfYears, cfg) + (cfg.demoDrift ?? 0) * (drift.get(c.parent) ?? 0) + nRef,
-      elasticity: c.district ? 1 : elasticity(c, national, asOfYears, cfg),
-      unit: parentRow.map((x) => x / scale),
-      weight: c.district ? 0 : c.demo.pop,
-    };
-  });
+  const contests = allContests.map((c) => ({
+    id: c.id,
+    ev: c.ev,
+    name: c.name,
+    division: c.division,
+    district: c.district,
+    parentId: c.parent,
+    // Lean plus the reference year's national margin gives the margin at that national margin.
+    base: projectedLean(c, national, asOfYears, cfg) + nRef,
+    unit: loadings.get(c.parent),
+    weight: c.district ? 0 : c.demo.pop,
+  }));
   return { contests, nRef };
 }
 
@@ -175,5 +126,3 @@ export function finishParams(map, { sharedStray, ownStray, districtExtra }) {
     })),
   };
 }
-
-export const ALL_YEARS = YEARS;

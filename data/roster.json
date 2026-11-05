@@ -81,7 +81,9 @@
   "match": [
    "Josh Shapiro"
   ],
-  "keys": [],
+  "keys": [
+   "Shapiro"
+  ],
   "guard": null
  },
  {
@@ -339,7 +341,9 @@
   "match": [
    "Cory Booker"
   ],
-  "keys": [],
+  "keys": [
+   "Booker"
+  ],
   "guard": null
  },
  {
@@ -1446,7 +1450,9 @@
   "match": [
    "Bernie Sanders"
   ],
-  "keys": [],
+  "keys": [
+   "Bernie"
+  ],
   "guard": null
  },
  {
@@ -1698,7 +1704,9 @@
   "match": [
    "Sherrod Brown"
   ],
-  "keys": [],
+  "keys": [
+   "Sherrod"
+  ],
   "guard": null
  },
  {
@@ -1896,7 +1904,9 @@
   "match": [
    "Ted Cruz"
   ],
-  "keys": [],
+  "keys": [
+   "Cruz"
+  ],
   "guard": null
  },
  {
@@ -1981,7 +1991,9 @@
   "match": [
    "Tucker Carlson"
   ],
-  "keys": [],
+  "keys": [
+   "Tucker"
+  ],
   "guard": null
  },
  {
@@ -2095,7 +2107,9 @@
   "match": [
    "Brian Kemp"
   ],
-  "keys": [],
+  "keys": [
+   "Kemp"
+  ],
   "guard": null
  },
  {
@@ -2208,7 +2222,9 @@
   "match": [
    "Rand Paul"
   ],
-  "keys": [],
+  "keys": [
+   "Rand Paul"
+  ],
   "guard": null
  },
  {
@@ -2291,7 +2307,9 @@
   "match": [
    "Chris Christie"
   ],
-  "keys": [],
+  "keys": [
+   "Christie"
+  ],
   "guard": null
  },
  {
@@ -2430,7 +2448,9 @@
   "match": [
    "Nikki Haley"
   ],
-  "keys": [],
+  "keys": [
+   "Haley"
+  ],
   "guard": null
  },
  {
@@ -2486,7 +2506,9 @@
   "match": [
    "Byron Donalds"
   ],
-  "keys": [],
+  "keys": [
+   "Donalds"
+  ],
   "guard": null
  },
  {
@@ -2598,7 +2620,9 @@
   "match": [
    "Mike Pence"
   ],
-  "keys": [],
+  "keys": [
+   "Pence"
+  ],
   "guard": null
  },
  {

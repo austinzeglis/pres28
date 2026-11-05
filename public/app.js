@@ -1,4 +1,4 @@
-import { buildMatchup, hashSeed, simulate } from "./sim.js?v=10";
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=12";
 
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
@@ -9,9 +9,11 @@ const PARTY = { D: "Democrats", R: "Republicans" };
 const COLOR = { D: "#2b63b5", R: "#c8402f", poly: "#00856b", kalshi: "#c26a12" };
 const REFRESH_MS = 5 * 60 * 1000;
 
-const state = { board: null, feed: { 2028: null, all: null }, scope: "2028", party: "", who: "", timer: null };
+const state = { board: null, feed: { 2028: null, all: null }, personFeed: new Map(), scope: "2028", party: "", who: "" };
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Links come from outside feeds, so only ordinary web addresses are used as links.
+const link = (u) => (/^https?:\/\//i.test(u ?? "") ? esc(u) : "#");
 const fmt1 = (x) => (x == null ? "–" : x >= 10 ? x.toFixed(0) : x.toFixed(1));
 const getJson = async (url) => {
   const res = await fetch(url);
@@ -73,7 +75,8 @@ const TALK = /presiden|white house|nominee|nomination|primary|primaries|caucus|2
 const cleanTitle = (s) => s.title.replace(/\s+-\s+[^-]{2,60}$/, "");
 
 function visibleStories() {
-  const rows = state.feed[state.scope] ?? [];
+  // Someone's own stories go far beyond the newest few hundred.
+  const rows = (state.who ? state.personFeed.get(state.who) : state.feed[state.scope]) ?? [];
   const lookup = peopleIndex();
   const seen = new Set();
   const out = [];
@@ -81,7 +84,6 @@ function visibleStories() {
     const people = JSON.parse(s.people ?? "[]");
     if (state.scope === "2028" && !(s.title.includes("2028") || (s.text ?? "").includes("2028")) ) continue;
     if (state.scope === "2028" && !TALK.test(`${s.title} ${s.text ?? ""}`)) continue;
-    if (state.who && !people.includes(state.who)) continue;
     if (state.party && !people.some((id) => lookup[id]?.party === state.party)) continue;
     const key = cleanTitle(s).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     if (seen.has(key)) continue;
@@ -103,13 +105,13 @@ function storyHtml(s, lookup) {
     const p = lookup[id];
     return p ? `<button class="who" data-who="${id}"><i class="${p.party}"></i>${esc(p.name.split(" ").slice(-1)[0] === "Jr." ? p.name.split(" ").slice(-2).join(" ") : p.name.split(" ").slice(-1)[0])}</button>` : "";
   }).join("");
-  return `<article class="story"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(cleanTitle(s))}</a>
+  return `<article class="story"><a href="${link(s.url)}" target="_blank" rel="noopener">${esc(cleanTitle(s))}</a>
     <div class="meta"><span>${esc(s.source)}</span><span>${ago(s.published)}</span>${chips}</div></article>`;
 }
 
 function newsBody() {
   const lookup = peopleIndex();
-  if (!state.feed[state.scope]) return `<div class="none">Loading</div>`;
+  if (state.who ? !state.personFeed.has(state.who) : !state.feed[state.scope]) return `<div class="none">Loading</div>`;
   const list = visibleStories();
   return list.length ? list.map((s) => storyHtml(s, lookup)).join("") : `<div class="none">No headlines</div>`;
 }
@@ -292,7 +294,7 @@ function storiesHtml() {
     return true;
   });
   return `<div class="tabs" style="margin-bottom:4px">${tab("all", "Stories", stories.length)}${tab("plans", "About running", plans.length)}${tab("posts", "Own posts", posts.length)}</div>
-    ${rows.length ? rows.map((s) => `<article class="story"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(cleanTitle(s))}</a><div class="meta"><span>${esc(s.source)}</span><span>${ago(s.published)}</span></div></article>`).join("") : `<div class="none">None</div>`}`;
+    ${rows.length ? rows.map((s) => `<article class="story"><a href="${link(s.url)}" target="_blank" rel="noopener">${esc(cleanTitle(s))}</a><div class="meta"><span>${esc(s.source)}</span><span>${ago(s.published)}</span></div></article>`).join("") : `<div class="none">None</div>`}`;
 }
 
 function rangeFrom() {
@@ -348,10 +350,10 @@ function drawPerson(row) {
     p.x && `<a href="https://x.com/${esc(p.x)}" target="_blank" rel="noopener">X</a>`,
     p.bluesky && `<a href="https://bsky.app/profile/${esc(p.bluesky)}" target="_blank" rel="noopener">Bluesky</a>`,
     p.youtube && `<a href="https://www.youtube.com/channel/${esc(p.youtube)}" target="_blank" rel="noopener">YouTube</a>`,
-    p.site && `<a href="${esc(p.site)}" target="_blank" rel="noopener">Site</a>`,
+    p.site && `<a href="${link(p.site)}" target="_blank" rel="noopener">Site</a>`,
   ].filter(Boolean).join("");
   const facts = [
-    p.list?.currently ?? p.desc,
+    p.currently ?? p.list?.currently ?? p.desc,
     age != null ? `Age ${age}` : null,
     p.list?.born ? `Born ${p.list.born}` : null,
     p.list?.past_runs ? `Ran ${p.list.past_runs}` : null,
@@ -366,8 +368,8 @@ function drawPerson(row) {
       <div>
         <h1><i class="swatch ${p.party}"></i>${esc(p.name)}</h1>
         <div class="facts">${facts}</div>
-        <div class="status"><b>${STATUS[st.status]}</b>${st.date ? `<span class="d">${esc(st.date)}</span>` : ""}${st.url ? `<a href="${esc(st.url)}" target="_blank" rel="noopener">${esc(st.headline)}</a>` : ""}</div>
-        ${p.filings?.length ? `<div class="status"><b>FEC</b>${p.filings.map((f) => `<a href="https://www.fec.gov/data/candidate/${esc(f.id)}/" target="_blank" rel="noopener">${esc(f.name)}</a><span class="d">${esc(f.first_file ?? "")}</span>`).join(" ")}</div>` : ""}
+        <div class="status"><b>${STATUS[st.status]}</b>${st.date ? `<span class="d">${esc(st.date)}</span>` : ""}${st.url ? `<a href="${link(st.url)}" target="_blank" rel="noopener">${esc(st.headline)}</a>` : ""}</div>
+        ${p.filings?.length ? `<div class="status"><b>Possible FEC match</b>${p.filings.map((f) => `<a href="https://www.fec.gov/data/candidate/${esc(f.id)}/" target="_blank" rel="noopener">${esc(f.name)}</a><span class="d">${esc(f.first_file ?? "")}</span>`).join(" ")}</div>` : ""}
         <div class="links">${links}</div>
       </div>
       <div class="big">
@@ -393,10 +395,10 @@ function drawPerson(row) {
           <section class="section"><h3>Stories per day</h3><div class="chart" id="c-news"></div></section>
         </div>
         ${p.statePolls?.length ? `<section class="section"><h3>State polls </h3><div class="scroll"><table><thead><tr><th>Ended</th><th>State</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
-          ${p.statePolls.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td class="mono">${esc(x.state)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("")}
+          ${p.statePolls.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td class="mono">${esc(x.state)}</td><td>${x.url ? `<a href="${link(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("")}
         </tbody></table></div></section>` : ""}
         <section class="section"><h3>Polls</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
-          ${offered.length ? offered.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}${x.discounted ? " *" : ""}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("") : `<tr><td colspan="5" class="none">None</td></tr>`}
+          ${offered.length ? offered.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td>${x.url ? `<a href="${link(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}${x.discounted ? " *" : ""}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("") : `<tr><td colspan="5" class="none">None</td></tr>`}
         </tbody></table></div></section>
       </div>
       <section class="section news-person" id="stories">${storiesHtml()}</section>
@@ -433,7 +435,7 @@ function stateBlock(party, code, data, date) {
     const label = t.onRoster ? `<a href="/p/${t.id}">${esc(t.name)}</a>` : esc(t.name);
     return `<div class="srow"><span class="nm">${label}</span><span class="plot"><i class="bar" style="width:${((100 * t.share) / max).toFixed(1)}%"></i></span><span class="num sc">${t.share.toFixed(1)}</span></div>`;
   }).join("");
-  const polls = s.polls.map((p) => `<tr><td class="mono">${esc(p.end)}</td><td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.pollster)}</a>` : esc(p.pollster)}</td><td>${p.top.map((t) => `${esc(t.name.endsWith("Jr.") ? t.name.split(" ").slice(-2).join(" ") : t.name.split(" ").at(-1))} ${t.pct}`).join(", ")}</td><td class="r mono">${p.n || "–"}</td></tr>`).join("");
+  const polls = s.polls.map((p) => `<tr><td class="mono">${esc(p.end)}</td><td>${p.url ? `<a href="${link(p.url)}" target="_blank" rel="noopener">${esc(p.pollster)}</a>` : esc(p.pollster)}</td><td>${p.top.map((t) => `${esc(t.name.endsWith("Jr.") ? t.name.split(" ").slice(-2).join(" ") : t.name.split(" ").at(-1))} ${t.pct}`).join(", ")}</td><td class="r mono">${p.n || "–"}</td></tr>`).join("");
   return `<section class="state"><h3>${esc(name)}<span class="right">${esc(when)}${when ? " · " : ""}${s.count} ${s.count === 1 ? "poll" : "polls"} · ${esc(s.latest)}</span></h3>
     ${rows}
     <table class="spolls"><thead><tr><th>Ended</th><th>Pollster</th><th>Top 3 (%)</th><th class="r">Sample</th></tr></thead><tbody>${polls}</tbody></table></section>`;
@@ -473,30 +475,37 @@ const lastName = (name) => (name.endsWith("Jr.") ? name.split(" ").slice(-2).joi
 
 // Runs off the page's thread, so the page stays responsive. If the browser can't, or the
 // background thread doesn't answer, it runs here instead: slower to paint, same result.
+const answers = new Map();
+
+function startWorker() {
+  if (match.worker) return match.worker;
+  match.worker = new Worker("/simworker.js?v=12", { type: "module" });
+  match.worker.onmessage = ({ data }) => answers.get(data.key)?.(data.result);
+  match.worker.onerror = (e) => {
+    console.error("simulation thread", e.message);
+    match.worker = null;
+    for (const retry of answers.values()) retry(null);
+  };
+  return match.worker;
+}
+
 function simulateMatchup(key, params) {
   const seed = hashSeed(`${key}|${match.model.updated}`);
   return new Promise((resolve) => {
-    let done = false;
     const finish = (result) => {
-      if (done) return;
-      done = true;
       clearTimeout(timer);
-      resolve(result);
+      answers.delete(key);
+      // Nobody is waiting on a pick the person has already moved past.
+      if (result || match.waiting !== key) resolve(result);
+      else resolve(simulate(params, DRAWS, seed));
     };
-    const inPage = () => finish(simulate(params, DRAWS, seed));
-    const timer = setTimeout(inPage, WORKER_PATIENCE_MS);
+    const timer = setTimeout(() => finish(null), WORKER_PATIENCE_MS);
+    answers.set(key, finish);
     try {
-      match.worker ??= new Worker("/simworker.js?v=10", { type: "module" });
-      match.worker.onmessage = ({ data }) => { if (data.key === key) finish(data.result); };
-      match.worker.onerror = (e) => {
-        console.error("simulation thread", e.message);
-        match.worker = null;
-        inPage();
-      };
-      match.worker.postMessage({ key, params, draws: DRAWS, seed });
+      startWorker().postMessage({ key, params, draws: DRAWS, seed });
     } catch (err) {
       console.error("simulation thread", err);
-      inPage();
+      finish(null);
     }
   });
 }
@@ -552,15 +561,12 @@ function drawMatchup(result, built) {
   const flags = (p) => [p.depth === 0 ? "Thin data" : "", p.ineligible ?? ""].filter(Boolean).map((t) => `<span class="flag">${esc(t)}</span>`).join("");
   const partRow = (p, top) => `<tr class="${top ? "ptop" : "psub"}"><td>${esc(p.label)}</td><td class="r mono">${signed(p.value, 2)}</td></tr>`;
   const piecesOf = (pieces, sign) => (pieces ?? []).map((x) => partRow({ label: x.label, value: sign * x.value }, false)).join("");
-  const parts = built.parts.map((p) => {
-    const sign = p.pieces && p.value !== 0 ? Math.sign(p.value) * Math.sign(p.pieces.reduce((s, x) => s + x.value, 0) || 1) : 1;
-    return partRow(p, true) + piecesOf(p.pieces, sign);
-  }).join("");
-  const home = (id, who) => (who.home?.includes(statesById.get(id)?.parentId) ? " ·" : "");
+  const parts = built.parts.map((p) => partRow(p, true) + piecesOf(p.pieces, p.against ? -1 : 1)).join("");
+  const home = (id, who) => (who.home?.includes(statesById.get(id)?.parentId) ? ` (${esc(lastName(who.name))} home)` : "");
 
-  const pollRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(m.state ?? "National")}${m.third ? ` · with ${esc(m.third)}` : ""}</td><td class="r mono">${m.demPct}</td><td class="r mono">${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  const pollRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(m.state ?? "National")}${m.third ? ` · with ${esc(m.third)}` : ""}</td><td class="r mono">${m.demPct}</td><td class="r mono">${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
   const related = built.polls.length ? [] : model.matchups.filter((m) => (m.dem === match.dem || m.rep === match.rep) && !m.state && !m.third).slice(0, 10);
-  const relatedRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(lastName(model.people[m.dem]?.name ?? m.dem))} ${m.demPct}, ${esc(lastName(model.people[m.rep]?.name ?? m.rep))} ${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  const relatedRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(lastName(model.people[m.dem]?.name ?? m.dem))} ${m.demPct}, ${esc(lastName(model.people[m.rep]?.name ?? m.rep))} ${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
   const legend = SHADE.map(([min, c], i) => {
     const top = i === 0 ? 100 : Math.round(SHADE[i - 1][0] * 100);
     return `<span><i style="background:${c}"></i>${Math.round(min * 100)}–${top}</span>`;
@@ -578,6 +584,7 @@ function drawMatchup(result, built) {
       <span>Electoral range <b>${result.evLow}–${result.evHigh}</b></span>
       <span>Tie <b>${(100 * result.tie).toFixed(1)}%</b></span>
       <span>Market chance of this matchup <b>${(100 * chance).toFixed(1)}%</b></span>
+      ${model.mood.modelShare != null && model.mood.marketShare != null ? `<span>Democrats across likely pairings: model <b>${(100 * model.mood.modelShare).toFixed(0)}%</b>, party markets <b>${(100 * model.mood.marketShare).toFixed(0)}%</b></span>` : ""}
     </div>
     <div class="mcols">
       <div>
@@ -605,8 +612,8 @@ async function runMatchup() {
   if (match.cache.has(key)) return;
   match.waiting = key;
   const result = await simulateMatchup(key, built.params);
-  match.cache.set(key, result);
-  if (match.waiting === key) drawMatchup(result, built);
+  if (result) match.cache.set(key, result);
+  if (result && match.waiting === key) drawMatchup(result, built);
 }
 
 async function matchupPage(demId, repId) {
@@ -664,7 +671,15 @@ document.addEventListener("click", async (e) => {
     return;
   }
   if (party) { state.party = party.dataset.party; drawNews(); return; }
-  if (who) { state.who = who.dataset.who; drawNews(); return; }
+  if (who) {
+    state.who = who.dataset.who;
+    drawNews();
+    if (state.who && !state.personFeed.has(state.who)) {
+      state.personFeed.set(state.who, await getJson(`/api/feed?person=${encodeURIComponent(state.who)}`).catch(() => []));
+      drawNews();
+    }
+    return;
+  }
   if (tab) {
     person.tab = tab.dataset.tab;
     app.querySelector("#stories").innerHTML = storiesHtml();

@@ -9,6 +9,8 @@ const ZERO_READS_AS = 0.25;
 const HOUSE_SHRINK = 1; // about one fresh poll's worth of doubt
 const MIN_POLLSTERS_FOR_HOUSE = 5;
 const RARELY_POLLED_DOUBT = 1; // one fresh poll's worth
+// Firms that work for one party or usually poll for its side. Their polls count half.
+const PARTISAN_FIRM = /mclaughlin|quantus|cygnal|trafalgar|co\/efficient|insideradvantage|rasmussen|rmg research|lake research|data for progress|public policy polling|gqr|blueprint/i;
 const NOT_A_PERSON = /^(others?|someone|somebody|some other|another|undecided|unsure|not sure|none|no one|nobody|neither|don.?t know|dk|refused|prefer not|would not|wouldn.?t|i would|no answer|skipped|write.?in)\b/i;
 
 // ---------- polls ----------
@@ -31,7 +33,7 @@ export function cleanPolls(rows) {
       party: r.subject.includes("Democratic") ? "D" : "R",
       n: r.sample_size ?? 0,
       population: r.population,
-      discounted: Boolean(r.partisan || r.internal),
+      discounted: Boolean(r.partisan || r.internal || PARTISAN_FIRM.test(r.pollster)),
       url: r.url,
       source: r.source ?? "votehub",
       state: r.state ?? null,
@@ -51,21 +53,27 @@ const widerThan = (a, b) =>
 const firstWord = (name) => name.toLowerCase().replace(/^the\s+/, "").split(/[^a-z0-9]+/)[0];
 
 // Two sources write the same poll differently ("Harvard Harris", "Harvard CAPS/Harris",
-// or a sponsor's name). It's the same poll if it ended within a day and either the
-// pollster's first word matches or at least four shared names read within a point.
+// or a sponsor's name). It's the same poll only if it ended within a day and the shared
+// names read about the same: firms like YouGov run several different polls at once.
 function samePoll(a, b) {
   if (a.party !== b.party || Math.abs(days(a.end, b.end)) > 1) return false;
-  if (firstWord(a.pollster) === firstWord(b.pollster)) return true;
   const shared = Object.keys(a.raw).filter((i) => i in b.raw);
-  return shared.length >= 4 && shared.every((i) => Math.abs(a.raw[i] - b.raw[i]) <= 1);
+  const close = (limit) => shared.every((i) => Math.abs(a.raw[i] - b.raw[i]) <= limit);
+  if (firstWord(a.pollster) === firstWord(b.pollster)) return shared.length >= 2 && close(2);
+  return shared.length >= 4 && close(1);
 }
 
 function mergeAcrossSources(polls) {
   const kept = [];
   for (const poll of polls) {
     const at = kept.findIndex((k) => samePoll(k, poll));
-    if (at < 0) kept.push(poll);
-    else if (widerThan(poll, kept[at])) kept[at] = poll;
+    if (at < 0) {
+      kept.push(poll);
+    } else {
+      const flagged = poll.discounted || kept[at].discounted;
+      if (widerThan(poll, kept[at])) kept[at] = poll;
+      kept[at] = { ...kept[at], discounted: flagged };
+    }
   }
   return kept;
 }

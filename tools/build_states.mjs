@@ -2,6 +2,7 @@
 // results 2008-2024, 2026 statewide results and demographics.
 // Run by hand when inputs change: node tools/build_states.mjs
 import { writeFileSync } from "node:fs";
+import { fetchResults2026 } from "../collect/results2026.mjs";
 
 const UA = { "user-agent": "pres28-collector/1.0 (https://github.com/austinzeglis/pres28)" };
 
@@ -87,46 +88,6 @@ async function presidential() {
 // Certified popular vote margins, D minus R, as a share of all votes.
 const NATIONAL_MARGIN = { 2008: 7.27, 2012: 3.86, 2016: 2.1, 2020: 4.45, 2024: -1.48 };
 
-async function results2026() {
-  const out = { senate: {}, governor: {}, house: { dem: 0, rep: 0, seatsCounted: 0 } };
-  for (const kind of ["senate", "governor", "house"]) {
-    const u = `https://static01.nyt.com/elections-assets/pages/data/2026-11-03/results-${kind}.json`;
-    const data = await (await fetch(u, { headers: UA })).json();
-    for (const race of data.races) {
-      const parties = Object.fromEntries(Object.values(race.candidate_metadata ?? {}).map((c) => [c.nyt_id, c.party?.nyt_id ?? ""]));
-      const unit = race.reporting_units?.find((r) => r.level === "state" || r.level === "district") ?? race.reporting_units?.[0];
-      if (!unit) continue;
-      const totals = { dem: 0, rep: 0, all: 0 };
-      const names = {};
-      for (const c of unit.candidates ?? []) {
-        const v = c.votes?.total ?? 0;
-        const p = String(parties[c.nyt_id] ?? "").toLowerCase();
-        totals.all += v;
-        if (p.startsWith("dem")) { totals.dem += v; names.dem ??= race.candidate_metadata[c.nyt_id]?.last_name; }
-        if (p.startsWith("gop") || p.startsWith("rep") || p === "r") { totals.rep += v; names.rep ??= race.candidate_metadata[c.nyt_id]?.last_name; }
-      }
-      if (!totals.all) continue;
-      if (kind === "house") {
-        if (totals.dem > 0 && totals.rep > 0) {
-          out.house.dem += totals.dem;
-          out.house.rep += totals.rep;
-          out.house.seatsCounted++;
-        }
-        continue;
-      }
-      if (totals.dem > 0 && totals.rep > 0) {
-        out[kind][unit.state_postal] = {
-          margin: Math.round(((totals.dem - totals.rep) / totals.all) * 1e4) / 100,
-          dem: names.dem, rep: names.rep, eevp: unit.eevp ?? null,
-        };
-      }
-    }
-  }
-  const { dem, rep } = out.house;
-  out.houseMargin = Math.round(((dem - rep) / (dem + rep)) * 1e4) / 100;
-  return out;
-}
-
 // Race, Hispanic origin and age from the census's open population estimates file.
 async function populationFile() {
   const u = "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/state/asrh/sc-est2023-alldata6.csv";
@@ -190,8 +151,8 @@ for (const id of Object.keys(EV)) {
   const have = Object.keys(results[id] ?? {}).join(",");
   if (!id.includes("-") && have !== "2008,2012,2016,2020,2024") throw new Error(`gap ${id}: ${have}`);
 }
-const r26 = await results2026();
-console.log(`2026: ${Object.keys(r26.senate).length} Senate, ${Object.keys(r26.governor).length} governor, House margin ${r26.houseMargin} over ${r26.house.seatsCounted} contested seats`);
+const r26 = await fetchResults2026(async (u) => (await fetch(u, { headers: UA })).json());
+console.log(`2026: ${Object.keys(r26.senate).length} Senate, ${Object.keys(r26.governor).length} governor, House margin ${r26.houseMargin} over ${r26.house.seats} contested seats`);
 const pop = await populationFile();
 const college = await wikiColumn("List of U.S. states and territories by educational attainment", 1); // bachelor's or higher
 const urban = await wikiColumn("Urbanization in the United States");

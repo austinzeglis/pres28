@@ -195,7 +195,13 @@ tr.total td { font-weight: 600; border-bottom: 0; }
 }
 @media (max-width: 560px) {
   .grid { grid-template-columns: 18px minmax(100px, 1fr) minmax(50px, 80px) 34px 34px 34px 28px; column-gap: 5px; }
-  .grid .st, .head .st-h { display: none; }
+  .head .st-h { display: none; }
+  /* Status moves under the name, so phones still show it. */
+  .row { height: auto; min-height: 25px; padding: 3px 0; }
+  .row .rk { grid-row: 1 / span 2; }
+  .row .st { grid-column: 2; grid-row: 2; }
+  .row .st.mentioned { display: none; }
+  .row .plot, .row .num, .row .chg { grid-row: 1 / span 2; }
   .who-head { grid-template-columns: 64px minmax(0, 1fr); }
   .who-head img { width: 64px; height: 64px; }
   .who-head h1 { font-size: 22px; }

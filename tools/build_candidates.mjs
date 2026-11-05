@@ -2,7 +2,7 @@
 // races with margins read from Wikipedia or AP, and congressional voting records.
 // Run by hand when facts change: node tools/build_candidates.mjs
 import { readFileSync, writeFileSync } from "node:fs";
-import { slug } from "../collect/names.mjs";
+import { recordMatches, slug } from "../collect/names.mjs";
 
 const UA = { "user-agent": "pres28-collector/1.0 (https://github.com/austinzeglis/pres28)" };
 const NAMES = {
@@ -173,6 +173,7 @@ const partyMedian = { D: median(members.filter((m) => m.party === "100").map((m)
 
 const roster = JSON.parse(readFileSync("data/roster.json", "utf8"));
 const out = {};
+const matched = [];
 const problems = [];
 for (const p of roster) {
   const facts = FACTS[p.name];
@@ -199,12 +200,14 @@ for (const p of roster) {
     }
     races.push({ year, state, office, incumbent: inc === "i", demMargin: Math.round(demMargin * 100) / 100 });
   }
-  const m = members.find((x) => x.state === (facts?.home ?? [])[0] && new RegExp(`^${surname.toUpperCase()}`).test(x.name) && x.party === (p.party === "D" ? "100" : "200"))
-    ?? members.find((x) => new RegExp(`^${surname.toUpperCase()},`).test(x.name) && x.party === (p.party === "D" ? "100" : "200") && (facts?.home ?? []).includes(x.state));
+  // Same party, a home state and the right first name: there are two Browns from Ohio and two Castros from Texas.
+  const m = members.find((x) => x.party === (p.party === "D" ? "100" : "200") && (facts?.home ?? []).includes(x.state) && recordMatches(p.name, x.name));
+  if (m) matched.push(`${p.name} = ${m.name}`);
   out[slug(p.name)] = { home: facts?.home ?? [], tie: facts?.tie ?? null, races, nominate: m ? m.score : null };
 }
 writeFileSync("data/candidates.json", JSON.stringify({ built: new Date().toISOString(), partyMedian, people: out }, null, 1) + "\n");
 console.log("party medians", partyMedian, "| people", Object.keys(out).length, "| with races", Object.values(out).filter((x) => x.races.length).length, "| with voting record", Object.values(out).filter((x) => x.nominate != null).length);
+console.log("voting records:", matched.join("; "));
 console.log("problems:", problems.length ? `\n  ${problems.join("\n  ")}` : "none");
 for (const id of ["jon-ossoff", "josh-shapiro", "andy-beshear", "jd-vance", "ron-desantis", "greg-abbott", "alexandria-ocasio-cortez", "john-fetterman", "sherrod-brown", "james-talarico", "kamala-harris"]) {
   console.log(id, JSON.stringify(out[id].races.map((r) => [r.year, r.state, r.office, r.demMargin])), "voting", out[id].nominate);
