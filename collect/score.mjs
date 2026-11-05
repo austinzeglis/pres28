@@ -82,11 +82,13 @@ function pollWeight(p, day) {
 function fitStrengths(polls) {
   const ids = [...new Set(polls.flatMap((p) => Object.keys(p.shares)))];
   let s = Object.fromEntries(ids.map((i) => [i, 1 / ids.length]));
+  // Scaled down where there's little polling at all, as in most states.
+  const doubt = Math.min(RARELY_POLLED_DOUBT, polls.reduce((n, p) => n + p.w, 0) / 5);
   for (let iter = 0; iter < 60; iter++) {
     const num = Object.fromEntries(ids.map((i) => [i, 0]));
     // The starting value stands in for polls nobody has run yet, so someone rarely
     // offered can't hold a large share on the strength of one or two readings.
-    const den = Object.fromEntries(ids.map((i) => [i, RARELY_POLLED_DOUBT]));
+    const den = Object.fromEntries(ids.map((i) => [i, doubt]));
     for (const p of polls) {
       const field = Object.keys(p.shares);
       const sum = field.reduce((n, i) => n + s[i], 0);
