@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildMatcher, fold, slug } from "./names.mjs";
+import { WEIGHTS, attentionShares, cleanPolls, marketShares, pollShares, rankParty } from "./score.mjs";
 
 const { INGEST_URL, INGEST_KEY } = process.env;
 if (!INGEST_URL || !INGEST_KEY) throw new Error("INGEST_URL and INGEST_KEY are required");
@@ -53,9 +54,9 @@ async function pool(items, size, work) {
   await Promise.all(Array.from({ length: size }, worker));
 }
 
-async function send(table, rows) {
+async function send(table, rows, size = 100) {
   const batches = [];
-  for (let i = 0; i < rows.length; i += 100) batches.push(rows.slice(i, i + 100));
+  for (let i = 0; i < rows.length; i += size) batches.push(rows.slice(i, i + size));
   let written = 0;
   await pool(batches, 4, async (batch) => {
     for (let attempt = 1; ; attempt++) {
@@ -445,7 +446,7 @@ async function taskBackfill() {
         return (await googleNews(`"${p.name}" 2028`)).map((raw) => toItem(raw, "gnews", "Google News", [p.id])).filter(Boolean);
       },
     })),
-  ].filter((j) => !done.has(j.key));
+  ].filter((j) => !done.has(j.key) && (!process.env.BACKFILL_ONLY || j.key.startsWith(process.env.BACKFILL_ONLY)));
 
   let sent = 0;
   let finished = 0;
@@ -466,6 +467,197 @@ async function taskBackfill() {
   return { rows: sent, note: `${finished} jobs done, ${failed} failed, ${jobs.length - finished - failed} left` };
 }
 
+// ---------- scoring ----------
+
+const HISTORY_FIRST_DAY = "2025-07-20"; // both markets are open from here
+const RECOMPUTE_POLLS_EVERY = 7; // days, or when a new poll arrives
+
+const pct = (x) => (x == null ? null : Math.round(x * 1e4) / 100);
+const round1 = (x) => Math.round(x * 10) / 10;
+const addDays = (day, n) => new Date(new Date(`${day}T00:00:00Z`).getTime() + n * 864e5).toISOString().slice(0, 10);
+
+async function exportJson(path) {
+  const res = await get(`${INGEST_URL}/export/${path}`, { timeout: 30000, tries: 3, headers: { authorization: `Bearer ${INGEST_KEY}` } });
+  return res.json();
+}
+
+function loadStatuses() {
+  const [, ...lines] = readFileSync("data/status.tsv", "utf8").trim().split("\n");
+  const out = {};
+  for (const line of lines) {
+    const [person, status, date, headline, url] = line.split("\t");
+    out[person] = { status, date, headline, url };
+  }
+  return out;
+}
+
+async function taskRescore() {
+  if (!markets.poly.length) await loadPoly();
+  if (!markets.kalshi.length) await loadKalshi();
+  const polls = cleanPolls(await exportJson("polls"));
+  const filings = await exportJson("filings");
+
+  // Everyone with a price counts toward market shares, on the roster or not.
+  const ids = new Set(roster.map((p) => p.id));
+  for (const m of [...markets.poly, ...markets.kalshi]) if (m.source.includes("_nom_")) ids.add(m.person);
+  const raw = new Map();
+  await pool([...ids], 6, async (id) => raw.set(id, await exportJson(`person/${encodeURIComponent(id)}`)));
+
+  const lookup = new Map(); // person -> source -> day -> value
+  const newsBy = new Map();
+  for (const [id, data] of raw) {
+    const bySource = new Map();
+    for (const o of data.obs) {
+      if (!bySource.has(o.source)) bySource.set(o.source, new Map());
+      bySource.get(o.source).set(o.d, o.v);
+    }
+    lookup.set(id, bySource);
+    newsBy.set(id, new Map(data.news.map((n) => [n.d, n.n])));
+  }
+
+  const carried = (series, day) => {
+    for (let back = 0; back <= 5; back++) {
+      const v = series?.get(addDays(day, -back));
+      if (v != null) return v;
+    }
+    return null;
+  };
+  const sum7 = (series, day) => {
+    let total = 0;
+    for (let back = 0; back < 7; back++) total += series?.get(addDays(day, -back)) ?? 0;
+    return total;
+  };
+
+  const inputs = { day: today };
+  const series = new Map();
+  for (const party of ["D", "R"]) {
+    const members = roster.filter((p) => p.party === party).map((p) => p.id);
+    const sources = [`poly_nom_${party}`, `kalshi_nom_${party}`];
+    let polled = {};
+    let pollsAt = null;
+    let pollCount = -1;
+    const partyRows = [];
+    for (let day = HISTORY_FIRST_DAY; day <= today; day = addDays(day, 1)) {
+      const rows = [];
+      for (const [id, bySource] of lookup) {
+        for (const source of sources) {
+          const value = carried(bySource.get(source), day);
+          if (value != null) rows.push({ person: id, source, value });
+        }
+      }
+      const mkt = marketShares(rows);
+
+      const count = polls.filter((p) => p.party === party && p.end <= day).length;
+      if (count !== pollCount || !pollsAt || day === today || addDays(pollsAt, RECOMPUTE_POLLS_EVERY) <= day) {
+        polled = pollShares(polls, party, day);
+        pollsAt = day;
+        pollCount = count;
+      }
+
+      const wiki = {};
+      const news = {};
+      for (const id of members) {
+        wiki[id] = sum7(lookup.get(id)?.get("wiki_views"), day);
+        news[id] = sum7(newsBy.get(id), day);
+      }
+      const attn = attentionShares(members, wiki, news);
+      const one = {};
+      for (const id of members) one[id] = { m: mkt[id] ?? null, p: polled[id] ?? null, a: attn[id] };
+      const ranked = rankParty(one);
+      for (const r of ranked.rows) {
+        if (!series.has(r.id)) series.set(r.id, { days: [], score: [], rank: [], m: [], p: [], a: [] });
+        const x = series.get(r.id);
+        x.days.push(day);
+        x.score.push(round1(r.score));
+        x.rank.push(r.rank);
+        x.m.push(pct(r.m));
+        x.p.push(pct(r.p));
+        x.a.push(pct(r.a));
+      }
+      partyRows.push(ranked);
+    }
+
+    const latest = partyRows.at(-1).rows;
+    inputs[party] = {
+      polled: polled, // includes people off the roster, so shares stay honest
+      members: Object.fromEntries(latest.map((r) => {
+        const x = series.get(r.id);
+        const at = x.days.length - 8;
+        return [r.id, { p: r.p, a: r.a, score7: at >= 0 ? x.score[at] : null, rank7: at >= 0 ? x.rank[at] : null, spark: x.score.slice(-60) }];
+      })),
+    };
+  }
+
+  const statuses = loadStatuses();
+  const snapshots = [{ key: "inputs", json: JSON.stringify(inputs), updated: stamp }];
+  const pairs = (m) => (m ? [...m].sort((a, b) => (a[0] < b[0] ? -1 : 1)).map(([d, v]) => [d, Math.round(v * 1e4) / 1e4]) : []);
+  for (const p of roster) {
+    const by = lookup.get(p.id);
+    const src = (name) => pairs(by?.get(name));
+    snapshots.push({
+      key: `person:${p.id}`,
+      updated: stamp,
+      json: JSON.stringify({
+        id: p.id, name: p.name, party: p.party, on_list: p.on_list, list: p.list, dob: p.dob, wiki: p.wiki, desc: p.desc, photo: p.photo,
+        bluesky: p.bluesky, youtube: p.youtube, x: p.x, site: p.site,
+        status: statuses[p.id] ?? { status: "mentioned" },
+        filings: filings.filter((f) => f.person === p.id),
+        series: series.get(p.id),
+        sources: {
+          poly: src(`poly_nom_${p.party}`),
+          kalshi: src(`kalshi_nom_${p.party}`),
+          wiki: src("wiki_views"),
+          news: pairs(newsBy.get(p.id)),
+        },
+        polls: polls
+          .filter((x) => x.party === p.party)
+          .map((x) => ({ pollster: x.pollster, end: x.end, pct: x.raw[p.id] ?? null, n: x.n, url: x.url, discounted: x.discounted, field: Object.keys(x.raw).length }))
+          .reverse(),
+      }),
+    });
+  }
+  await send("snapshots", snapshots, 1);
+  return { rows: snapshots.length, note: `${polls.length} polls after merging repeats` };
+}
+
+// Runs hourly: fresh market prices over the polls and attention from the daily rescore.
+async function taskBoard() {
+  if (!markets.poly.length) await loadPoly();
+  if (!markets.kalshi.length) await loadKalshi();
+  const inputs = await exportJson("snapshot/inputs");
+  if (!inputs?.D) throw new Error("no inputs yet: rescore has not run");
+  const statuses = loadStatuses();
+  const meta = new Map(roster.map((p) => [p.id, p]));
+  const board = { updated: stamp, inputsDay: inputs.day, weights: WEIGHTS };
+  for (const party of ["D", "R"]) {
+    const live = [...markets.poly, ...markets.kalshi].filter((m) => m.source.endsWith(`_nom_${party}`));
+    const mkt = marketShares(live);
+    const one = {};
+    for (const [id, x] of Object.entries(inputs[party].members)) one[id] = { m: mkt[id] ?? null, p: x.p, a: x.a };
+    const { rows, top } = rankParty(one);
+    board[party] = {
+      top: pct(top),
+      rows: rows.map((r) => {
+        const x = inputs[party].members[r.id];
+        const p = meta.get(r.id);
+        const st = statuses[r.id];
+        const priceOf = (kind) => live.find((m) => m.person === r.id && m.source.startsWith(kind))?.value ?? null;
+        return {
+          id: r.id, name: p.name, rank: r.rank, score: round1(r.score), blend: pct(r.blend),
+          m: pct(r.m), p: pct(r.p), a: pct(r.a), thin: r.thin ? 1 : 0, on_list: p.on_list,
+          poly: pct(priceOf("poly")), kalshi: pct(priceOf("kalshi")),
+          d7: x.score7 == null ? null : round1(r.score - x.score7),
+          r7: x.rank7 == null ? null : x.rank7 - r.rank,
+          status: st?.status ?? "mentioned", statusDate: st?.date ?? null,
+          spark: [...x.spark, round1(r.score)],
+        };
+      }),
+    };
+  }
+  await send("snapshots", [{ key: "board", json: JSON.stringify(board), updated: stamp }], 1);
+  return { rows: 1, note: `leaders ${board.D.rows[0].name}, ${board.R.rows[0].name}` };
+}
+
 // ---------- schedule ----------
 
 const TASKS = {
@@ -480,6 +672,8 @@ const TASKS = {
   wikipedia: taskWikipedia,
   fec: taskFec,
   backfill: taskBackfill,
+  rescore: taskRescore,
+  board: taskBoard,
 };
 
 function chosen() {
@@ -489,6 +683,8 @@ function chosen() {
   const list = ["polymarket", "kalshi", "feeds", "gnews", "bluesky", "youtube"];
   if (hour === 6) list.push("people", "polls", "wikipedia", "fec");
   if (hour === 6 || hour === 18) list.push("backfill");
+  if (hour === 6) list.push("rescore");
+  list.push("board");
   return list;
 }
 

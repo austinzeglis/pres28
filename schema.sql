@@ -37,3 +37,22 @@ CREATE TABLE IF NOT EXISTS runs (
 CREATE TABLE IF NOT EXISTS backfill (
   key TEXT PRIMARY KEY, rows_sent INTEGER, done_at TEXT
 ) WITHOUT ROWID;
+
+-- Finds a person's stories without scanning items. Filled by the trigger below.
+CREATE TABLE IF NOT EXISTS item_people (
+  person TEXT, published TEXT, id TEXT, kind TEXT,
+  PRIMARY KEY (person, published, id)
+) WITHOUT ROWID;
+
+CREATE TRIGGER IF NOT EXISTS items_people AFTER INSERT ON items BEGIN
+  INSERT OR IGNORE INTO item_people(person, published, id, kind)
+  SELECT je.value, coalesce(NEW.published, NEW.seen), NEW.id, NEW.kind FROM json_each(NEW.people) je;
+END;
+
+CREATE INDEX IF NOT EXISTS items_published ON items(published);
+
+-- Ready-made JSON for the site: board, inputs, person:<id>. Rewriting these costs
+-- a handful of writes, where per-day score rows would cost tens of thousands.
+CREATE TABLE IF NOT EXISTS snapshots (
+  key TEXT PRIMARY KEY, json TEXT, updated TEXT
+) WITHOUT ROWID;

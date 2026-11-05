@@ -75,6 +75,17 @@ for (let i = 0; i < titles.length; i += 50) {
   for (const n of data.normalized ?? []) if (!entities.has(n.from)) entities.set(n.from, entities.get(n.to));
 }
 
+// Headshots.
+const photos = new Map();
+for (let i = 0; i < titles.length; i += 50) {
+  const q = new URLSearchParams({
+    action: "query", prop: "pageimages", piprop: "thumbnail", pithumbsize: "240", pilimit: "50",
+    redirects: "1", titles: titles.slice(i, i + 50).join("|"), format: "json",
+  });
+  const data = await (await fetch(`https://en.wikipedia.org/w/api.php?${q}`, { headers: UA })).json();
+  for (const page of Object.values(data.query?.pages ?? {})) if (page.thumbnail) photos.set(page.title, page.thumbnail.source);
+}
+
 const claim = (e, prop) => {
   const v = e?.claims?.[prop]?.find((c) => c.rank !== "deprecated")?.mainsnak?.datavalue?.value;
   return typeof v === "string" ? v : v?.time ?? null;
@@ -93,6 +104,7 @@ const roster = pool.map((p) => {
     wikidata: e?.id ?? null,
     wiki: e?.sitelinks?.enwiki?.title ?? null,
     desc: e?.descriptions?.en?.value ?? null,
+    photo: photos.get(e?.sitelinks?.enwiki?.title) ?? null,
     dob: claim(e, "P569")?.slice(1, 11) ?? null,
     bluesky: claim(e, "P12361"),
     youtube: claim(e, "P2397"),
@@ -107,5 +119,5 @@ const roster = pool.map((p) => {
 writeFileSync("data/roster.json", JSON.stringify(roster, null, 1) + "\n");
 
 const count = (k) => roster.filter((r) => r[k]).length;
-console.log(`people ${roster.length} | wiki ${count("wiki")} | bluesky ${count("bluesky")} | youtube ${count("youtube")} | x ${count("x")}`);
+console.log(`people ${roster.length} | wiki ${count("wiki")} | bluesky ${count("bluesky")} | youtube ${count("youtube")} | x ${count("x")} | photo ${count("photo")}`);
 for (const r of roster) console.log(`${r.party} ${r.name} -> ${r.wiki} | ${r.desc}`);

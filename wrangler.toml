@@ -3,6 +3,12 @@ main = "src/worker.js"
 compatibility_date = "2025-09-01"
 workers_dev = true
 
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*", "/ingest/*", "/export/*", "/status", "/backfill"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "pres28"
