@@ -107,6 +107,13 @@ const KALSHI = [
 ];
 const markets = { poly: [], kalshi: [] };
 
+// A new or dead market can show any price at all. One opened with $2.57 traded, a
+// 1-cent bid and a 51-cent ask, and read as 26%. A price has to earn its way in.
+const MIN_TRADED = 1000;
+const MAX_SPREAD = 0.1;
+const priceIsReal = (traded, bid, ask) =>
+  traded >= MIN_TRADED && !(bid > 0 && ask > 0 && ask - bid > MAX_SPREAD);
+
 async function loadPoly() {
   for (const m of POLY) {
     const [event] = await getJson(`https://gamma-api.polymarket.com/events?slug=${m.slug}`);
@@ -115,7 +122,8 @@ async function loadPoly() {
       const name = x.groupItemTitle ?? "";
       const volume = +(x.volume ?? 0);
       // Unused slots are named "Person X", and dead markets can show stale prices.
-      if (/^Person [A-Z]+$/.test(name) || !name || volume <= 0 || x.active === false || x.closed) continue;
+      if (/^Person\b/.test(name) || !name || !x.outcomePrices || x.active === false || x.closed) continue;
+      if (!priceIsReal(volume, +(x.bestBid ?? 0), +(x.bestAsk ?? 0))) continue;
       markets.poly.push({
         source: m.source,
         person: slug(name),
@@ -140,7 +148,7 @@ async function loadKalshi() {
       const last = +(x.last_price_dollars ?? 0);
       const volume = +(x.volume_fp ?? 0);
       const value = bid > 0 && ask > 0 && ask < 1 ? (bid + ask) / 2 : last;
-      if (!name || (value <= 0 && volume <= 0)) continue;
+      if (!name || value <= 0 || !priceIsReal(volume, bid, ask)) continue;
       markets.kalshi.push({ source: m.source, series: m.series, ticker: x.ticker, person: slug(name), name, value, volume });
     }
   }

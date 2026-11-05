@@ -441,8 +441,8 @@ function stateBlock(party, code, data, date) {
     const label = t.onRoster ? `<a href="/p/${t.id}">${esc(t.name)}</a>` : esc(t.name);
     return `<div class="srow"><span class="nm">${label}</span><span class="plot"><i class="bar" style="width:${((100 * t.share) / max).toFixed(1)}%"></i></span><span class="num sc">${t.share.toFixed(1)}</span></div>`;
   }).join("");
-  const polls = s.polls.map((p) => `<tr><td class="mono">${esc(p.end)}</td><td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.pollster)}</a>` : esc(p.pollster)}</td><td>${p.top.map((t) => `${esc(t.name.split(" ").filter((w) => w !== "Jr.").at(-1))} ${t.pct}`).join(", ")}</td><td class="r mono">${p.n || "–"}</td></tr>`).join("");
-  return `<section class="state"><h3>${esc(name)}<span class="right">${esc(when)}${when ? " · " : ""}${s.count} polls · ${esc(s.latest)}</span></h3>
+  const polls = s.polls.map((p) => `<tr><td class="mono">${esc(p.end)}</td><td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.pollster)}</a>` : esc(p.pollster)}</td><td>${p.top.map((t) => `${esc(t.name.endsWith("Jr.") ? t.name.split(" ").slice(-2).join(" ") : t.name.split(" ").at(-1))} ${t.pct}`).join(", ")}</td><td class="r mono">${p.n || "–"}</td></tr>`).join("");
+  return `<section class="state"><h3>${esc(name)}<span class="right">${esc(when)}${when ? " · " : ""}${s.count} ${s.count === 1 ? "poll" : "polls"} · ${esc(s.latest)}</span></h3>
     ${rows}
     <table class="spolls"><thead><tr><th>Ended</th><th>Pollster</th><th>Top 3 (%)</th><th class="r">Sample</th></tr></thead><tbody>${polls}</tbody></table></section>`;
 }
