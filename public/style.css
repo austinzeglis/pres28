@@ -198,10 +198,16 @@ tr.total td { font-weight: 600; border-bottom: 0; }
   .head .st-h { display: none; }
   /* Status moves under the name, so phones still show it. */
   .row { height: auto; min-height: 25px; padding: 3px 0; }
-  .row .rk { grid-row: 1 / span 2; }
-  .row .st { grid-column: 2; grid-row: 2; }
   .row .st.mentioned { display: none; }
-  .row .plot, .row .num, .row .chg { grid-row: 1 / span 2; }
+  .row > * { grid-row: 1 / span 2; }
+  .row > :nth-child(1) { grid-column: 1; }
+  .row > .nm { grid-column: 2; grid-row: 1; }
+  .row > .st { grid-column: 2; grid-row: 2; }
+  .row > :nth-child(4) { grid-column: 3; }
+  .row > :nth-child(5) { grid-column: 4; }
+  .row > :nth-child(6) { grid-column: 5; }
+  .row > :nth-child(7) { grid-column: 6; }
+  .row > :nth-child(8) { grid-column: 7; }
   .who-head { grid-template-columns: 64px minmax(0, 1fr); }
   .who-head img { width: 64px; height: 64px; }
   .who-head h1 { font-size: 22px; }
