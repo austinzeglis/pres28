@@ -14,7 +14,7 @@ const TABLES = {
 };
 
 const MAX_ROWS = 100;
-const QUIET_MINUTES = 100;
+const QUIET_MINUTES = 50;
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
@@ -118,25 +118,33 @@ async function compact(env, { before, runsBefore }) {
   return json({ merged: merged.meta?.rows_written ?? 0 });
 }
 
-// If collection has gone quiet, ask GitHub to run it. A backstop for GitHub's own schedule,
-// which can run late or skip. Does nothing until a GITHUB_TOKEN secret is set.
-async function watchdog(env) {
-  if (!env.GITHUB_TOKEN) return;
-  const row = await env.DB.prepare("SELECT max(ts) AS last FROM runs").first();
-  const quietMinutes = row?.last ? (Date.now() - Date.parse(row.last)) / 6e4 : Infinity;
-  if (quietMinutes < QUIET_MINUTES) return;
-  const res = await fetch("https://api.github.com/repos/austinzeglis/pres28/actions/workflows/collect.yml/dispatches", {
-    method: "POST",
-    headers: { authorization: `Bearer ${env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "user-agent": "pres28-watchdog", "content-type": "application/json" },
-    body: JSON.stringify({ ref: "main" }),
-  });
-  console.log(`watchdog: quiet ${Math.round(quietMinutes)} min, GitHub answered ${res.status}`);
+// Starts collection when the last run is getting old. This is the dependable trigger:
+// GitHub's own schedule can run late or not at all, and if it does run, this stays quiet.
+async function watchdog(env, force = false) {
+  const row = await env.DB.prepare("SELECT ts FROM runs WHERE source = 'board' ORDER BY ts DESC LIMIT 1").first();
+  const quietMinutes = row?.ts ? Math.round((Date.now() - Date.parse(row.ts)) / 6e4) : null;
+  const outcome = { at: new Date().toISOString(), quietMinutes, forced: force };
+  if (!force && quietMinutes != null && quietMinutes < QUIET_MINUTES) return { ...outcome, action: "not needed" };
+  if (!env.GITHUB_TOKEN) {
+    outcome.action = "no token";
+  } else {
+    const res = await fetch("https://api.github.com/repos/austinzeglis/pres28/actions/workflows/collect.yml/dispatches", {
+      method: "POST",
+      headers: { authorization: `Bearer ${env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "user-agent": "pres28-watchdog", "x-github-api-version": "2022-11-28", "content-type": "application/json" },
+      body: JSON.stringify({ ref: "main" }),
+    });
+    outcome.action = "started run";
+    outcome.github = res.status;
+  }
+  await env.DB.prepare("INSERT OR REPLACE INTO snapshots(key, json, updated) VALUES('watchdog', ?, ?)").bind(JSON.stringify(outcome), outcome.at).run();
+  return outcome;
 }
 
 async function status(env, deep) {
   const runs = await env.DB.prepare("SELECT ts, source, ok, rows_sent, note FROM runs ORDER BY ts DESC LIMIT 60").all();
   const backfill = await env.DB.prepare("SELECT count(*) AS jobs, coalesce(sum(rows_sent), 0) AS rows_sent FROM backfill").first();
-  const out = { runs: runs.results, backfill };
+  const timer = await env.DB.prepare("SELECT json FROM snapshots WHERE key = 'watchdog'").first();
+  const out = { watchdog: timer ? JSON.parse(timer.json) : null, runs: runs.results, backfill };
   if (deep) {
     // Full scans cost reads, so these counts sit behind the key.
     const obs = await env.DB.prepare("SELECT source, count(*) AS n, count(DISTINCT person) AS people, min(ts) AS first, max(ts) AS last FROM obs GROUP BY source").all();
@@ -158,6 +166,10 @@ export default {
     const url = new URL(request.url);
     const authed = Boolean(env.INGEST_KEY) && request.headers.get("authorization") === `Bearer ${env.INGEST_KEY}`;
 
+    if (request.method === "POST" && url.pathname === "/watchdog") {
+      if (!authed) return json({ error: "unauthorized" }, 401);
+      return json(await watchdog(env, true));
+    }
     if (request.method === "POST" && url.pathname === "/compact") {
       if (!authed) return json({ error: "unauthorized" }, 401);
       return compact(env, await request.json());

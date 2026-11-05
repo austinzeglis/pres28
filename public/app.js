@@ -1,4 +1,4 @@
-import { buildMatchup, hashSeed, simulate } from "./sim.js?v=16";
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=17";
 
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
@@ -20,6 +20,8 @@ const getJson = async (url) => {
   return res.json();
 };
 const stamp = (iso) => new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(iso)) + " CT";
+// A hidden failure is the worst kind: say so when the data has stopped moving.
+const freshness = (iso) => `${stamp(iso)}${(Date.now() - new Date(iso)) / 36e5 > 3 ? " · not updating" : ""}`;
 const shortDate = (d) => new Intl.DateTimeFormat("en-US", { timeZone: "UTC", month: "short", day: "numeric", year: "numeric" }).format(new Date(`${d}T12:00:00Z`));
 function ago(iso) {
   if (!iso) return "";
@@ -142,7 +144,7 @@ function drawHome() {
   app.innerHTML = `<header class="top">
       <a href="/"><h1>2028</h1></a>
       ${nav("home")}
-      <span class="when">${stamp(b.updated)}</span>
+      <span class="when">${freshness(b.updated)}</span>
     </header>
     <main class="home">
       <div class="boards-d">${boardHtml("D")}</div>
@@ -360,7 +362,7 @@ function drawPerson(row) {
   ].filter(Boolean).map(esc).join(" · ");
   const rangeBtn = (key, label) => `<button data-range="${key}" class="${person.range === key ? "on" : ""}">${label}</button>`;
 
-  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("")}<span class="when">${state.board ? stamp(state.board.updated) : ""}</span></header>
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("")}<span class="when">${state.board ? freshness(state.board.updated) : ""}</span></header>
   <main class="person">
     <a class="back" href="/">← Boards</a>
     <div class="who-head">
@@ -479,7 +481,7 @@ const answers = new Map();
 
 function startWorker() {
   if (match.worker) return match.worker;
-  match.worker = new Worker("/simworker.js?v=16", { type: "module" });
+  match.worker = new Worker("/simworker.js?v=17", { type: "module" });
   match.worker.onmessage = ({ data }) => answers.get(data.key)?.(data.result);
   match.worker.onerror = (e) => {
     console.error("simulation thread", e.message);
@@ -760,7 +762,7 @@ async function matchupPage(demId, repId) {
   match.dem = known(demId, "D") ? demId : board.D.rows[0].id;
   match.rep = known(repId, "R") ? repId : board.R.rows[0].id;
   match.settings = readAddress();
-  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("matchup")}<span class="when">${stamp(model.updated)}</span></header>
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("matchup")}<span class="when">${freshness(board.updated)}</span></header>
     <main class="matchup">
       <div class="mpicks">${pickerHtml("D", match.dem)}<span class="mvs">vs</span>${pickerHtml("R", match.rep)}</div>
       <div class="msettings" id="msettings"></div>
