@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS obs (
 CREATE TABLE IF NOT EXISTS polls (
   id TEXT PRIMARY KEY, source TEXT, subject TEXT, pollster TEXT, start_date TEXT, end_date TEXT,
   population TEXT, sample_size INTEGER, url TEXT, partisan TEXT, internal INTEGER,
-  created TEXT, answers TEXT
+  created TEXT, answers TEXT, state TEXT
 ) WITHOUT ROWID;
 
 -- Headlines and posts. kind is feed, gnews, bluesky or youtube. people is a JSON array of ids.

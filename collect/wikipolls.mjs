@@ -119,7 +119,32 @@ function footnotes(raw) {
   return found;
 }
 
-export function parseWikiPolls(wikitext, party) {
+const STATE_CODES = {
+  Alabama: "AL", Alaska: "AK", Arizona: "AZ", Arkansas: "AR", California: "CA", Colorado: "CO", Connecticut: "CT", Delaware: "DE", Florida: "FL",
+  Georgia: "GA", Hawaii: "HI", Idaho: "ID", Illinois: "IL", Indiana: "IN", Iowa: "IA", Kansas: "KS", Kentucky: "KY", Louisiana: "LA", Maine: "ME",
+  Maryland: "MD", Massachusetts: "MA", Michigan: "MI", Minnesota: "MN", Mississippi: "MS", Missouri: "MO", Montana: "MT", Nebraska: "NE", Nevada: "NV",
+  "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", Ohio: "OH",
+  Oklahoma: "OK", Oregon: "OR", Pennsylvania: "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", Tennessee: "TN", Texas: "TX",
+  Utah: "UT", Vermont: "VT", Virginia: "VA", Washington: "WA", "West Virginia": "WV", Wisconsin: "WI", Wyoming: "WY",
+};
+
+// The statewide page has one "== Iowa caucus ==" style section per state.
+export function parseStatePolls(wikitext, party) {
+  const parts = wikitext.split(/^==[ ]*([^=\n]+?)[ ]*==[ ]*$/m);
+  const polls = [];
+  let skipped = 0;
+  for (let i = 1; i < parts.length; i += 2) {
+    const name = parts[i].replace(/\s+(primary|primaries|caucus|caucuses)$/i, "");
+    const code = STATE_CODES[name];
+    if (!code) continue;
+    const found = parseWikiPolls(parts[i + 1], party, code);
+    polls.push(...found.polls);
+    skipped += found.skipped;
+  }
+  return { polls, skipped };
+}
+
+export function parseWikiPolls(wikitext, party, state = null) {
   const subject = `2028 ${party === "D" ? "Democratic" : "Republican"}`;
   const text = wikitext.replace(/<ref[^>]*\/>/g, "").replace(/<ref[\s\S]*?<\/ref>/g, "");
   const tables = text.match(/\{\|[\s\S]*?\n\|\}/g) ?? [];
@@ -181,8 +206,9 @@ export function parseWikiPolls(wikitext, party) {
       }
       const partisan = source.match(/\((R|D)\)/)?.[1] ?? null;
       polls.push({
-        id: `wikipedia:${party}:${dates.end}:${slug(pollster)}:${n ?? "x"}:${answers.length}`,
+        id: `wikipedia:${party}:${state ? `${state}:` : ""}${dates.end}:${slug(pollster)}:${n ?? "x"}:${answers.length}`,
         source: "wikipedia",
+        state,
         subject,
         pollster,
         start_date: dates.start,

@@ -6,6 +6,9 @@ export const WEIGHTS = { markets: 0.45, polls: 0.45, attention: 0.1 };
 const DAY = 864e5;
 const days = (a, b) => (new Date(b) - new Date(a)) / DAY;
 const ZERO_READS_AS = 0.25;
+const HOUSE_SHRINK = 1; // about one fresh poll's worth of doubt
+const MIN_POLLSTERS_FOR_HOUSE = 5;
+const RARELY_POLLED_DOUBT = 1; // one fresh poll's worth
 const NOT_A_PERSON = /^(others?|someone|somebody|some other|another|undecided|unsure|not sure|none|no one|nobody|neither|don.?t know|dk|refused|prefer not|would not|wouldn.?t|i would|no answer|skipped|write.?in)\b/i;
 
 // ---------- polls ----------
@@ -31,6 +34,7 @@ export function cleanPolls(rows) {
       discounted: Boolean(r.partisan || r.internal),
       url: r.url,
       source: r.source ?? "votehub",
+      state: r.state ?? null,
       raw: Object.fromEntries(answers.map((a) => [slug(a.choice), a.pct])),
       shares: Object.fromEntries(answers.map((a) => [slug(a.choice), floored(a) / total])),
     };
@@ -80,7 +84,9 @@ function fitStrengths(polls) {
   let s = Object.fromEntries(ids.map((i) => [i, 1 / ids.length]));
   for (let iter = 0; iter < 60; iter++) {
     const num = Object.fromEntries(ids.map((i) => [i, 0]));
-    const den = Object.fromEntries(ids.map((i) => [i, 0]));
+    // The starting value stands in for polls nobody has run yet, so someone rarely
+    // offered can't hold a large share on the strength of one or two readings.
+    const den = Object.fromEntries(ids.map((i) => [i, RARELY_POLLED_DOUBT]));
     for (const p of polls) {
       const field = Object.keys(p.shares);
       const sum = field.reduce((n, i) => n + s[i], 0);
@@ -97,8 +103,9 @@ function fitStrengths(polls) {
   return s;
 }
 
-// How far each pollster reads above or below the fit for each person, pulled
-// toward zero when that pollster has few polls, then removed.
+// How far each pollster reads above or below the fit for each person, counting
+// recent polls most: an old poll differs from today's fit because the race moved,
+// not because the pollster leans. Pulled toward zero when there's little to go on.
 function withoutHouseEffects(polls, s) {
   const seen = new Map();
   for (const p of polls) {
@@ -106,9 +113,9 @@ function withoutHouseEffects(polls, s) {
     const sum = field.reduce((n, i) => n + s[i], 0);
     for (const i of field) {
       const key = `${p.pollster}|${i}`;
-      const e = seen.get(key) ?? { total: 0, n: 0 };
-      e.total += Math.log(p.shares[i] / (s[i] / sum));
-      e.n += 1;
+      const e = seen.get(key) ?? { total: 0, weight: 0 };
+      e.total += p.w * Math.log(p.shares[i] / (s[i] / sum));
+      e.weight += p.w;
       seen.set(key, e);
     }
   }
@@ -116,7 +123,7 @@ function withoutHouseEffects(polls, s) {
     const adjusted = {};
     for (const [i, v] of Object.entries(p.shares)) {
       const e = seen.get(`${p.pollster}|${i}`);
-      adjusted[i] = v / Math.exp(e.total / (e.n + 3));
+      adjusted[i] = v / Math.exp(e.total / (e.weight + HOUSE_SHRINK));
     }
     const total = Object.values(adjusted).reduce((a, b) => a + b, 0);
     for (const i of Object.keys(adjusted)) adjusted[i] /= total;
@@ -124,13 +131,17 @@ function withoutHouseEffects(polls, s) {
   });
 }
 
-// Each person's share of the poll race as of a day. Polls older than 18 months don't count.
-export function pollShares(polls, party, day) {
+// Each person's share of the poll race as of a day. Polls older than 18 months don't
+// count. Pollster leans can only be told apart with several pollsters polling recently.
+export function pollShares(polls, party, day, { house = true } = {}) {
   const active = polls
     .filter((p) => p.party === party && p.end <= day && days(p.end, day) <= 540)
     .map((p) => ({ ...p, w: pollWeight(p, day) }));
   if (active.length < 2) return {};
-  return fitStrengths(withoutHouseEffects(active, fitStrengths(active)));
+  const first = fitStrengths(active);
+  const recentPollsters = new Set(active.filter((p) => days(p.end, day) <= 120).map((p) => p.pollster));
+  if (!house || recentPollsters.size < MIN_POLLSTERS_FOR_HOUSE) return first;
+  return fitStrengths(withoutHouseEffects(active, first));
 }
 
 // ---------- blending ----------

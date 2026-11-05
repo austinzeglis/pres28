@@ -138,12 +138,15 @@ function drawNews() {
   body.innerHTML = newsBody();
 }
 
+const nav = (here) => `<nav class="nav"><a href="/" class="${here === "home" ? "on" : ""}">Boards</a><a href="/states" class="${here === "states" ? "on" : ""}">States</a></nav>`;
+
 function drawHome() {
   const b = state.board;
   document.title = "2028";
   const w = b.weights;
   app.innerHTML = `<header class="top">
       <a href="/"><h1>2028</h1></a>
+      ${nav("home")}
       <span class="blend">Mkts ${w.markets * 100} · Polls ${w.polls * 100} · Attention ${w.attention * 100}</span>
       <span class="blend">+ added</span>
       <span class="blend">Polls: VoteHub, <a class="credit" href="https://en.wikipedia.org/wiki/Nationwide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</span>
@@ -364,7 +367,7 @@ function drawPerson(row) {
   ].filter(Boolean).map(esc).join(" · ");
   const rangeBtn = (key, label) => `<button data-range="${key}" class="${person.range === key ? "on" : ""}">${label}</button>`;
 
-  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a><span class="when">${state.board ? stamp(state.board.updated) : ""}</span></header>
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("")}<span class="when">${state.board ? stamp(state.board.updated) : ""}</span></header>
   <main class="person">
     <a class="back" href="/">← Boards</a>
     <div class="who-head">
@@ -398,6 +401,9 @@ function drawPerson(row) {
           <section class="section"><h3>Wikipedia views</h3><div class="chart" id="c-wiki"></div></section>
           <section class="section"><h3>Stories per day</h3><div class="chart" id="c-news"></div></section>
         </div>
+        ${p.statePolls?.length ? `<section class="section"><h3>State polls <span class="right" style="font-weight:400;color:var(--ink2)">Not in the score · Wikipedia (CC BY-SA)</span></h3><div class="scroll"><table><thead><tr><th>Ended</th><th>State</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
+          ${p.statePolls.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td class="mono">${esc(x.state)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("")}
+        </tbody></table></div></section>` : ""}
         <section class="section"><h3>Polls <span class="right" style="font-weight:400;color:var(--ink2)">VoteHub, Wikipedia (CC BY-SA)</span></h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
           ${offered.length ? offered.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}${x.discounted ? " *" : ""}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("") : `<tr><td colspan="5" class="none">None</td></tr>`}
         </tbody></table></div></section>
@@ -421,6 +427,50 @@ async function personPage(id) {
   drawPerson(row);
 }
 
+// ---------- states ----------
+
+function stateBlock(party, code, data, date) {
+  const name = data.names[code] ?? code;
+  const when = date ? shortDate(date).replace(/, \d{4}$/, "") : "";
+  const s = data[party][code];
+  if (!s) {
+    return `<section class="state empty"><h3>${esc(name)}<span class="right">${esc(when)}</span></h3><div class="none">No polls</div></section>`;
+  }
+  const max = Math.max(...s.top.map((t) => t.share), 1);
+  const rows = s.top.map((t) => {
+    const label = t.onRoster ? `<a href="/p/${t.id}">${esc(t.name)}</a>` : esc(t.name);
+    return `<div class="srow"><span class="nm">${label}</span><span class="plot"><i class="bar" style="width:${((100 * t.share) / max).toFixed(1)}%"></i></span><span class="num sc">${t.share.toFixed(1)}</span></div>`;
+  }).join("");
+  const polls = s.polls.map((p) => `<tr><td class="mono">${esc(p.end)}</td><td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.pollster)}</a>` : esc(p.pollster)}</td><td>${p.top.map((t) => `${esc(t.name.split(" ").filter((w) => w !== "Jr.").at(-1))} ${t.pct}`).join(", ")}</td><td class="r mono">${p.n || "–"}</td></tr>`).join("");
+  return `<section class="state"><h3>${esc(name)}<span class="right">${esc(when)}${when ? " · " : ""}${s.count} polls · ${esc(s.latest)}</span></h3>
+    ${rows}
+    <table class="spolls"><thead><tr><th>Ended</th><th>Pollster</th><th>Top 3 (%)</th><th class="r">Sample</th></tr></thead><tbody>${polls}</tbody></table></section>`;
+}
+
+function statesColumn(party, data) {
+  const early = data.early[party];
+  const earlySet = new Set(early.map((e) => e.state));
+  const others = Object.keys(data[party]).filter((c) => !earlySet.has(c)).sort((a, b) => (data.names[a] < data.names[b] ? -1 : 1));
+  return `<section class="board ${party}">
+    <h2><i class="swatch"></i>${PARTY[party]}</h2>
+    <h4 class="group">Early states</h4>
+    ${early.map((e) => stateBlock(party, e.state, data, e.date)).join("")}
+    <h4 class="group">Other states</h4>
+    ${others.map((c) => stateBlock(party, c, data)).join("")}
+  </section>`;
+}
+
+async function statesPage() {
+  document.title = "States · 2028";
+  const data = await getJson("/api/states");
+  app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("states")}
+      <span class="blend">Not in the score</span>
+      <span class="blend">Shares exclude undecided</span>
+      <span class="blend">Polls: <a class="credit" href="https://en.wikipedia.org/wiki/Statewide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</span>
+      <span class="when">${stamp(data.updated)}</span></header>
+    <main class="states">${statesColumn("D", data)}${statesColumn("R", data)}</main>`;
+}
+
 // ---------- events and routing ----------
 
 async function route() {
@@ -428,6 +478,7 @@ async function route() {
   const match = location.pathname.match(/^\/p\/([^/]+)/);
   try {
     if (match) await personPage(decodeURIComponent(match[1]));
+    else if (location.pathname === "/states") await statesPage();
     else await home();
     window.scrollTo(0, 0);
   } catch (err) {

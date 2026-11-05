@@ -3,7 +3,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildMatcher, fold, slug } from "./names.mjs";
-import { parseWikiPolls } from "./wikipolls.mjs";
+import { parseStatePolls, parseWikiPolls } from "./wikipolls.mjs";
 import { WEIGHTS, attentionShares, cleanPolls, marketShares, pollShares, rankParty } from "./score.mjs";
 
 const { INGEST_URL, INGEST_KEY } = process.env;
@@ -358,6 +358,21 @@ async function taskWikiPolls() {
   return { rows: rows.length, note: `newest ${rows.map((r) => r.end_date).sort().at(-1)}, ${skipped} rows skipped` };
 }
 
+async function taskStatePolls() {
+  const rows = [];
+  let skipped = 0;
+  for (const [page, party] of [["Democratic", "D"], ["Republican", "R"]]) {
+    const u = `https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=Statewide_opinion_polling_for_the_2028_${page}_Party_presidential_primaries`;
+    const data = await getJson(u, { timeout: 30000, tries: 3 });
+    const parsed = parseStatePolls(data.parse.wikitext["*"], party);
+    if (parsed.polls.length < 10) throw new Error(`only ${parsed.polls.length} ${page} state polls parsed`);
+    skipped += parsed.skipped;
+    rows.push(...parsed.polls.map((p) => ({ ...p, created: today, answers: JSON.stringify(p.answers) })));
+  }
+  await send("polls", rows);
+  return { rows: rows.length, note: `${new Set(rows.map((r) => r.state)).size} states, newest ${rows.map((r) => r.end_date).sort().at(-1)}, ${skipped} rows skipped` };
+}
+
 const compact = (iso) => iso.slice(0, 10).replaceAll("-", "");
 const pageviewsUrl = (title, from, to) =>
   `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/${encodeURIComponent(title.replaceAll(" ", "_"))}/daily/${compact(from)}00/${compact(to)}00`;
@@ -508,10 +523,46 @@ function loadStatuses() {
   return out;
 }
 
+function cleanStates(rows) {
+  const out = [];
+  const states = new Set(rows.map((r) => r.state).filter(Boolean));
+  for (const state of states) out.push(...cleanPolls(rows.filter((r) => r.state === state)));
+  return out;
+}
+
+const STATE_NAMES = JSON.parse(readFileSync("data/calendar.json", "utf8"));
+
+function statesSnapshot(statePolls) {
+  const nameOf = new Map(roster.map((p) => [p.id, p.name]));
+  const pretty = (id) => nameOf.get(id) ?? id.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+  const out = { updated: stamp, early: STATE_NAMES.early, names: STATE_NAMES.names };
+  for (const party of ["D", "R"]) {
+    out[party] = {};
+    for (const state of new Set(statePolls.filter((x) => x.party === party).map((x) => x.state))) {
+      const list = statePolls.filter((x) => x.party === party && x.state === state);
+      const fit = pollShares(list, party, today);
+      const shares = Object.keys(fit).length ? fit : list.at(-1).shares;
+      out[party][state] = {
+        count: list.length,
+        latest: list.at(-1).end,
+        top: Object.entries(shares).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([id, v]) => ({ id, name: pretty(id), onRoster: nameOf.has(id), share: pct(v) })),
+        polls: [...list].reverse().slice(0, 12).map((x) => ({
+          end: x.end, pollster: x.pollster, url: x.url, n: x.n,
+          top: Object.entries(x.raw).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([id, v]) => ({ name: pretty(id), pct: v })),
+        })),
+      };
+    }
+  }
+  return out;
+}
+
 async function taskRescore() {
   if (!markets.poly.length) await loadPoly();
   if (!markets.kalshi.length) await loadKalshi();
-  const polls = cleanPolls(await exportJson("polls"));
+  const pollRows = await exportJson("polls");
+  // State polls are kept out of the national score: each state is its own small race.
+  const polls = cleanPolls(pollRows.filter((r) => !r.state));
+  const statePolls = cleanStates(pollRows);
   const filings = await exportJson("filings");
 
   // Everyone with a price counts toward market shares, on the roster or not.
@@ -606,7 +657,10 @@ async function taskRescore() {
   }
 
   const statuses = loadStatuses();
-  const snapshots = [{ key: "inputs", json: JSON.stringify(inputs), updated: stamp }];
+  const snapshots = [
+    { key: "inputs", json: JSON.stringify(inputs), updated: stamp },
+    { key: "states", json: JSON.stringify(statesSnapshot(statePolls)), updated: stamp },
+  ];
   const pairs = (m) => (m ? [...m].sort((a, b) => (a[0] < b[0] ? -1 : 1)).map(([d, v]) => [d, Math.round(v * 1e4) / 1e4]) : []);
   for (const p of roster) {
     const by = lookup.get(p.id);
@@ -630,6 +684,10 @@ async function taskRescore() {
           .filter((x) => x.party === p.party)
           .map((x) => ({ pollster: x.pollster, end: x.end, pct: x.raw[p.id] ?? null, n: x.n, url: x.url, source: x.source, discounted: x.discounted, field: Object.keys(x.raw).length }))
           .reverse(),
+        statePolls: statePolls
+          .filter((x) => x.party === p.party && x.raw[p.id] != null)
+          .map((x) => ({ state: x.state, pollster: x.pollster, end: x.end, pct: x.raw[p.id], n: x.n, url: x.url, field: Object.keys(x.raw).length }))
+          .sort((a, b) => (a.end < b.end ? 1 : -1)),
       }),
     });
   }
@@ -687,6 +745,7 @@ const TASKS = {
   people: taskPeople,
   polls: taskPolls,
   wikipolls: taskWikiPolls,
+  statepolls: taskStatePolls,
   wikipedia: taskWikipedia,
   fec: taskFec,
   backfill: taskBackfill,
@@ -700,7 +759,7 @@ function chosen() {
   if (asked) return asked.split(",").map((s) => s.trim());
   const list = ["polymarket", "kalshi", "feeds", "gnews", "bluesky", "youtube"];
   if (hour === 6) list.push("people", "wikipedia", "fec");
-  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "backfill", "rescore");
+  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "statepolls", "backfill", "rescore");
   list.push("board");
   return list;
 }
