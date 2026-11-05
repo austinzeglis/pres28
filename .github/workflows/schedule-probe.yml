@@ -1,0 +1,16 @@
+name: schedule-probe
+
+# Temporary: tests whether GitHub's scheduler fires for this repo at all.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - run: echo "scheduler fired"
