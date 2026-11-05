@@ -851,6 +851,14 @@ async function taskBoard() {
   if (!inputs?.D) throw new Error("no inputs yet: rescore has not run");
   const statuses = loadStatuses();
   const meta = new Map(roster.map((p) => [p.id, p]));
+  const facts = JSON.parse(readFileSync("data/candidates.json", "utf8")).people;
+  const ageOf = (p) => {
+    if (!p?.dob) return p?.list?.age ?? null;
+    const born = new Date(`${p.dob}T00:00:00Z`);
+    let age = now.getUTCFullYear() - born.getUTCFullYear();
+    if (now < new Date(Date.UTC(now.getUTCFullYear(), born.getUTCMonth(), born.getUTCDate()))) age--;
+    return Number.isFinite(age) ? age : p.list?.age ?? null;
+  };
   const board = { updated: stamp, inputsDay: inputs.day, weights: WEIGHTS };
   for (const party of ["D", "R"]) {
     const live = [...markets.poly, ...markets.kalshi].filter((m) => m.source.endsWith(`_nom_${party}`));
@@ -866,6 +874,7 @@ async function taskBoard() {
         const priceOf = (kind) => live.find((m) => m.person === r.id && m.source.startsWith(kind))?.value ?? null;
         return {
           id: r.id, name: p.name, rank: r.rank, score: round1(r.score), blend: pct(r.blend),
+          age: ageOf(p), state: facts[r.id]?.home?.[0] ?? null,
           m: pct(r.m), p: pct(r.p), a: pct(r.a), thin: r.thin ? 1 : 0, on_list: p.on_list,
           poly: pct(priceOf("poly")), kalshi: pct(priceOf("kalshi")),
           d7: x.score7 == null ? null : round1(r.score - x.score7),

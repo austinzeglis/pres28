@@ -1,4 +1,4 @@
-import { buildMatchup, hashSeed, simulate } from "./sim.js?v=15";
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=16";
 
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
@@ -14,7 +14,6 @@ const state = { board: null, feed: { 2028: null, all: null }, personFeed: new Ma
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 // Links come from outside feeds, so only ordinary web addresses are used as links.
 const link = (u) => (/^https?:\/\//i.test(u ?? "") ? esc(u) : "#");
-const fmt1 = (x) => (x == null ? "–" : x >= 10 ? x.toFixed(0) : x.toFixed(1));
 const getJson = async (url) => {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: ${res.status}`);
@@ -50,10 +49,10 @@ function rowHtml(r) {
     <span class="rk">${r.rank}</span>
     <span class="nm">${esc(r.name)}${r.on_list ? "" : "<sup>+</sup>"}</span>
     <span class="st ${r.status}">${STATUS[r.status]}</span>
+    <span class="bio">${r.age ?? "–"}</span>
+    <span class="bio">${esc(r.state ?? "–")}</span>
     <span class="plot"><i class="bar" style="width:${r.score}%"></i></span>
     <span class="num sc">${r.score >= 10 ? r.score.toFixed(0) : r.score.toFixed(1)}</span>
-    <span class="num src${r.m == null ? " nil" : ""}">${fmt1(r.m)}</span>
-    <span class="num src${r.p == null ? " nil" : ""}">${fmt1(r.p)}</span>
     <span class="chg${r.r7 === 0 ? " flat" : ""}">${rise}</span>
   </a>`;
 }
@@ -64,8 +63,9 @@ function boardHtml(party) {
     <h2><i class="swatch"></i>${PARTY[party]}</h2>
     <div class="grid head">
       <span></span><span></span><span class="st-h">Status</span>
+      <span class="bio-h">Age</span><span class="bio-h">State</span>
       <span></span>
-      <span class="num">Score</span><span class="num">Mkts</span><span class="num">Polls</span><span class="num">7d</span>
+      <span class="num">Score</span><span class="num">7d</span>
     </div>
     ${rows.map(rowHtml).join("")}
   </section>`;
@@ -479,7 +479,7 @@ const answers = new Map();
 
 function startWorker() {
   if (match.worker) return match.worker;
-  match.worker = new Worker("/simworker.js?v=15", { type: "module" });
+  match.worker = new Worker("/simworker.js?v=16", { type: "module" });
   match.worker.onmessage = ({ data }) => answers.get(data.key)?.(data.result);
   match.worker.onerror = (e) => {
     console.error("simulation thread", e.message);
