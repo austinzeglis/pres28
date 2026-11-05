@@ -63,7 +63,7 @@ const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const OFFICE = "(?:Gov\\.|Governor|Sen\\.|Senator|Rep\\.|Representative|Secretary|Sec\\.|Vice President|VP|Vice-President|Mayor)";
 
 // Other people and things that share a surname we match on.
-const NOT_THEM = /\bBen Shapiro\b|\bBooker Prize\b|\bBooker T\b/g;
+const NOT_THEM = /\bBen Shapiro\b|\bHaley Stevens\b|\bDe La Cruz\b|\bCruz Azul\b|\bPenelope Cruz\b|\bChristie's\b/g;
 
 // Returns a function from (title, text) to the ids of the people named.
 export function buildMatcher(roster) {

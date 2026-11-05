@@ -341,9 +341,7 @@
   "match": [
    "Cory Booker"
   ],
-  "keys": [
-   "Booker"
-  ],
+  "keys": [],
   "guard": null
  },
  {
@@ -1991,9 +1989,7 @@
   "match": [
    "Tucker Carlson"
   ],
-  "keys": [
-   "Tucker"
-  ],
+  "keys": [],
   "guard": null
  },
  {

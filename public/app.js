@@ -1,4 +1,4 @@
-import { buildMatchup, hashSeed, simulate } from "./sim.js?v=13";
+import { buildMatchup, hashSeed, simulate } from "./sim.js?v=15";
 
 const app = document.getElementById("app");
 const tip = document.getElementById("tip");
@@ -466,7 +466,7 @@ async function statesPage() {
 
 const DRAWS = 100000;
 const WORKER_PATIENCE_MS = 5000;
-const match = { model: null, map: null, dem: null, rep: null, cache: new Map(), worker: null, waiting: null };
+const match = { model: null, map: null, dem: null, rep: null, cache: new Map(), worker: null, waiting: null, running: null, shownKey: null, shownDem: null, lastResult: null, settings: { source: "blend", mood: null, range: "today" } };
 const SHADE = [[0.9, "#1f4f96"], [0.7, "#5a8bd0"], [0.55, "#aac4e8"], [0.45, "#e4e5e8"], [0.3, "#f0b7ae"], [0.1, "#d9705f"], [0, "#b2331f"]];
 const shadeOf = (p) => SHADE.find(([min]) => p >= min)[1];
 const signed = (x, digits = 1) => `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(digits)}`;
@@ -479,7 +479,7 @@ const answers = new Map();
 
 function startWorker() {
   if (match.worker) return match.worker;
-  match.worker = new Worker("/simworker.js?v=13", { type: "module" });
+  match.worker = new Worker("/simworker.js?v=15", { type: "module" });
   match.worker.onmessage = ({ data }) => answers.get(data.key)?.(data.result);
   match.worker.onerror = (e) => {
     console.error("simulation thread", e.message);
@@ -545,28 +545,147 @@ function mapHtml(r) {
   return `<svg viewBox="0 0 ${match.map.w} ${match.map.h}" role="img" aria-label="Win chance by state">${paths}</svg>`;
 }
 
-function drawMatchup(result, built) {
+// ---------- matchup settings ----------
+
+const SOURCES = [
+  ["blend", "Blend"],
+  ["markets", "Party markets"],
+  ["polls", "Matchup polls"],
+  ["results", "Past results"],
+];
+const RANGES = [
+  ["today", "Today"],
+  ["year", "A year out"],
+  ["eday", "Election Day"],
+];
+const MOOD_LIMIT = 10;
+const DEFAULT_SETTINGS = { source: "blend", mood: null, range: "today" };
+
+const moodFromSource = (source) => {
+  const m = match.model.mood;
+  return { blend: m.center, markets: m.market, polls: m.pollLevel, results: m.fundamentals }[source] ?? m.center;
+};
+const clampMood = (x) => Math.max(-MOOD_LIMIT, Math.min(MOOD_LIMIT, x));
+const moodNow = () => (match.settings.mood != null ? match.settings.mood : moodFromSource(match.settings.source));
+
+// How much could still change. Never wider than the model's range for today.
+function rangeSettings(range) {
+  const sd = match.model.mood.sd;
+  if (range === "eday") return { nationalSd: Math.min(sd, 3), candidateScale: 0.4 };
+  if (range === "year") return { nationalSd: Math.min(sd, 4.25), candidateScale: 0.7 };
+  return {};
+}
+
+function buildCurrent() {
+  const { source, mood, range } = match.settings;
+  const value = moodNow();
+  const custom = mood != null;
+  const label = custom ? "National mood (your setting)" : source === "blend" ? "National mood" : `National mood (${SOURCES.find((s) => s[0] === source)[1].toLowerCase()})`;
+  return buildMatchup(match.model, match.dem, match.rep, {
+    mood: value,
+    moodLabel: label,
+    moodPieces: !custom && source === "blend" ? match.model.mood.pieces : [],
+    ...rangeSettings(range),
+  });
+}
+
+const settingsKey = () => {
+  const s = match.settings;
+  return `${match.dem}|${match.rep}|${s.mood != null ? `m${s.mood}` : s.source}|${s.range}`;
+};
+
+function syncAddress() {
+  const s = match.settings;
+  const q = new URLSearchParams();
+  if (s.source !== "blend") q.set("source", s.source);
+  if (s.mood != null) q.set("mood", String(s.mood));
+  if (s.range !== "today") q.set("range", s.range);
+  const query = q.toString();
+  history.replaceState(null, "", `/matchup/${match.dem}/${match.rep}${query ? `?${query}` : ""}`);
+}
+
+function readAddress() {
+  const q = new URLSearchParams(location.search);
+  const m = q.get("mood");
+  const parsed = m == null || m === "" ? NaN : Number(m);
+  return {
+    source: SOURCES.some((s) => s[0] === q.get("source")) ? q.get("source") : "blend",
+    mood: Number.isFinite(parsed) ? clampMood(parsed) : null,
+    range: RANGES.some((r) => r[0] === q.get("range")) ? q.get("range") : "today",
+  };
+}
+
+function drawControls() {
+  const s = match.settings;
+  const value = moodNow();
+  const button = (attr, key, label, on, off) => `<button data-${attr}="${key}" class="${on ? "on" : ""}"${off ? " disabled" : ""}>${label}</button>`;
+  const available = (key) => moodFromSource(key) != null && Number.isFinite(moodFromSource(key));
+  app.querySelector("#msettings").innerHTML = `
+    <div class="mset">
+      <div class="mlabel">National mood <b id="moodread">${leanText(value)}</b>${s.mood != null ? ` <span class="mcustom">Custom</span>` : ""}</div>
+      <div class="mslider"><span>R+${MOOD_LIMIT}</span><input type="range" id="moodslider" aria-label="National mood" min="${-MOOD_LIMIT}" max="${MOOD_LIMIT}" step="0.5" value="${clampMood(value)}"><span>D+${MOOD_LIMIT}</span></div>
+    </div>
+    <div class="mset">
+      <div class="mlabel">Mood source</div>
+      <div class="tabs">${SOURCES.map(([key, label]) => button("source", key, label, s.mood == null && s.source === key, !available(key))).join("")}</div>
+    </div>
+    <div class="mset">
+      <div class="mlabel">Uncertainty</div>
+      <div class="tabs">${RANGES.map(([key, label]) => button("range", key, label, s.range === key)).join("")}</div>
+    </div>
+    <div class="mrun">
+      <button class="mrunbtn" data-run>Run 100,000 simulations</button>
+      <button class="mreset" data-reset>Reset</button>
+      <div class="mstatus" id="mstatus"></div>
+    </div>`;
+  drawStatus();
+}
+
+function drawStatus() {
+  const box = app.querySelector("#mresult");
+  const line = app.querySelector("#mstatus");
+  if (!box || !line) return;
+  const running = match.running === settingsKey();
+  const stale = Boolean(match.shownKey) && match.shownKey !== settingsKey();
+  box.classList.toggle("stale", stale);
+  line.textContent = running ? "Simulating" : stale ? "Result below is from earlier choices" : "";
+}
+
+function changed() {
+  syncAddress();
+  drawStatus();
+}
+
+// ---------- matchup results and polls ----------
+
+function drawPolls() {
   const { model } = match;
   const dem = model.people[match.dem];
   const rep = model.people[match.rep];
+  const polls = model.matchups.filter((m) => m.dem === match.dem && m.rep === match.rep);
+  const pollRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(m.state ?? "National")}${m.third ? ` · with ${esc(m.third)}` : ""}</td><td class="r mono">${m.demPct}</td><td class="r mono">${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  const related = polls.length ? [] : model.matchups.filter((m) => (m.dem === match.dem || m.rep === match.rep) && !m.state && !m.third).slice(0, 10);
+  const relatedRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(lastName(model.people[m.dem]?.name ?? m.dem))} ${m.demPct}, ${esc(lastName(model.people[m.rep]?.name ?? m.rep))} ${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
+  app.querySelector("#mpolls").innerHTML = `<section class="section"><h3>Polls of this matchup <span class="right mnote">${polls.length}</span></h3>
+      ${polls.length ? `<div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Where</th><th class="r">${esc(lastName(dem.name))}</th><th class="r">${esc(lastName(rep.name))}</th><th class="r">Sample</th></tr></thead><tbody>${polls.map(pollRow).join("")}</tbody></table></div>` : `<div class="none">None</div>`}
+    </section>
+    ${related.length ? `<section class="section"><h3>Their polls against others</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Result</th><th class="r">Sample</th></tr></thead><tbody>${related.map(relatedRow).join("")}</tbody></table></div></section>` : ""}`;
+}
+
+function drawMatchup(result, built, demId, repId) {
+  const { model } = match;
+  const dem = model.people[demId];
+  const rep = model.people[repId];
   const statesById = new Map(model.map.contests.map((c) => [c.id, c]));
   const box = app.querySelector("#mresult");
-  if (!result) {
-    box.innerHTML = `<div class="none">Simulating</div>`;
-    return;
-  }
   const rowOf = (party, id) => state.board[party].rows.find((x) => x.id === id);
-  const chance = (rowOf("D", match.dem)?.m ?? 0) * (rowOf("R", match.rep)?.m ?? 0) / 1e4;
+  const chance = (rowOf("D", demId)?.m ?? 0) * (rowOf("R", repId)?.m ?? 0) / 1e4;
   const tips = [...result.states].sort((a, b) => b.tip - a.tip).slice(0, 9);
   const flags = (p) => [p.depth === 0 ? "Thin data" : "", p.ineligible ?? ""].filter(Boolean).map((t) => `<span class="flag">${esc(t)}</span>`).join("");
   const partRow = (p, top) => `<tr class="${top ? "ptop" : "psub"}"><td>${esc(p.label)}</td><td class="r mono">${signed(p.value, 2)}</td></tr>`;
   const piecesOf = (pieces, sign) => (pieces ?? []).map((x) => partRow({ label: x.label, value: sign * x.value }, false)).join("");
   const parts = built.parts.map((p) => partRow(p, true) + piecesOf(p.pieces, p.against ? -1 : 1)).join("");
   const home = (id, who) => (who.home?.includes(statesById.get(id)?.parentId) ? ` (${esc(lastName(who.name))} home)` : "");
-
-  const pollRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(m.state ?? "National")}${m.third ? ` · with ${esc(m.third)}` : ""}</td><td class="r mono">${m.demPct}</td><td class="r mono">${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
-  const related = built.polls.length ? [] : model.matchups.filter((m) => (m.dem === match.dem || m.rep === match.rep) && !m.state && !m.third).slice(0, 10);
-  const relatedRow = (m) => `<tr><td class="mono">${esc(m.end)}</td><td>${m.url ? `<a href="${link(m.url)}" target="_blank" rel="noopener">${esc(m.pollster)}</a>` : esc(m.pollster)}</td><td>${esc(lastName(model.people[m.dem]?.name ?? m.dem))} ${m.demPct}, ${esc(lastName(model.people[m.rep]?.name ?? m.rep))} ${m.repPct}</td><td class="r mono">${m.n ? m.n.toLocaleString() : "–"}</td></tr>`;
   const legend = SHADE.map(([min, c], i) => {
     const top = i === 0 ? 100 : Math.round(SHADE[i - 1][0] * 100);
     return `<span><i style="background:${c}"></i>${Math.round(min * 100)}–${top}</span>`;
@@ -597,23 +716,35 @@ function drawMatchup(result, built) {
         </tbody></table></section>
         <section class="section"><h3>What went in <span class="right mnote">Points toward ${esc(lastName(dem.name))}</span></h3><table class="parts"><tbody>${parts}</tbody></table></section>
       </div>
-    </div>
-    <section class="section"><h3>Polls of this matchup <span class="right mnote">${built.polls.length}</span></h3>
-      ${built.polls.length ? `<div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Where</th><th class="r">${esc(lastName(dem.name))}</th><th class="r">${esc(lastName(rep.name))}</th><th class="r">Sample</th></tr></thead><tbody>${built.polls.map(pollRow).join("")}</tbody></table></div>` : `<div class="none">None</div>`}
-    </section>
-    ${related.length ? `<section class="section"><h3>Their polls against others</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th>Result</th><th class="r">Sample</th></tr></thead><tbody>${related.map(relatedRow).join("")}</tbody></table></div></section>` : ""}`;
+    </div>`;
   match.lastResult = result;
+  match.shownDem = demId;
 }
 
+// Only ever runs from the Run button.
 async function runMatchup() {
-  const key = `${match.dem}|${match.rep}`;
-  const built = buildMatchup(match.model, match.dem, match.rep);
-  drawMatchup(match.cache.get(key) ?? null, built);
-  if (match.cache.has(key)) return;
+  const key = settingsKey();
+  const demId = match.dem;
+  const repId = match.rep;
+  const built = buildCurrent();
+  const show = (result) => {
+    drawMatchup(result, built, demId, repId);
+    match.shownKey = key;
+  };
+  if (match.cache.has(key)) {
+    show(match.cache.get(key));
+    drawStatus();
+    return;
+  }
   match.waiting = key;
+  match.running = key;
+  drawStatus();
   const result = await simulateMatchup(key, built.params);
   if (result) match.cache.set(key, result);
-  if (result && match.waiting === key) drawMatchup(result, built);
+  if (match.running === key) match.running = null;
+  // A newer Run replaces this one. Otherwise show it, marked stale if choices have since moved.
+  if (result && match.waiting === key) show(result);
+  drawStatus();
 }
 
 async function matchupPage(demId, repId) {
@@ -623,18 +754,23 @@ async function matchupPage(demId, repId) {
     state.board ?? getJson("/api/board"),
     match.map ?? getJson("/us-map.json"),
   ]);
-  Object.assign(match, { model, map });
+  Object.assign(match, { model, map, shownKey: null, running: null, waiting: null, lastResult: null });
   state.board = board;
   const known = (id, party) => model.people[id]?.party === party && board[party].rows.some((r) => r.id === id);
   match.dem = known(demId, "D") ? demId : board.D.rows[0].id;
   match.rep = known(repId, "R") ? repId : board.R.rows[0].id;
+  match.settings = readAddress();
   app.innerHTML = `<header class="top"><a href="/"><h1>2028</h1></a>${nav("matchup")}<span class="when">${stamp(model.updated)}</span></header>
     <main class="matchup">
       <div class="mpicks">${pickerHtml("D", match.dem)}<span class="mvs">vs</span>${pickerHtml("R", match.rep)}</div>
+      <div class="msettings" id="msettings"></div>
       <div id="mresult"></div>
+      <div id="mpolls"></div>
     </main>
-    <footer class="foot">If these two are the nominees · ${DRAWS.toLocaleString()} simulated elections · National mood ${leanText(model.mood.center)} · Polls: <a class="credit" href="https://en.wikipedia.org/wiki/2028_United_States_presidential_election" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</footer>`;
-  await runMatchup();
+    <footer class="foot">If these two are the nominees · Model mood ${leanText(model.mood.center)} · Polls: <a class="credit" href="https://en.wikipedia.org/wiki/2028_United_States_presidential_election" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</footer>`;
+  drawControls();
+  drawPolls();
+  syncAddress();
 }
 
 // ---------- events and routing ----------
@@ -661,6 +797,26 @@ document.addEventListener("click", async (e) => {
   const who = e.target.closest("[data-who]");
   const tab = e.target.closest("[data-tab]");
   const range = e.target.closest("[data-range]");
+  if (e.target.closest("[data-run]")) { runMatchup(); return; }
+  if (e.target.closest("[data-reset]")) {
+    match.settings = { ...DEFAULT_SETTINGS };
+    drawControls();
+    changed();
+    return;
+  }
+  const source = e.target.closest("[data-source]");
+  if (source) {
+    match.settings = { ...match.settings, source: source.dataset.source, mood: null };
+    drawControls();
+    changed();
+    return;
+  }
+  if (range && location.pathname.startsWith("/matchup")) {
+    match.settings = { ...match.settings, range: range.dataset.range };
+    drawControls();
+    changed();
+    return;
+  }
   if (scope) {
     state.scope = scope.dataset.scope;
     drawNews();
@@ -704,8 +860,18 @@ document.addEventListener("change", (e) => {
   if (!pick) return;
   if (pick.dataset.pick === "D") match.dem = pick.value;
   else match.rep = pick.value;
-  history.replaceState(null, "", `/matchup/${match.dem}/${match.rep}`);
-  runMatchup();
+  drawPolls();
+  changed();
+});
+
+document.addEventListener("input", (e) => {
+  if (e.target.id !== "moodslider") return;
+  match.settings = { ...match.settings, mood: Number(e.target.value) };
+  app.querySelector("#moodread").textContent = leanText(match.settings.mood);
+  const label = app.querySelector("#moodread").parentElement;
+  if (!label.querySelector(".mcustom")) label.insertAdjacentHTML("beforeend", ` <span class="mcustom">Custom</span>`);
+  app.querySelectorAll("[data-source]").forEach((b) => b.classList.remove("on"));
+  changed();
 });
 
 document.addEventListener("mousemove", (e) => {
@@ -713,7 +879,7 @@ document.addEventListener("mousemove", (e) => {
   if (stateShape && match.lastResult) {
     const s = match.lastResult.states.find((x) => x.id === stateShape.dataset.state);
     const c = match.model.map.contests.find((x) => x.id === s.id);
-    showTip(`<b>${esc(c.name)}</b><div class="kv"><span>${esc(lastName(match.model.people[match.dem].name))}</span><span>${(100 * s.demWin).toFixed(1)}%</span><span>Margin</span><span>${leanText(s.margin)}</span><span>Votes</span><span>${s.ev}</span><span>Decides</span><span>${(100 * s.tip).toFixed(1)}%</span></div>`, e.clientX, e.clientY);
+    showTip(`<b>${esc(c.name)}</b><div class="kv"><span>${esc(lastName(match.model.people[match.shownDem].name))}</span><span>${(100 * s.demWin).toFixed(1)}%</span><span>Margin</span><span>${leanText(s.margin)}</span><span>Votes</span><span>${s.ev}</span><span>Decides</span><span>${(100 * s.tip).toFixed(1)}%</span></div>`, e.clientX, e.clientY);
     return;
   }
   const evBar = e.target.closest?.(".evbar");

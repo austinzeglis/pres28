@@ -85,6 +85,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .pick { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .pick select { flex: 1; min-width: 0; font: 500 15px var(--sans); padding: 7px 8px; background: #fff; color: var(--ink); border: 1px solid var(--ink3); border-radius: 0; }
 .mvs { text-align: center; font-size: 12px; color: var(--ink2); }
+.msettings { display: grid; grid-template-columns: minmax(220px, 1.2fr) minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: 12px 26px; align-items: start; padding: 10px 0 14px; border-bottom: 2px solid var(--rule2); margin-bottom: 16px; }
+.mlabel { font: 500 11px var(--sans); color: var(--ink2); margin-bottom: 6px; }
+.mlabel b { font: 500 13px var(--mono); color: var(--ink); margin-left: 4px; }
+.mcustom { font: 400 10.5px var(--sans); color: var(--ink2); margin-left: 4px; }
+.mslider { display: flex; align-items: center; gap: 7px; font: 400 10px var(--mono); color: var(--ink2); }
+.mslider input { flex: 1; min-width: 0; accent-color: var(--ink); }
+.tabs button:disabled { color: var(--ink3); cursor: default; }
+.mrun { display: grid; grid-template-columns: auto auto; gap: 5px 10px; align-items: center; justify-items: start; }
+.mrunbtn { background: var(--ink); color: #fff; font: 600 13px var(--sans); padding: 9px 14px; white-space: nowrap; }
+.mrunbtn:hover { background: #33363f; }
+.mreset { font: 500 11.5px var(--sans); color: var(--ink2); }
+.mreset:hover { color: var(--ink); }
+.mstatus { grid-column: 1 / -1; font: 500 11px var(--sans); color: var(--ink2); min-height: 15px; }
+#mresult.stale { opacity: 0.35; }
 .mtop { display: grid; grid-template-columns: 1fr 1fr; align-items: end; }
 .mtop .right { text-align: right; }
 .mname { font: 600 15px var(--sans); }
@@ -190,6 +204,7 @@ tr.total td { font-weight: 600; border-bottom: 0; }
   .cols { grid-template-columns: minmax(0, 1fr); }
   .states { grid-template-columns: minmax(0, 1fr); }
   .mcols { grid-template-columns: minmax(0, 1fr); }
+  .msettings { grid-template-columns: minmax(0, 1fr); }
   .top { flex-wrap: wrap; gap: 4px 14px; }
   .top .when { margin-left: 0; }
 }

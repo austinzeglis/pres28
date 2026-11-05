@@ -163,7 +163,8 @@ export function simulate(params, draws = 100000, seed = 1) {
 }
 
 // Turns the daily model and two names into simulator settings, and says what each piece did.
-export function buildMatchup(model, demId, repId) {
+// settings (all optional): mood, moodLabel, moodPieces, nationalSd, candidateScale.
+export function buildMatchup(model, demId, repId, settings = {}) {
   const dem = model.people[demId];
   const rep = model.people[repId];
   const polls = (model.matchups ?? []).filter((m) => m.dem === demId && m.rep === repId);
@@ -173,8 +174,9 @@ export function buildMatchup(model, demId, repId) {
   // about nine fresh polls to outweigh everything else we know.
   const trust = 1 + model.daysLeft / 90;
 
-  const parts = [{ label: "National mood", value: model.mood.center, pieces: model.mood.pieces }];
-  let mean = model.mood.center + dem.strength - rep.strength;
+  const moodValue = settings.mood ?? model.mood.center;
+  const parts = [{ label: settings.moodLabel ?? "National mood", value: moodValue, pieces: settings.moodPieces ?? model.mood.pieces }];
+  let mean = moodValue + dem.strength - rep.strength;
   parts.push({ label: `${dem.name} edge`, value: dem.strength, pieces: dem.pieces });
   parts.push({ label: `${rep.name} edge`, value: -rep.strength, pieces: rep.pieces, against: true });
 
@@ -215,9 +217,9 @@ export function buildMatchup(model, demId, repId) {
   return {
     params: {
       nationalMean: mean,
-      nationalSd: model.mood.sd,
+      nationalSd: settings.nationalSd ?? model.mood.sd,
       nationalDf: model.mood.df,
-      candidateSd: Math.sqrt(dem.sd ** 2 + rep.sd ** 2),
+      candidateSd: Math.sqrt(dem.sd ** 2 + rep.sd ** 2) * (settings.candidateScale ?? 1),
       nRef: model.map.nRef,
       factorSd: model.map.factorSd,
       districtShare: model.map.districtShare,
