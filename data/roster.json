@@ -1,0 +1,2849 @@
+[
+ {
+  "id": "gavin-newsom",
+  "name": "Gavin Newsom",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 1,
+   "age": 59,
+   "currently": "Governor of California",
+   "born": "San Francisco, CA",
+   "past_runs": ""
+  },
+  "wikidata": "Q461391",
+  "wiki": "Gavin Newsom",
+  "desc": "40th governor of California since 2019",
+  "dob": "1967-10-10",
+  "bluesky": null,
+  "youtube": "UCY-3GVY7vhOuuixr1QBMWEg",
+  "x": "GavinNewsom",
+  "site": "http://www.gavinnewsom.com/",
+  "match": [
+   "Gavin Newsom"
+  ],
+  "keys": [
+   "Newsom"
+  ],
+  "guard": null
+ },
+ {
+  "id": "kamala-harris",
+  "name": "Kamala Harris",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 2,
+   "age": 62,
+   "currently": "former Vice President",
+   "born": "Oakland, CA",
+   "past_runs": "2020, 2024"
+  },
+  "wikidata": "Q10853588",
+  "wiki": "Kamala Harris",
+  "desc": "Vice President of the United States from 2021 to 2025",
+  "dob": "1964-10-20",
+  "bluesky": "kamalaharris.com",
+  "youtube": "UCe1ciA1TDa5F9K6Ufr_6Fsw",
+  "x": "KamalaHarris",
+  "site": "https://www.whitehouse.gov/administration/vice-president-harris/",
+  "match": [
+   "Kamala Harris"
+  ],
+  "keys": [
+   "Kamala"
+  ],
+  "guard": null
+ },
+ {
+  "id": "josh-shapiro",
+  "name": "Josh Shapiro",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 3,
+   "age": 53,
+   "currently": "Governor of Pennsylvania",
+   "born": "Kansas City, MO",
+   "past_runs": ""
+  },
+  "wikidata": "Q6289368",
+  "wiki": "Josh Shapiro",
+  "desc": "American politician (born 1973)",
+  "dob": "1973-06-20",
+  "bluesky": "governor.pa.gov",
+  "youtube": "UCUaychFudHUhag9nHj3prDg",
+  "x": "joshshapiropa",
+  "site": "https://www.joshshapiro.org/",
+  "match": [
+   "Josh Shapiro"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "pete-buttigieg",
+  "name": "Pete Buttigieg",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 4,
+   "age": 44,
+   "currently": "former Sec. of Transportation",
+   "born": "South Bend, IN",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q7173106",
+  "wiki": "Pete Buttigieg",
+  "desc": "American politician (born 1982)",
+  "dob": "1982-01-19",
+  "bluesky": "petebuttigieg.bsky.social",
+  "youtube": "UCxauM3N4Nb47HG6PuDMh0Ow",
+  "x": "PeteButtigieg",
+  "site": null,
+  "match": [
+   "Pete Buttigieg"
+  ],
+  "keys": [
+   "Buttigieg"
+  ],
+  "guard": null
+ },
+ {
+  "id": "alexandria-ocasio-cortez",
+  "name": "Alexandria Ocasio-Cortez",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 5,
+   "age": 37,
+   "currently": "U.S. Rep, New York",
+   "born": "New York City, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q55223040",
+  "wiki": "Alexandria Ocasio-Cortez",
+  "desc": "American politician (born 1989)",
+  "dob": "1989-10-13",
+  "bluesky": "ocasio-cortez.house.gov",
+  "youtube": "UCElqfal0wzzpLsHlRuqZjaA",
+  "x": "AOC",
+  "site": "https://ocasio-cortez.house.gov/",
+  "match": [
+   "Alexandria Ocasio-Cortez",
+   "Ocasio-Cortez"
+  ],
+  "keys": [
+   "AOC"
+  ],
+  "guard": null
+ },
+ {
+  "id": "mark-kelly",
+  "name": "Mark Kelly",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 6,
+   "age": 62,
+   "currently": "Senator, Arizona",
+   "born": "Orange, NJ",
+   "past_runs": ""
+  },
+  "wikidata": "Q357510",
+  "wiki": "Mark Kelly",
+  "desc": "American politician, astronaut, and naval officer (born 1964)",
+  "dob": "1964-02-21",
+  "bluesky": null,
+  "youtube": "UCV1CKi8Tg_Y9q0V_FLHvesw",
+  "x": "CaptMarkKelly",
+  "site": "https://markkelly.com/",
+  "match": [
+   "Mark Kelly"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jb-pritzker",
+  "name": "J.B. Pritzker",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 7,
+   "age": 61,
+   "currently": "Governor of Illinois",
+   "born": "Atherton, CA",
+   "past_runs": ""
+  },
+  "wikidata": "Q6103950",
+  "wiki": "JB Pritzker",
+  "desc": "American businessman and politician (born 1965)",
+  "dob": "1965-01-19",
+  "bluesky": "jbpritzker.bsky.social",
+  "youtube": "UCI8FbW3Sm5y_3eP2g8kyXHg",
+  "x": "JBPritzker",
+  "site": "http://www.jbpritzker.com",
+  "match": [
+   "J.B. Pritzker",
+   "JB Pritzker",
+   "J. B. Pritzker"
+  ],
+  "keys": [
+   "Pritzker"
+  ],
+  "guard": null
+ },
+ {
+  "id": "andy-beshear",
+  "name": "Andy Beshear",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 8,
+   "age": 48,
+   "currently": "Governor of Kentucky",
+   "born": "Louisville, KY",
+   "past_runs": ""
+  },
+  "wikidata": "Q21572825",
+  "wiki": "Andy Beshear",
+  "desc": "American attorney and politician (born 1977)",
+  "dob": "1977-11-29",
+  "bluesky": "govandybeshear.bsky.social",
+  "youtube": "UChRbM-FLeKV4tKUwlMf6XNg",
+  "x": "AndyBeshearKY",
+  "site": "https://governor.ky.gov/About-Us/Pages/Governor-Andy-Beshear.aspx",
+  "match": [
+   "Andy Beshear"
+  ],
+  "keys": [
+   "Beshear"
+  ],
+  "guard": null
+ },
+ {
+  "id": "wes-moore",
+  "name": "Wes Moore",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 9,
+   "age": 49,
+   "currently": "Governor of Maryland",
+   "born": "Takoma Park, MD",
+   "past_runs": ""
+  },
+  "wikidata": "Q7983732",
+  "wiki": "Wes Moore",
+  "desc": "American politician, investment banker, author and television producer",
+  "dob": "1978-10-15",
+  "bluesky": "govwesmoore.bsky.social",
+  "youtube": "UCdxota7dx7862DWyTbHN1nA",
+  "x": "iamwesmoore",
+  "site": "https://wesmoore.com/",
+  "match": [
+   "Wes Moore"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "raphael-warnock",
+  "name": "Raphael Warnock",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 10,
+   "age": 59,
+   "currently": "Senator, Georgia",
+   "born": "Savannah, GA",
+   "past_runs": ""
+  },
+  "wikidata": "Q84146599",
+  "wiki": "Raphael Warnock",
+  "desc": "American pastor and politician (born 1969)",
+  "dob": "1969-07-23",
+  "bluesky": "warnock.senate.gov",
+  "youtube": "UCEARDmtU8htGQ_hqviHGrVA",
+  "x": "ReverendWarnock",
+  "site": "https://warnockforgeorgia.com",
+  "match": [
+   "Raphael Warnock"
+  ],
+  "keys": [
+   "Warnock"
+  ],
+  "guard": null
+ },
+ {
+  "id": "ruben-gallego",
+  "name": "Ruben Gallego",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 11,
+   "age": 48,
+   "currently": "Senator, Arizona",
+   "born": "Chicago, IL",
+   "past_runs": ""
+  },
+  "wikidata": "Q16218474",
+  "wiki": "Ruben Gallego",
+  "desc": "American politician (born 1979)",
+  "dob": "1979-11-20",
+  "bluesky": "gallego.senate.gov",
+  "youtube": "UCru0REdL016INldtvq6gaLA",
+  "x": "RepRubenGallego",
+  "site": "https://rubengallego.house.gov",
+  "match": [
+   "Ruben Gallego"
+  ],
+  "keys": [
+   "Gallego"
+  ],
+  "guard": null
+ },
+ {
+  "id": "cory-booker",
+  "name": "Cory Booker",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 12,
+   "age": 59,
+   "currently": "Senator, New Jersey",
+   "born": "Washington, DC",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q1135767",
+  "wiki": "Cory Booker",
+  "desc": "American politician (born 1969)",
+  "dob": "1969-04-27",
+  "bluesky": "corybooker.com",
+  "youtube": "UC6FlymqNS1VettnVZa7goPA",
+  "x": "CoryBooker",
+  "site": "http://www.booker.senate.gov",
+  "match": [
+   "Cory Booker"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "chris-murphy",
+  "name": "Chris Murphy",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 13,
+   "age": 54,
+   "currently": "Senator, Connecticut",
+   "born": "White Plains, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q1077594",
+  "wiki": "Chris Murphy",
+  "desc": "American lawyer and politician (born 1973)",
+  "dob": "1973-08-03",
+  "bluesky": null,
+  "youtube": "UCbcEa40PIFpLpdDe06n3F3Q",
+  "x": "ChrisMurphyCT",
+  "site": "https://www.murphy.senate.gov/",
+  "match": [
+   "Chris Murphy"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "elissa-slotkin",
+  "name": "Elissa Slotkin",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 14,
+   "age": 52,
+   "currently": "Senator, Michigan",
+   "born": "New York City, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q30323721",
+  "wiki": "Elissa Slotkin",
+  "desc": "American politician (born 1976)",
+  "dob": "1976-07-10",
+  "bluesky": "slotkin.senate.gov",
+  "youtube": "UCpZaVXq7xHeiFQTPBqFC4gQ",
+  "x": "ElissaSlotkin",
+  "site": "https://elissaslotkin.org",
+  "match": [
+   "Elissa Slotkin"
+  ],
+  "keys": [
+   "Slotkin"
+  ],
+  "guard": null
+ },
+ {
+  "id": "ro-khanna",
+  "name": "Ro Khanna",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 15,
+   "age": 52,
+   "currently": "U.S. Rep, California",
+   "born": "Philadelphia, PA",
+   "past_runs": ""
+  },
+  "wikidata": "Q7339221",
+  "wiki": "Ro Khanna",
+  "desc": "U.S. Representative from California",
+  "dob": "1976-09-13",
+  "bluesky": "khanna.house.gov",
+  "youtube": "UCr4KOYv1o1oEQhy1jhhm3pQ",
+  "x": "RepRoKhanna",
+  "site": "http://www.rokhanna.com/",
+  "match": [
+   "Ro Khanna"
+  ],
+  "keys": [
+   "Khanna"
+  ],
+  "guard": null
+ },
+ {
+  "id": "gretchen-whitmer",
+  "name": "Gretchen Whitmer",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 16,
+   "age": 57,
+   "currently": "Governor of Michigan",
+   "born": "Lansing, MI",
+   "past_runs": ""
+  },
+  "wikidata": "Q5607720",
+  "wiki": "Gretchen Whitmer",
+  "desc": "American politician and attorney (born 1971)",
+  "dob": "1971-08-23",
+  "bluesky": null,
+  "youtube": "UCuQqWLxbEiy5kg3DX20I6Vw",
+  "x": "GovWhitmer",
+  "site": "https://www.michigan.gov/whitmer/",
+  "match": [
+   "Gretchen Whitmer"
+  ],
+  "keys": [
+   "Whitmer"
+  ],
+  "guard": null
+ },
+ {
+  "id": "jared-polis",
+  "name": "Jared Polis",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 17,
+   "age": 53,
+   "currently": "Governor of Colorado",
+   "born": "Boulder, CO",
+   "past_runs": ""
+  },
+  "wikidata": "Q935734",
+  "wiki": "Jared Polis",
+  "desc": "American politician",
+  "dob": "1975-05-12",
+  "bluesky": null,
+  "youtube": "UCJJ1Ye0mOzqZh1_GErFUISw",
+  "x": "JaredPolis",
+  "site": "https://www.colorado.gov/governor/gov-polis",
+  "match": [
+   "Jared Polis"
+  ],
+  "keys": [
+   "Polis"
+  ],
+  "guard": null
+ },
+ {
+  "id": "tim-walz",
+  "name": "Tim Walz",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 18,
+   "age": 62,
+   "currently": "Governor of Minnesota",
+   "born": "West Point, NE",
+   "past_runs": ""
+  },
+  "wikidata": "Q2434360",
+  "wiki": "Tim Walz",
+  "desc": "American politician (born 1964)",
+  "dob": "1964-04-06",
+  "bluesky": "governorwalz.mn.gov",
+  "youtube": "UCAaYwb6XgcSVZ-5s3ei2g6g",
+  "x": "GovTimWalz",
+  "site": "https://kamalaharris.com/meet-governor-tim-walz/",
+  "match": [
+   "Tim Walz"
+  ],
+  "keys": [
+   "Walz"
+  ],
+  "guard": null
+ },
+ {
+  "id": "amy-klobuchar",
+  "name": "Amy Klobuchar",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 19,
+   "age": 66,
+   "currently": "Senator, Minnesota",
+   "born": "Plymouth, MN",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q22237",
+  "wiki": "Amy Klobuchar",
+  "desc": "American politician and lawyer (born 1960)",
+  "dob": "1960-05-25",
+  "bluesky": "amyklobuchar.com",
+  "youtube": "UCvdeJsDsV51tFb_hVqvtYGA",
+  "x": "amyklobuchar",
+  "site": "https://www.klobuchar.senate.gov/public/",
+  "match": [
+   "Amy Klobuchar"
+  ],
+  "keys": [
+   "Klobuchar"
+  ],
+  "guard": null
+ },
+ {
+  "id": "rahm-emanuel",
+  "name": "Rahm Emanuel",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 20,
+   "age": 68,
+   "currently": "former Mayor of Chicago",
+   "born": "Chicago, IL",
+   "past_runs": ""
+  },
+  "wikidata": "Q298443",
+  "wiki": "Rahm Emanuel",
+  "desc": "American politician (born 1959)",
+  "dob": "1959-11-29",
+  "bluesky": null,
+  "youtube": null,
+  "x": "RahmEmanuel",
+  "site": null,
+  "match": [
+   "Rahm Emanuel"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jon-ossoff",
+  "name": "Jon Ossoff",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 21,
+   "age": 39,
+   "currently": "Senator, Georgia",
+   "born": "Atlanta, GA",
+   "past_runs": ""
+  },
+  "wikidata": "Q28839536",
+  "wiki": "Jon Ossoff",
+  "desc": "American politician (born 1987)",
+  "dob": "1987-02-16",
+  "bluesky": "ossoff.bsky.social",
+  "youtube": "UCVCG2sRHEP6VW2Ao9LEcDPw",
+  "x": "ossoff",
+  "site": "https://www.ossoff.senate.gov/",
+  "match": [
+   "Jon Ossoff"
+  ],
+  "keys": [
+   "Ossoff"
+  ],
+  "guard": null
+ },
+ {
+  "id": "tammy-duckworth",
+  "name": "Tammy Duckworth",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 22,
+   "age": 58,
+   "currently": "Senator, Illinois",
+   "born": "Bangkok, TH",
+   "past_runs": ""
+  },
+  "wikidata": "Q3036410",
+  "wiki": "Tammy Duckworth",
+  "desc": "American politician and military officer (born 1968)",
+  "dob": "1968-03-12",
+  "bluesky": null,
+  "youtube": "UCYRWRvUxtjaHnFMCbdd94tg",
+  "x": "SenDuckworth",
+  "site": "https://www.tammyduckworth.com",
+  "match": [
+   "Tammy Duckworth"
+  ],
+  "keys": [
+   "Duckworth"
+  ],
+  "guard": null
+ },
+ {
+  "id": "brian-schatz",
+  "name": "Brian Schatz",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 23,
+   "age": 56,
+   "currently": "Senator, Hawaii",
+   "born": "Ann Arbor, MI",
+   "past_runs": ""
+  },
+  "wikidata": "Q1827902",
+  "wiki": "Brian Schatz",
+  "desc": "American educator and politician (born 1972)",
+  "dob": "1972-10-20",
+  "bluesky": "schatz.bsky.social",
+  "youtube": "UC8-mSYp2WqBiB_5iwtwKfow",
+  "x": "brianschatz",
+  "site": "http://www.schatz.senate.gov",
+  "match": [
+   "Brian Schatz"
+  ],
+  "keys": [
+   "Schatz"
+  ],
+  "guard": null
+ },
+ {
+  "id": "chris-van-hollen",
+  "name": "Chris Van Hollen",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 24,
+   "age": 69,
+   "currently": "Senator, Maryland",
+   "born": "Karachi, PK",
+   "past_runs": ""
+  },
+  "wikidata": "Q1077819",
+  "wiki": "Chris Van Hollen",
+  "desc": "United States Senator from Maryland",
+  "dob": "1959-01-10",
+  "bluesky": "vanhollen.senate.gov",
+  "youtube": "UCkpfJWu1N9Okd6PE_NidtBQ",
+  "x": "VanHollenForMD",
+  "site": "https://www.vanhollen.senate.gov/",
+  "match": [
+   "Chris Van Hollen"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "tammy-baldwin",
+  "name": "Tammy Baldwin",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 25,
+   "age": 66,
+   "currently": "Senator, Wisconsin",
+   "born": "Madison, WI",
+   "past_runs": ""
+  },
+  "wikidata": "Q40628",
+  "wiki": "Tammy Baldwin",
+  "desc": "American lawyer and politician (born 1962)",
+  "dob": "1962-02-11",
+  "bluesky": null,
+  "youtube": "UC_XjYCRbbI2_TDDjJidwk0Q",
+  "x": "tammybaldwin",
+  "site": "https://www.baldwin.senate.gov",
+  "match": [
+   "Tammy Baldwin"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "mark-warner",
+  "name": "Mark Warner",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 26,
+   "age": 73,
+   "currently": "Senator, Virginia",
+   "born": "Indianapolis, IN",
+   "past_runs": ""
+  },
+  "wikidata": "Q453893",
+  "wiki": "Mark Warner",
+  "desc": "United States Senator from Virginia",
+  "dob": "1954-12-15",
+  "bluesky": "markwarner.bsky.social",
+  "youtube": "UCwyivNlEGf4sGd1oDLfY5jw",
+  "x": "MarkWarner",
+  "site": "https://www.warner.senate.gov/public/",
+  "match": [
+   "Mark Warner"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "elizabeth-warren",
+  "name": "Elizabeth Warren",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 27,
+   "age": 79,
+   "currently": "Senator, Massachusetts",
+   "born": "Oklahoma City, OK",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q434706",
+  "wiki": "Elizabeth Warren",
+  "desc": "American politician (born 1949)",
+  "dob": "1949-06-22",
+  "bluesky": "elizabeth-warren.bsky.social",
+  "youtube": "UCTH9zV8Imw09J5bOoTR18_A",
+  "x": "ewarren",
+  "site": "https://elizabethwarren.com/",
+  "match": [
+   "Elizabeth Warren"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "john-fetterman",
+  "name": "John Fetterman",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 28,
+   "age": 59,
+   "currently": "Senator, Pennsylvania",
+   "born": "Reading, PA",
+   "past_runs": ""
+  },
+  "wikidata": "Q3181500",
+  "wiki": "John Fetterman",
+  "desc": "American politician (born 1969)",
+  "dob": "1969-08-15",
+  "bluesky": "fetterman.senate.gov",
+  "youtube": "UCxY2CYHyZaHUkK9HyxKDMDA",
+  "x": "JohnFetterman",
+  "site": "https://johnfetterman.com/",
+  "match": [
+   "John Fetterman"
+  ],
+  "keys": [
+   "Fetterman"
+  ],
+  "guard": null
+ },
+ {
+  "id": "jasmine-crockett",
+  "name": "Jasmine Crockett",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 29,
+   "age": 47,
+   "currently": "U.S. Rep, Texas",
+   "born": "St. Louis, MO",
+   "past_runs": ""
+  },
+  "wikidata": "Q101428652",
+  "wiki": "Jasmine Crockett",
+  "desc": "American politician (born 1981)",
+  "dob": "1981-03-29",
+  "bluesky": "crockett.house.gov",
+  "youtube": "UCBYoL67diOf4u4G0x4IGW2w",
+  "x": "JasmineForUS",
+  "site": "https://www.jasmineforus.com/",
+  "match": [
+   "Jasmine Crockett"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "pramila-jayapal",
+  "name": "Pramila Jayapal",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 30,
+   "age": 63,
+   "currently": "U.S. Rep, Washington",
+   "born": "Chennai, IN",
+   "past_runs": ""
+  },
+  "wikidata": "Q18978140",
+  "wiki": "Pramila Jayapal",
+  "desc": "American politician (born 1965)",
+  "dob": "1965-09-21",
+  "bluesky": "repjayapal.bsky.social",
+  "youtube": "UCmyD0_-2Oowkfwc_Raghclw",
+  "x": "RepJayapal",
+  "site": "https://jayapal.house.gov/",
+  "match": [
+   "Pramila Jayapal"
+  ],
+  "keys": [
+   "Jayapal"
+  ],
+  "guard": null
+ },
+ {
+  "id": "maura-healey",
+  "name": "Maura Healey",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 31,
+   "age": 57,
+   "currently": "Governor of Massachusetts",
+   "born": "Bethesda, MD",
+   "past_runs": ""
+  },
+  "wikidata": "Q16205062",
+  "wiki": "Maura Healey",
+  "desc": "73rd governor of Massachusetts (born 1971)",
+  "dob": "1971-02-08",
+  "bluesky": null,
+  "youtube": "UCrSPSfOS6JSHM86GJv-otoQ",
+  "x": "maura_healey",
+  "site": "https://maurahealey.com/",
+  "match": [
+   "Maura Healey"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "katie-hobbs",
+  "name": "Katie Hobbs",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 32,
+   "age": 58,
+   "currently": "Governor of Arizona",
+   "born": "Phoenix, AZ",
+   "past_runs": ""
+  },
+  "wikidata": "Q16226012",
+  "wiki": "Katie Hobbs",
+  "desc": "Governor of Arizona since 2023",
+  "dob": "1969-12-28",
+  "bluesky": null,
+  "youtube": "UCuWuNOtkNtTDW1-K55EbMyg",
+  "x": "katiehobbs",
+  "site": "http://www.katiehobbs.org/",
+  "match": [
+   "Katie Hobbs"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "josh-green",
+  "name": "Josh Green",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 33,
+   "age": 57,
+   "currently": "Governor of Hawaii",
+   "born": "Kingston, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q16224583",
+  "wiki": "Josh Green (politician)",
+  "desc": "Governor of Hawaii since 2022",
+  "dob": "1970-02-11",
+  "bluesky": null,
+  "youtube": "UCIbYSEzEelfrtW0wpTBHRVw",
+  "x": "DrJoshGreen",
+  "site": "https://joshgreenforhawaii.com/",
+  "match": [
+   "Josh Green"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "josh-stein",
+  "name": "Josh Stein",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 34,
+   "age": 60,
+   "currently": "Governor of North Carolina",
+   "born": "Washington, DC",
+   "past_runs": ""
+  },
+  "wikidata": "Q6289402",
+  "wiki": "Josh Stein",
+  "desc": "American politician (born 1966)",
+  "dob": "1966-09-13",
+  "bluesky": null,
+  "youtube": "UCz1XsZYTzudZtHAIQvuEQAQ",
+  "x": "JoshStein_",
+  "site": "https://www.joshstein.org/",
+  "match": [
+   "Josh Stein"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "roy-cooper",
+  "name": "Roy Cooper",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 35,
+   "age": 71,
+   "currently": "former North Carolina Gov.",
+   "born": "Nashville, TN",
+   "past_runs": ""
+  },
+  "wikidata": "Q7372694",
+  "wiki": "Roy Cooper",
+  "desc": "American attorney and politician (born 1957)",
+  "dob": "1957-06-13",
+  "bluesky": "roycoopernc.bsky.social",
+  "youtube": "UCENYd_GH_VlKV6UdcKLFnPQ",
+  "x": "RoyCooperNC",
+  "site": "https://www.roycooper.com/",
+  "match": [
+   "Roy Cooper"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "gina-raimondo",
+  "name": "Gina Raimondo",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 36,
+   "age": 57,
+   "currently": "former Sec. of Commerce",
+   "born": "Smithfield, RI",
+   "past_runs": ""
+  },
+  "wikidata": "Q5562913",
+  "wiki": "Gina Raimondo",
+  "desc": "40th United States Secretary of Commerce",
+  "dob": "1971-05-17",
+  "bluesky": null,
+  "youtube": "UCotjZlo9e9n6XfnlZYmMM2w",
+  "x": "GinaRaimondo",
+  "site": "https://ginaraimondo.com/",
+  "match": [
+   "Gina Raimondo"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "beto-orourke",
+  "name": "Beto O'Rourke",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 37,
+   "age": 56,
+   "currently": "former U.S. Rep, Texas",
+   "born": "El Paso, TX",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q4014532",
+  "wiki": "Beto O'Rourke",
+  "desc": "American politician (born 1972)",
+  "dob": "1972-09-26",
+  "bluesky": null,
+  "youtube": "UClxfjz6tgqTbwYwQNy0VURg",
+  "x": "RepBetoORourke",
+  "site": "https://betoorourke.com/",
+  "match": [
+   "Beto O'Rourke",
+   "Robert O'Rourke"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "stacey-abrams",
+  "name": "Stacey Abrams",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 38,
+   "age": 54,
+   "currently": "Georgia state legislator",
+   "born": "Madison, WI",
+   "past_runs": ""
+  },
+  "wikidata": "Q7595813",
+  "wiki": "Stacey Abrams",
+  "desc": "American politician, lawyer, voting rights activist, and author (born 1973)",
+  "dob": "1973-12-09",
+  "bluesky": null,
+  "youtube": "UCPjnB2FdBAvJp2fKOGzJHww",
+  "x": "staceyabrams",
+  "site": "http://staceyabrams.com/",
+  "match": [
+   "Stacey Abrams"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "xavier-becerra",
+  "name": "Xavier Becerra",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 39,
+   "age": 70,
+   "currently": "former Sec. of HHS",
+   "born": "Sacramento, CA",
+   "past_runs": ""
+  },
+  "wikidata": "Q1855840",
+  "wiki": "Xavier Becerra",
+  "desc": "Governor-elect of California (born 1958)",
+  "dob": "1958-01-26",
+  "bluesky": null,
+  "youtube": "UCoY0rJzkgkl1TmoKTUKTI6w",
+  "x": "AGBecerra",
+  "site": "https://oag.ca.gov/about",
+  "match": [
+   "Xavier Becerra"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "julian-castro",
+  "name": "Julian Castro",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 40,
+   "age": 54,
+   "currently": "former Sec. of HUD",
+   "born": "San Antonio, TX",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q970720",
+  "wiki": "Julian Castro",
+  "desc": "16th Secretary of Housing and Urban Development and 181st Mayor of San Antonio",
+  "dob": "1974-09-16",
+  "bluesky": null,
+  "youtube": "UCWy3FMoClFZYFRTW80PIntQ",
+  "x": "juliancastro",
+  "site": "https://www.julianforthefuture.com/",
+  "match": [
+   "Julian Castro",
+   "Julián Castro"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "phil-murphy",
+  "name": "Phil Murphy",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 41,
+   "age": 71,
+   "currently": "former New Jersey Gov.",
+   "born": "Needham, MA",
+   "past_runs": ""
+  },
+  "wikidata": "Q260042",
+  "wiki": "Phil Murphy",
+  "desc": "American politician and financier (born 1957)",
+  "dob": "1957-08-16",
+  "bluesky": null,
+  "youtube": "UCH8YwF0eRl9E5lpGj8OaiLg",
+  "x": "philmurphynj",
+  "site": "https://www.nj.gov/governor/admin/about/",
+  "match": [
+   "Phil Murphy"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "deval-patrick",
+  "name": "Deval Patrick",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 42,
+   "age": 72,
+   "currently": "former Massachusetts Gov.",
+   "born": "Chicago, IL",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q11100",
+  "wiki": "Deval Patrick",
+  "desc": "Governor of Massachusetts from 2007 to 2015",
+  "dob": "1956-07-31",
+  "bluesky": null,
+  "youtube": "UCI5eidLTloNjzOpbLICfsnA",
+  "x": "devalpatrick",
+  "site": null,
+  "match": [
+   "Deval Patrick"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "abigail-spanberger",
+  "name": "Abigail Spanberger",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 43,
+   "age": 49,
+   "currently": "Governor of Virginia",
+   "born": "Red Bank, NJ",
+   "past_runs": ""
+  },
+  "wikidata": "Q55603085",
+  "wiki": "Abigail Spanberger",
+  "desc": "American politician and former intelligence officer (born 1979)",
+  "dob": "1979-08-07",
+  "bluesky": null,
+  "youtube": "UC66jKgZXnDVGUrOnwHjpvNg",
+  "x": "SpanbergerVA07",
+  "site": "https://abigailspanberger.com/",
+  "match": [
+   "Abigail Spanberger"
+  ],
+  "keys": [
+   "Spanberger"
+  ],
+  "guard": null
+ },
+ {
+  "id": "andy-kim",
+  "name": "Andy Kim",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 44,
+   "age": 46,
+   "currently": "Senator, New Jersey",
+   "born": "Boston, MA",
+   "past_runs": ""
+  },
+  "wikidata": "Q55639180",
+  "wiki": "Andy Kim",
+  "desc": "American politician and diplomat (born 1982)",
+  "dob": "1982-07-12",
+  "bluesky": null,
+  "youtube": "UCn_FREkpMfHfTU-bSwcM0sw",
+  "x": "RepAndyKimNJ",
+  "site": "http://andykim.com/",
+  "match": [
+   "Andy Kim"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "chris-coons",
+  "name": "Chris Coons",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 45,
+   "age": 65,
+   "currently": "Senator, Delaware",
+   "born": "Greenwich, CT",
+   "past_runs": ""
+  },
+  "wikidata": "Q923242",
+  "wiki": "Chris Coons",
+  "desc": "American lawyer and politician (born 1963)",
+  "dob": "1963-09-09",
+  "bluesky": "coons.senate.gov",
+  "youtube": "UC2lOVbsddn1HIkcDnmCw6tA",
+  "x": "ChrisCoons",
+  "site": "http://coons.senate.gov",
+  "match": [
+   "Chris Coons"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "mitch-landrieu",
+  "name": "Mitch Landrieu",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 46,
+   "age": 66,
+   "currently": "former Mayor of New Orleans",
+   "born": "New Orleans, LA",
+   "past_runs": ""
+  },
+  "wikidata": "Q3317069",
+  "wiki": "Mitch Landrieu",
+  "desc": "American politician (born 1960)",
+  "dob": "1960-08-16",
+  "bluesky": null,
+  "youtube": null,
+  "x": "MitchLandrieu",
+  "site": "http://www.mitchlandrieu.com/",
+  "match": [
+   "Mitch Landrieu"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "michelle-lujan-grisham",
+  "name": "Michelle Lujan Grisham",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 47,
+   "age": 66,
+   "currently": "Governor, New Mexico",
+   "born": "Los Alamos, NM",
+   "past_runs": ""
+  },
+  "wikidata": "Q3917203",
+  "wiki": "Michelle Lujan Grisham",
+  "desc": "Governor of New Mexico since 2019",
+  "dob": "1959-10-24",
+  "bluesky": null,
+  "youtube": "UCWVWbeIUHc2nl-SQgTMczNA",
+  "x": "GovMLG",
+  "site": "https://www.governor.state.nm.us/our-leadership/governor/",
+  "match": [
+   "Michelle Lujan Grisham",
+   "Lujan Grisham"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jason-crow",
+  "name": "Jason Crow",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 48,
+   "age": 47,
+   "currently": "U.S. Rep, Colorado",
+   "born": "Madison, WI",
+   "past_runs": ""
+  },
+  "wikidata": "Q58323071",
+  "wiki": "Jason Crow",
+  "desc": "American politician (born 1979)",
+  "dob": "1979-03-15",
+  "bluesky": null,
+  "youtube": "UCuOJwt1224LxPmcodmj61yw",
+  "x": "RepJasonCrow",
+  "site": "https://jasoncrowforcongress.com/",
+  "match": [
+   "Jason Crow"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "don-lemon",
+  "name": "Don Lemon",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 49,
+   "age": 60,
+   "currently": "News anchor",
+   "born": "Baton Rouge, LA",
+   "past_runs": ""
+  },
+  "wikidata": "Q5292992",
+  "wiki": "Don Lemon",
+  "desc": "American journalist and news anchor (born 1966)",
+  "dob": "1966-03-01",
+  "bluesky": "donlemonofficial.bsky.social",
+  "youtube": null,
+  "x": "donlemon",
+  "site": null,
+  "match": [
+   "Don Lemon"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "stephen-a-smith",
+  "name": "Stephen A. Smith",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 50,
+   "age": 59,
+   "currently": "Television personality",
+   "born": "Bronx, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q7608548",
+  "wiki": "Stephen A. Smith",
+  "desc": "American sports journalist",
+  "dob": "1967-10-14",
+  "bluesky": null,
+  "youtube": null,
+  "x": "stephenasmith",
+  "site": null,
+  "match": [
+   "Stephen A. Smith"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "mark-cuban",
+  "name": "Mark Cuban",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 51,
+   "age": 68,
+   "currently": "Businessman/personality",
+   "born": "Pittsburgh, PA",
+   "past_runs": ""
+  },
+  "wikidata": "Q318503",
+  "wiki": "Mark Cuban",
+  "desc": "American investor and entrepreneur (born 1958)",
+  "dob": "1958-07-31",
+  "bluesky": "mcuban.bsky.social",
+  "youtube": null,
+  "x": "mcuban",
+  "site": "https://blogmaverick.com",
+  "match": [
+   "Mark Cuban"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "bernie-sanders",
+  "name": "Bernie Sanders",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 52,
+   "age": 85,
+   "currently": "Senator, Vermont",
+   "born": "Brooklyn, NY",
+   "past_runs": "2016, 2020"
+  },
+  "wikidata": "Q359442",
+  "wiki": "Bernie Sanders",
+  "desc": "United States Senator from Vermont",
+  "dob": "1941-09-08",
+  "bluesky": "sanders.senate.gov",
+  "youtube": "UCH1dpzjCEiGAt8CXkryhkZg",
+  "x": "SenSanders",
+  "site": "https://www.sanders.senate.gov/",
+  "match": [
+   "Bernie Sanders"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "catherine-cortez-masto",
+  "name": "Catherine Cortez Masto",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 53,
+   "age": 64,
+   "currently": "Senator, Nevada",
+   "born": "Las Vegas, NV",
+   "past_runs": ""
+  },
+  "wikidata": "Q5052604",
+  "wiki": "Catherine Cortez Masto",
+  "desc": "American lawyer and politician (born 1964)",
+  "dob": "1964-03-29",
+  "bluesky": null,
+  "youtube": "UCIINj3ZEAqcB2t8YS0MWA4A",
+  "x": "CortezMasto",
+  "site": "http://catherinecortezmasto.com/",
+  "match": [
+   "Catherine Cortez Masto",
+   "Cortez Masto"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "debbie-stabenow",
+  "name": "Debbie Stabenow",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 54,
+   "age": 78,
+   "currently": "former Senator, Michigan",
+   "born": "Gladwin, MI",
+   "past_runs": ""
+  },
+  "wikidata": "Q241092",
+  "wiki": "Debbie Stabenow",
+  "desc": "American politician (born 1950)",
+  "dob": "1950-04-29",
+  "bluesky": null,
+  "youtube": "UCFoDKCvxSwCUfDv-4Eg4K5A",
+  "x": "SenStabenow",
+  "site": "https://www.stabenow.senate.gov/",
+  "match": [
+   "Debbie Stabenow"
+  ],
+  "keys": [
+   "Stabenow"
+  ],
+  "guard": null
+ },
+ {
+  "id": "eric-adams",
+  "name": "Eric Adams",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 55,
+   "age": 68,
+   "currently": "former mayor, New York City",
+   "born": "Brooklyn, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q5385992",
+  "wiki": "Eric Adams",
+  "desc": "Mayor of New York City from 2022–2026",
+  "dob": "1960-09-01",
+  "bluesky": null,
+  "youtube": "UCHjQwVruB4ZBuCr1A8NMWQA",
+  "x": "ericadamsfornyc",
+  "site": null,
+  "match": [
+   "Eric Adams"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "eric-swalwell",
+  "name": "Eric Swalwell",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 56,
+   "age": 48,
+   "currently": "U.S. Rep, California",
+   "born": "Sac City, IA",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q3466996",
+  "wiki": "Eric Swalwell",
+  "desc": "American lawyer and politician (born 1980)",
+  "dob": "1980-11-16",
+  "bluesky": null,
+  "youtube": "UCKvwsFNGD4sDkE_9g-2ft0w",
+  "x": "RepSwalwell",
+  "site": "http://swalwell.house.gov",
+  "match": [
+   "Eric Swalwell"
+  ],
+  "keys": [
+   "Swalwell"
+  ],
+  "guard": null
+ },
+ {
+  "id": "hakeem-jeffries",
+  "name": "Hakeem Jeffries",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 57,
+   "age": 58,
+   "currently": "U.S. Rep, New York",
+   "born": "Brooklyn, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q5640425",
+  "wiki": "Hakeem Jeffries",
+  "desc": "American politician (born 1970)",
+  "dob": "1970-08-04",
+  "bluesky": "hakeem-jeffries.bsky.social",
+  "youtube": "UCYVmbsjoNbQ4j-PCQIYgpWQ",
+  "x": "RepJeffries",
+  "site": "http://jeffries.house.gov",
+  "match": [
+   "Hakeem Jeffries"
+  ],
+  "keys": [
+   "Jeffries"
+  ],
+  "guard": null
+ },
+ {
+  "id": "gina-mccarthy",
+  "name": "Gina McCarthy",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 58,
+   "age": 74,
+   "currently": "former White House adviser",
+   "born": "Boston, MA",
+   "past_runs": ""
+  },
+  "wikidata": "Q5562899",
+  "wiki": "Gina McCarthy",
+  "desc": "American government official",
+  "dob": "1954-05-03",
+  "bluesky": null,
+  "youtube": null,
+  "x": "GinaEPA",
+  "site": null,
+  "match": [
+   "Gina McCarthy"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "andrew-yang",
+  "name": "Andrew Yang",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 59,
+   "age": 53,
+   "currently": "Entrepreneur",
+   "born": "Schenectady, NY",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q28723576",
+  "wiki": "Andrew Yang",
+  "desc": "American entrepreneur, attorney and political candidate (born 1975)",
+  "dob": "1975-01-13",
+  "bluesky": null,
+  "youtube": "UCriIuQZpMi6gEt_2P7xKCww",
+  "x": "AndrewYang",
+  "site": "https://www.yang2020.com/",
+  "match": [
+   "Andrew Yang"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "adam-schiff",
+  "name": "Adam Schiff",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 60,
+   "age": 66,
+   "currently": "Senator, California",
+   "born": "Framingham, MA",
+   "past_runs": ""
+  },
+  "wikidata": "Q350843",
+  "wiki": "Adam Schiff",
+  "desc": "American politician",
+  "dob": "1960-06-22",
+  "bluesky": "repadamschlff.bsky.social",
+  "youtube": "UCadiUi-KZoFk1K5ZDsluLcA",
+  "x": "RepAdamSchiff",
+  "site": "https://schiff.house.gov/",
+  "match": [
+   "Adam Schiff"
+  ],
+  "keys": [
+   "Schiff"
+  ],
+  "guard": null
+ },
+ {
+  "id": "sherrod-brown",
+  "name": "Sherrod Brown",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 61,
+   "age": 73,
+   "currently": "former Senator, Ohio",
+   "born": "Mansfield, OH",
+   "past_runs": ""
+  },
+  "wikidata": "Q381880",
+  "wiki": "Sherrod Brown",
+  "desc": "American politician and educator (born 1952)",
+  "dob": "1952-11-09",
+  "bluesky": null,
+  "youtube": "UCgy8jfERh-t_ixkKKoCmglQ",
+  "x": "SenSherrodBrown",
+  "site": "https://www.sherrodbrown.com/",
+  "match": [
+   "Sherrod Brown"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jeff-jackson",
+  "name": "Jeff Jackson",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 62,
+   "age": 44,
+   "currently": "North Carolina AG",
+   "born": "Miami, FL",
+   "past_runs": ""
+  },
+  "wikidata": "Q17183308",
+  "wiki": "Jeff Jackson (politician)",
+  "desc": "American politician and attorney (born 1982)",
+  "dob": "1982-09-12",
+  "bluesky": null,
+  "youtube": "UCMS_OsMEOc1s9hlwRvQyahg",
+  "x": "JeffJacksonNC",
+  "site": "https://www.jeffjacksonnc.com/",
+  "match": [
+   "Jeff Jackson"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jamie-raskin",
+  "name": "Jamie Raskin",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 63,
+   "age": 63,
+   "currently": "U.S. Rep, Maryland",
+   "born": "Washington, DC",
+   "past_runs": ""
+  },
+  "wikidata": "Q640835",
+  "wiki": "Jamie Raskin",
+  "desc": "American lawyer, politician, and U.S. Representative from Maryland since 2017",
+  "dob": "1962-12-13",
+  "bluesky": "raskin.house.gov",
+  "youtube": "UChxDE6vho5BfBTOqiBsDmKg",
+  "x": "RepRaskin",
+  "site": "https://jamieraskin.com/",
+  "match": [
+   "Jamie Raskin"
+  ],
+  "keys": [
+   "Raskin"
+  ],
+  "guard": null
+ },
+ {
+  "id": "katie-porter",
+  "name": "Katie Porter",
+  "party": "D",
+  "on_list": 1,
+  "list": {
+   "id": 64,
+   "age": 52,
+   "currently": "former U.S. Rep, California",
+   "born": "Fort Dodge, IA",
+   "past_runs": ""
+  },
+  "wikidata": "Q58754391",
+  "wiki": "Katie Porter",
+  "desc": "U.S. Representative from California",
+  "dob": "1974-01-03",
+  "bluesky": "katieporteroc.bsky.social",
+  "youtube": "UCRdB2ce4DloCSyuPbWfOZyw",
+  "x": "RepKatiePorter",
+  "site": "https://porter.house.gov/",
+  "match": [
+   "Katie Porter"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "donald-trump",
+  "name": "Donald Trump",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 1,
+   "age": 80,
+   "currently": "President",
+   "born": "New York, NY",
+   "past_runs": "2000, 2016, 2020, 2024"
+  },
+  "wikidata": "Q22686",
+  "wiki": "Donald Trump",
+  "desc": "President of the United States (2017–2021; since 2025)",
+  "dob": "1946-06-14",
+  "bluesky": null,
+  "youtube": "UCAql2DyGU2un1Ei2nMYsqOA",
+  "x": "realDonaldTrump",
+  "site": "https://donaldjtrump.com",
+  "match": [
+   "Donald Trump",
+   "Donald J. Trump"
+  ],
+  "keys": [],
+  "guard": "\\b2028\\b|third term"
+ },
+ {
+  "id": "jd-vance",
+  "name": "JD Vance",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 2,
+   "age": 42,
+   "currently": "Vice President",
+   "born": "Middletown, OH",
+   "past_runs": ""
+  },
+  "wikidata": "Q28935729",
+  "wiki": "JD Vance",
+  "desc": "Vice President of the United States since 2025",
+  "dob": "1984-08-02",
+  "bluesky": "jd-vance-1.bsky.social",
+  "youtube": null,
+  "x": "jdvance1",
+  "site": "https://jdvance.com",
+  "match": [
+   "JD Vance",
+   "J.D. Vance",
+   "J. D. Vance"
+  ],
+  "keys": [
+   "Vance"
+  ],
+  "guard": null
+ },
+ {
+  "id": "marco-rubio",
+  "name": "Marco Rubio",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 3,
+   "age": 55,
+   "currently": "Sec. of State, National Security Advisor",
+   "born": "Miami, FL",
+   "past_runs": "2016"
+  },
+  "wikidata": "Q324546",
+  "wiki": "Marco Rubio",
+  "desc": "72nd United States Secretary of State since 2025",
+  "dob": "1971-05-28",
+  "bluesky": null,
+  "youtube": "UCh8t7sV_DBKz4A-RkL9feyg",
+  "x": "marcorubio",
+  "site": "https://marcorubio.com/",
+  "match": [
+   "Marco Rubio"
+  ],
+  "keys": [
+   "Rubio"
+  ],
+  "guard": null
+ },
+ {
+  "id": "ted-cruz",
+  "name": "Ted Cruz",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 4,
+   "age": 55,
+   "currently": "Senator, Texas",
+   "born": "Calgary, AB",
+   "past_runs": "2016"
+  },
+  "wikidata": "Q2036942",
+  "wiki": "Ted Cruz",
+  "desc": "American politician (born 1970)",
+  "dob": "1970-12-22",
+  "bluesky": null,
+  "youtube": "UCOTZ-6H1rri1lSsj6IzhUyw",
+  "x": "tedcruz",
+  "site": "https://www.tedcruz.org/",
+  "match": [
+   "Ted Cruz"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "ron-desantis",
+  "name": "Ron DeSantis",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 5,
+   "age": 48,
+   "currently": "Governor of Florida",
+   "born": "Jacksonville, FL",
+   "past_runs": "2024"
+  },
+  "wikidata": "Q3105215",
+  "wiki": "Ron DeSantis",
+  "desc": "American politician (born 1978)",
+  "dob": "1978-09-14",
+  "bluesky": null,
+  "youtube": "UCRM1qBatq45tZxRqYeUa02g",
+  "x": "RonDeSantisFL",
+  "site": "https://rondesantis.com/",
+  "match": [
+   "Ron DeSantis"
+  ],
+  "keys": [
+   "DeSantis"
+  ],
+  "guard": null
+ },
+ {
+  "id": "donald-trump-jr",
+  "name": "Donald Trump Jr.",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 6,
+   "age": 48,
+   "currently": "Businessman",
+   "born": "New York, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q3713655",
+  "wiki": "Donald Trump Jr.",
+  "desc": "American businessman and reality television personality (born 1977)",
+  "dob": "1977-12-31",
+  "bluesky": null,
+  "youtube": null,
+  "x": "DonaldJTrumpJr",
+  "site": "https://donjr.com/",
+  "match": [
+   "Donald Trump Jr.",
+   "Don Jr.",
+   "Donald J. Trump Jr."
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "tucker-carlson",
+  "name": "Tucker Carlson",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 7,
+   "age": 57,
+   "currently": "Media personality",
+   "born": "San Francisco, CA",
+   "past_runs": ""
+  },
+  "wikidata": "Q743162",
+  "wiki": "Tucker Carlson",
+  "desc": "American conservative political commentator (born 1969)",
+  "dob": "1969-05-16",
+  "bluesky": null,
+  "youtube": "UCGttrUON87gWfU6dMWm1fcA",
+  "x": "tuckercarlson",
+  "site": "https://tuckercarlson.com",
+  "match": [
+   "Tucker Carlson"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "pete-hegseth",
+  "name": "Pete Hegseth",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 8,
+   "age": 46,
+   "currently": "Secretary of Defense",
+   "born": "Minneapolis, MN",
+   "past_runs": ""
+  },
+  "wikidata": "Q7172014",
+  "wiki": "Pete Hegseth",
+  "desc": "United States Secretary of Defense",
+  "dob": "1980-06-06",
+  "bluesky": null,
+  "youtube": "UCVkLq-zBx0ZVsR9pLkQM9iQ",
+  "x": "PeteHegseth",
+  "site": "https://petehegseth.com/",
+  "match": [
+   "Pete Hegseth"
+  ],
+  "keys": [
+   "Hegseth"
+  ],
+  "guard": null
+ },
+ {
+  "id": "john-kennedy",
+  "name": "John Kennedy",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 9,
+   "age": 74,
+   "currently": "Senator, Louisiana",
+   "born": "Centreville, MS",
+   "past_runs": ""
+  },
+  "wikidata": "Q6250211",
+  "wiki": "John Kennedy (Louisiana politician)",
+  "desc": "American politician; United States senator from Louisiana (born 1951)",
+  "dob": "1951-11-21",
+  "bluesky": null,
+  "youtube": null,
+  "x": "SenJohnKennedy",
+  "site": "http://www.johnkennedy.com/",
+  "match": [
+   "John N. Kennedy",
+   "John Neely Kennedy",
+   "Sen. John Kennedy",
+   "Senator John Kennedy"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "sarah-huckabee-sanders",
+  "name": "Sarah Huckabee Sanders",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 10,
+   "age": 44,
+   "currently": "Governor, Arkansas",
+   "born": "Hope, AR",
+   "past_runs": ""
+  },
+  "wikidata": "Q27986907",
+  "wiki": "Sarah Huckabee Sanders",
+  "desc": "Governor of Arkansas since 2023",
+  "dob": "1982-08-13",
+  "bluesky": null,
+  "youtube": null,
+  "x": "SHSanders45",
+  "site": null,
+  "match": [
+   "Sarah Huckabee Sanders",
+   "Sarah Sanders"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "brian-kemp",
+  "name": "Brian Kemp",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 11,
+   "age": 62,
+   "currently": "Governor, Georgia",
+   "born": "Athens, GA",
+   "past_runs": ""
+  },
+  "wikidata": "Q4964973",
+  "wiki": "Brian Kemp",
+  "desc": "American politician (born 1963)",
+  "dob": "1963-11-02",
+  "bluesky": null,
+  "youtube": null,
+  "x": "BrianKempGA",
+  "site": null,
+  "match": [
+   "Brian Kemp"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "thomas-massie",
+  "name": "Thomas Massie",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 12,
+   "age": 55,
+   "currently": "U.S. Rep, Kentucky",
+   "born": "Huntington, WV",
+   "past_runs": ""
+  },
+  "wikidata": "Q2426031",
+  "wiki": "Thomas Massie",
+  "desc": "American politician",
+  "dob": "1971-01-13",
+  "bluesky": null,
+  "youtube": "UCpmXOtvvXC3GE8o9VxYNK7g",
+  "x": "RepThomasMassie",
+  "site": "http://www.thomasmassie.com",
+  "match": [
+   "Thomas Massie"
+  ],
+  "keys": [
+   "Massie"
+  ],
+  "guard": null
+ },
+ {
+  "id": "ivanka-trump",
+  "name": "Ivanka Trump",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 13,
+   "age": 44,
+   "currently": "Businesswoman, former advisor",
+   "born": "New York, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q239411",
+  "wiki": "Ivanka Trump",
+  "desc": "American businesswoman, socialite and political advisior (born 1981)",
+  "dob": "1981-10-30",
+  "bluesky": null,
+  "youtube": null,
+  "x": "IvankaTrump",
+  "site": "https://www.ivankatrump.com",
+  "match": [
+   "Ivanka Trump"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "robert-f-kennedy-jr",
+  "name": "Robert F. Kennedy Jr.",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 14,
+   "age": 72,
+   "currently": "Secretary of Health and Human Services",
+   "born": "Washington, DC",
+   "past_runs": ""
+  },
+  "wikidata": "Q1352872",
+  "wiki": "Robert F. Kennedy Jr.",
+  "desc": "26th United States Secretary of Health and Human Services since 2025",
+  "dob": "1954-01-17",
+  "bluesky": null,
+  "youtube": "UC4ewc5vQcMpLticvqPDcSQw",
+  "x": "RobertKennedyJr",
+  "site": null,
+  "match": [
+   "Robert F. Kennedy Jr.",
+   "RFK Jr.",
+   "RFK Jr",
+   "Robert Kennedy Jr."
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "rand-paul",
+  "name": "Rand Paul",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 15,
+   "age": 63,
+   "currently": "Senator, Kentucky",
+   "born": "Pittsburgh, PA",
+   "past_runs": "2016"
+  },
+  "wikidata": "Q463557",
+  "wiki": "Rand Paul",
+  "desc": "United States Senator from Kentucky since 2011",
+  "dob": "1963-01-07",
+  "bluesky": null,
+  "youtube": "UCeM9I-20oWUs8daIIpsNHoQ",
+  "x": "RandPaul",
+  "site": "https://paul.senate.gov/",
+  "match": [
+   "Rand Paul"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "don-bacon",
+  "name": "Don Bacon",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 16,
+   "age": 63,
+   "currently": "U.S. Rep, Nebraska",
+   "born": "Momence, IL",
+   "past_runs": ""
+  },
+  "wikidata": "Q19757583",
+  "wiki": "Don Bacon",
+  "desc": "American politician (born 1963)",
+  "dob": "1963-08-16",
+  "bluesky": null,
+  "youtube": "UCR9abI1lZzAZ6HwQXc-dLFQ",
+  "x": "repdonbacon",
+  "site": "http://www.donbacon2016.com/",
+  "match": [
+   "Don Bacon"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "glenn-youngkin",
+  "name": "Glenn Youngkin",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 17,
+   "age": 45,
+   "currently": "former Governor of Virginia",
+   "born": "Richmond, VA",
+   "past_runs": ""
+  },
+  "wikidata": "Q100963892",
+  "wiki": "Glenn Youngkin",
+  "desc": "American politician and businessman (born 1966)",
+  "dob": "1966-12-09",
+  "bluesky": null,
+  "youtube": null,
+  "x": null,
+  "site": null,
+  "match": [
+   "Glenn Youngkin"
+  ],
+  "keys": [
+   "Youngkin"
+  ],
+  "guard": null
+ },
+ {
+  "id": "chris-christie",
+  "name": "Chris Christie",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 18,
+   "age": 64,
+   "currently": "former Governor of New Jersey",
+   "born": "Newark, NJ",
+   "past_runs": "2016, 2024"
+  },
+  "wikidata": "Q63879",
+  "wiki": "Chris Christie",
+  "desc": "55th Governor of New Jersey and former U.S. Attorney for the District of New Jersey",
+  "dob": "1962-09-06",
+  "bluesky": null,
+  "youtube": "UC9HPE8pwH55pQJGIF8p2vEA",
+  "x": "chrischristie",
+  "site": "https://chrischristie.com/",
+  "match": [
+   "Chris Christie"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "josh-hawley",
+  "name": "Josh Hawley",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 19,
+   "age": 46,
+   "currently": "Senator, Missouri",
+   "born": "Springdale, AR",
+   "past_runs": ""
+  },
+  "wikidata": "Q23020745",
+  "wiki": "Josh Hawley",
+  "desc": "American lawyer and politician (born 1979)",
+  "dob": "1979-12-31",
+  "bluesky": null,
+  "youtube": null,
+  "x": "HawleyMO",
+  "site": "https://joshhawley.com/",
+  "match": [
+   "Josh Hawley"
+  ],
+  "keys": [
+   "Hawley"
+  ],
+  "guard": null
+ },
+ {
+  "id": "marjorie-taylor-greene",
+  "name": "Marjorie Taylor Greene",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 20,
+   "age": 52,
+   "currently": "Businesswoman; former U.S. rep, Georgia",
+   "born": "Milledgeville, GA",
+   "past_runs": ""
+  },
+  "wikidata": "Q98380406",
+  "wiki": "Marjorie Taylor Greene",
+  "desc": "American politician",
+  "dob": "1974-05-27",
+  "bluesky": null,
+  "youtube": "UCYfpODnmxKs0aE5-Jx--wIg",
+  "x": "mtgreenee",
+  "site": "https://greene.house.gov",
+  "match": [
+   "Marjorie Taylor Greene"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "katie-britt",
+  "name": "Katie Britt",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 21,
+   "age": 44,
+   "currently": "Senator, Alabama",
+   "born": "Enterprise, AL",
+   "past_runs": ""
+  },
+  "wikidata": "Q111285444",
+  "wiki": "Katie Britt",
+  "desc": "United States Senator from Alabama since 2023",
+  "dob": "1982-02-03",
+  "bluesky": null,
+  "youtube": null,
+  "x": "KatieBrittforAL",
+  "site": "https://www.katiebrittforsenate.com/",
+  "match": [
+   "Katie Britt"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "tulsi-gabbard",
+  "name": "Tulsi Gabbard",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 22,
+   "age": 45,
+   "currently": "former National Intelligence Director",
+   "born": "Leloaloa, AS",
+   "past_runs": "2020"
+  },
+  "wikidata": "Q32620",
+  "wiki": "Tulsi Gabbard",
+  "desc": "American politician (born 1981)",
+  "dob": "1981-04-12",
+  "bluesky": null,
+  "youtube": "UCkQmC0YfIU4388Tu0_k4esA",
+  "x": "TulsiGabbard",
+  "site": "https://www.tulsigabbard.com/",
+  "match": [
+   "Tulsi Gabbard"
+  ],
+  "keys": [
+   "Gabbard"
+  ],
+  "guard": null
+ },
+ {
+  "id": "nikki-haley",
+  "name": "Nikki Haley",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 23,
+   "age": 54,
+   "currently": "former Governor of South Carolina",
+   "born": "Bamberg, SC",
+   "past_runs": "2024"
+  },
+  "wikidata": "Q11668",
+  "wiki": "Nikki Haley",
+  "desc": "American politician and diplomat (born 1972)",
+  "dob": "1972-01-20",
+  "bluesky": null,
+  "youtube": "UCtr9Pe4YPJi2jgwoNQms44g",
+  "x": "nikkihaley",
+  "site": "https://nikkihaley.com/",
+  "match": [
+   "Nikki Haley"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "vivek-ramaswamy",
+  "name": "Vivek Ramaswamy",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 24,
+   "age": 41,
+   "currently": "Entrepreneur",
+   "born": "Cincinnati, OH",
+   "past_runs": "2024"
+  },
+  "wikidata": "Q27881473",
+  "wiki": "Vivek Ramaswamy",
+  "desc": "American businessman (born 1985)",
+  "dob": "1985-08-09",
+  "bluesky": null,
+  "youtube": "UCautFW0hm0QPVXFVeSpSpxg",
+  "x": "VivekGRamaswamy",
+  "site": "https://www.vivekramaswamy.com/",
+  "match": [
+   "Vivek Ramaswamy"
+  ],
+  "keys": [
+   "Ramaswamy"
+  ],
+  "guard": null
+ },
+ {
+  "id": "byron-donalds",
+  "name": "Byron Donalds",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 25,
+   "age": 47,
+   "currently": "U.S. Rep, Florida",
+   "born": "Brooklyn, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q59726216",
+  "wiki": "Byron Donalds",
+  "desc": "Governor-elect of Florida (born 1978)",
+  "dob": "1978-10-28",
+  "bluesky": null,
+  "youtube": null,
+  "x": null,
+  "site": "https://www.byrondonalds.com/",
+  "match": [
+   "Byron Donalds"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "elise-stefanik",
+  "name": "Elise Stefanik",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 26,
+   "age": 42,
+   "currently": "U.S. Rep, New York",
+   "born": "Albany, NY",
+   "past_runs": ""
+  },
+  "wikidata": "Q18211057",
+  "wiki": "Elise Stefanik",
+  "desc": "United States Representative from New York since 2015 (Republican)",
+  "dob": "1984-07-02",
+  "bluesky": null,
+  "youtube": "UCHvf42C8Vw6QnjwO2L2ukKA",
+  "x": "elisestefanik",
+  "site": "https://stefanik.house.gov/",
+  "match": [
+   "Elise Stefanik"
+  ],
+  "keys": [
+   "Stefanik"
+  ],
+  "guard": null
+ },
+ {
+  "id": "elon-musk",
+  "name": "Elon Musk",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 27,
+   "age": 55,
+   "currently": "Businessman",
+   "born": "Pretoria, SA",
+   "past_runs": ""
+  },
+  "wikidata": "Q317521",
+  "wiki": "Elon Musk",
+  "desc": "American businessman (born 1971)",
+  "dob": "1971-06-28",
+  "bluesky": null,
+  "youtube": null,
+  "x": "elonmusk",
+  "site": null,
+  "match": [
+   "Elon Musk"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "kristi-noem",
+  "name": "Kristi Noem",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 28,
+   "age": 54,
+   "currently": "former Secretary of Homeland Security",
+   "born": "Watertown, SD",
+   "past_runs": ""
+  },
+  "wikidata": "Q465749",
+  "wiki": "Kristi Noem",
+  "desc": "American politician (born 1971)",
+  "dob": "1971-11-30",
+  "bluesky": null,
+  "youtube": "UCZPzuVONjRwo5TsrKzbYRVA",
+  "x": "govkristinoem",
+  "site": "https://kristinoem.com",
+  "match": [
+   "Kristi Noem"
+  ],
+  "keys": [
+   "Noem"
+  ],
+  "guard": null
+ },
+ {
+  "id": "mike-pence",
+  "name": "Mike Pence",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 29,
+   "age": 67,
+   "currently": "former Vice President",
+   "born": "Columbus, IN",
+   "past_runs": "2024"
+  },
+  "wikidata": "Q24313",
+  "wiki": "Mike Pence",
+  "desc": "Vice President of the United States from 2017 to 2021",
+  "dob": "1959-06-07",
+  "bluesky": null,
+  "youtube": "UChJ1H6GuoOMm9CbDa3nkhbA",
+  "x": "Mike_Pence",
+  "site": "https://trumpwhitehouse.archives.gov/people/mike-pence/",
+  "match": [
+   "Mike Pence"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "doug-burgum",
+  "name": "Doug Burgum",
+  "party": "R",
+  "on_list": 1,
+  "list": {
+   "id": 30,
+   "age": 70,
+   "currently": "Secretary of the Interior",
+   "born": "Arthur, ND",
+   "past_runs": "2024"
+  },
+  "wikidata": "Q22095395",
+  "wiki": "Doug Burgum",
+  "desc": "United States Secretary of the Interior",
+  "dob": "1956-08-01",
+  "bluesky": null,
+  "youtube": "UCOSz7vkSeEz6SY56Q_L5dDw",
+  "x": "DougBurgum",
+  "site": null,
+  "match": [
+   "Doug Burgum"
+  ],
+  "keys": [
+   "Burgum"
+  ],
+  "guard": null
+ },
+ {
+  "id": "james-talarico",
+  "name": "James Talarico",
+  "party": "D",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q100742942",
+  "wiki": "James Talarico",
+  "desc": "American politician (born 1989)",
+  "dob": "1989-05-17",
+  "bluesky": null,
+  "youtube": "UCY0jKbBT2SdUo-hLgDwz5qg",
+  "x": "jamestalarico",
+  "site": "https://house.texas.gov/members/3685",
+  "match": [
+   "James Talarico"
+  ],
+  "keys": [
+   "Talarico"
+  ],
+  "guard": null
+ },
+ {
+  "id": "abdul-el-sayed",
+  "name": "Abdul El-Sayed",
+  "party": "D",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q25752879",
+  "wiki": "Abdul El-Sayed",
+  "desc": "American politician and epidemiologist (born 1984)",
+  "dob": "1984-10-31",
+  "bluesky": "abdulelsayed.bsky.social",
+  "youtube": "UC0Arr9_NIOkWt-hyuhQpx1Q",
+  "x": "AbdulElSayed",
+  "site": "https://abdulelsayed.com/",
+  "match": [
+   "Abdul El-Sayed"
+  ],
+  "keys": [
+   "El-Sayed"
+  ],
+  "guard": null
+ },
+ {
+  "id": "michelle-obama",
+  "name": "Michelle Obama",
+  "party": "D",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q13133",
+  "wiki": "Michelle Obama",
+  "desc": "lawyer and former First Lady of the United States (2009-2017)",
+  "dob": "1964-01-17",
+  "bluesky": null,
+  "youtube": null,
+  "x": "MichelleObama",
+  "site": "https://www.obama.org/",
+  "match": [
+   "Michelle Obama"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "chelsea-clinton",
+  "name": "Chelsea Clinton",
+  "party": "D",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q229671",
+  "wiki": "Chelsea Clinton",
+  "desc": "American author and global health advocate",
+  "dob": "1980-02-27",
+  "bluesky": null,
+  "youtube": null,
+  "x": "ChelseaClinton",
+  "site": null,
+  "match": [
+   "Chelsea Clinton"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "jon-stewart",
+  "name": "Jon Stewart",
+  "party": "D",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q211987",
+  "wiki": "Jon Stewart",
+  "desc": "American comedian, writer, producer, activist, and television host",
+  "dob": "1962-11-28",
+  "bluesky": null,
+  "youtube": null,
+  "x": "jonstewart",
+  "site": null,
+  "match": [
+   "Jon Stewart"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "joe-kent",
+  "name": "Joe Kent",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q116200618",
+  "wiki": "Joe Kent",
+  "desc": "American former federal intelligence official, political candidate, army officer",
+  "dob": "1980-04-11",
+  "bluesky": null,
+  "youtube": "UCKbuJaeG0pW27AMO1MwMfJg",
+  "x": "joekent16jan19",
+  "site": "https://joekentforcongress.com/",
+  "match": [
+   "Joe Kent"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "tom-cotton",
+  "name": "Tom Cotton",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q3090307",
+  "wiki": "Tom Cotton",
+  "desc": "American politician and army officer (born 1977)",
+  "dob": "1977-05-13",
+  "bluesky": null,
+  "youtube": "UCXEk6mokWBajIpNatbjnwSg",
+  "x": "TomCottonAR",
+  "site": "https://www.cotton.senate.gov/",
+  "match": [
+   "Tom Cotton"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "john-mcentee",
+  "name": "John McEntee",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q28741861",
+  "wiki": "John McEntee (political aide)",
+  "desc": "American political advisor (born 1990)",
+  "dob": "1990-05-09",
+  "bluesky": null,
+  "youtube": null,
+  "x": null,
+  "site": null,
+  "match": [
+   "John McEntee"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "tim-scott",
+  "name": "Tim Scott",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q561315",
+  "wiki": "Tim Scott",
+  "desc": "United States Senator from South Carolina since 2013",
+  "dob": "1965-09-19",
+  "bluesky": null,
+  "youtube": "UCSfAsbG80CNInSKrtpKoL-w",
+  "x": "SenatorTimScott",
+  "site": "https://www.scott.senate.gov",
+  "match": [
+   "Tim Scott"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "steve-bannon",
+  "name": "Steve Bannon",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q16146870",
+  "wiki": "Steve Bannon",
+  "desc": "American media executive & political strategist (born 1953)",
+  "dob": "1953-11-27",
+  "bluesky": null,
+  "youtube": null,
+  "x": null,
+  "site": null,
+  "match": [
+   "Steve Bannon"
+  ],
+  "keys": [
+   "Bannon"
+  ],
+  "guard": null
+ },
+ {
+  "id": "greg-abbott",
+  "name": "Greg Abbott",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q5605224",
+  "wiki": "Greg Abbott",
+  "desc": "Governor of Texas since 2015",
+  "dob": "1957-11-13",
+  "bluesky": null,
+  "youtube": "UCbcEFi7520XdyXdF0u9LqMQ",
+  "x": "GregAbbott_TX",
+  "site": "http://www.gregabbott.com/",
+  "match": [
+   "Greg Abbott"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "mike-pompeo",
+  "name": "Mike Pompeo",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q473239",
+  "wiki": "Mike Pompeo",
+  "desc": "American politician, United States Secretary of State",
+  "dob": "1963-12-30",
+  "bluesky": null,
+  "youtube": "UCHxVnNpdjh6jqutY91ufgUw",
+  "x": "mikepompeo",
+  "site": "https://www.whitehouse.gov/people/mike-pompeo/",
+  "match": [
+   "Mike Pompeo"
+  ],
+  "keys": [
+   "Pompeo"
+  ],
+  "guard": null
+ },
+ {
+  "id": "rick-scott",
+  "name": "Rick Scott",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q439729",
+  "wiki": "Rick Scott",
+  "desc": "United States Senator from Florida since 2019",
+  "dob": "1952-12-01",
+  "bluesky": null,
+  "youtube": "UC-Y9pFmW4PYGZHkC8lcqSkQ",
+  "x": "scottforflorida",
+  "site": "https://rickscott.senate.gov",
+  "match": [
+   "Rick Scott"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "spencer-cox",
+  "name": "Spencer Cox",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q16208237",
+  "wiki": "Spencer Cox",
+  "desc": "18th Governor of Utah since 2021",
+  "dob": "1975-07-11",
+  "bluesky": null,
+  "youtube": null,
+  "x": "SpencerJCox",
+  "site": "https://governor.utah.gov/",
+  "match": [
+   "Spencer Cox"
+  ],
+  "keys": [],
+  "guard": null
+ },
+ {
+  "id": "lee-zeldin",
+  "name": "Lee Zeldin",
+  "party": "R",
+  "on_list": 0,
+  "list": null,
+  "wikidata": "Q16221257",
+  "wiki": "Lee Zeldin",
+  "desc": "American politician (born 1980)",
+  "dob": "1980-01-30",
+  "bluesky": null,
+  "youtube": "UCHzZuesCPDka2NhZO8icqzA",
+  "x": "RepLeeZeldin",
+  "site": "http://www.nysenate.gov/senator/lee-m-zeldin",
+  "match": [
+   "Lee Zeldin"
+  ],
+  "keys": [
+   "Zeldin"
+  ],
+  "guard": null
+ }
+]

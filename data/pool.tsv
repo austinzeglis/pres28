@@ -1,0 +1,110 @@
+party	list_id	name	age	currently	born	past_runs
+D	1	Gavin Newsom	59	Governor of California	San Francisco, CA
+D	2	Kamala Harris	62	former Vice President	Oakland, CA	2020, 2024
+D	3	Josh Shapiro	53	Governor of Pennsylvania	Kansas City, MO
+D	4	Pete Buttigieg	44	former Sec. of Transportation	South Bend, IN	2020
+D	5	Alexandria Ocasio-Cortez	37	U.S. Rep, New York	New York City, NY
+D	6	Mark Kelly	62	Senator, Arizona	Orange, NJ
+D	7	J.B. Pritzker	61	Governor of Illinois	Atherton, CA
+D	8	Andy Beshear	48	Governor of Kentucky	Louisville, KY
+D	9	Wes Moore	49	Governor of Maryland	Takoma Park, MD
+D	10	Raphael Warnock	59	Senator, Georgia	Savannah, GA
+D	11	Ruben Gallego	48	Senator, Arizona	Chicago, IL
+D	12	Cory Booker	59	Senator, New Jersey	Washington, DC	2020
+D	13	Chris Murphy	54	Senator, Connecticut	White Plains, NY
+D	14	Elissa Slotkin	52	Senator, Michigan	New York City, NY
+D	15	Ro Khanna	52	U.S. Rep, California	Philadelphia, PA
+D	16	Gretchen Whitmer	57	Governor of Michigan	Lansing, MI
+D	17	Jared Polis	53	Governor of Colorado	Boulder, CO
+D	18	Tim Walz	62	Governor of Minnesota	West Point, NE
+D	19	Amy Klobuchar	66	Senator, Minnesota	Plymouth, MN	2020
+D	20	Rahm Emanuel	68	former Mayor of Chicago	Chicago, IL
+D	21	Jon Ossoff	39	Senator, Georgia	Atlanta, GA
+D	22	Tammy Duckworth	58	Senator, Illinois	Bangkok, TH
+D	23	Brian Schatz	56	Senator, Hawaii	Ann Arbor, MI
+D	24	Chris Van Hollen	69	Senator, Maryland	Karachi, PK
+D	25	Tammy Baldwin	66	Senator, Wisconsin	Madison, WI
+D	26	Mark Warner	73	Senator, Virginia	Indianapolis, IN
+D	27	Elizabeth Warren	79	Senator, Massachusetts	Oklahoma City, OK	2020
+D	28	John Fetterman	59	Senator, Pennsylvania	Reading, PA
+D	29	Jasmine Crockett	47	U.S. Rep, Texas	St. Louis, MO
+D	30	Pramila Jayapal	63	U.S. Rep, Washington	Chennai, IN
+D	31	Maura Healey	57	Governor of Massachusetts	Bethesda, MD
+D	32	Katie Hobbs	58	Governor of Arizona	Phoenix, AZ
+D	33	Josh Green	57	Governor of Hawaii	Kingston, NY
+D	34	Josh Stein	60	Governor of North Carolina	Washington, DC
+D	35	Roy Cooper	71	former North Carolina Gov.	Nashville, TN
+D	36	Gina Raimondo	57	former Sec. of Commerce	Smithfield, RI
+D	37	Beto O'Rourke	56	former U.S. Rep, Texas	El Paso, TX	2020
+D	38	Stacey Abrams	54	Georgia state legislator	Madison, WI
+D	39	Xavier Becerra	70	former Sec. of HHS	Sacramento, CA
+D	40	Julian Castro	54	former Sec. of HUD	San Antonio, TX	2020
+D	41	Phil Murphy	71	former New Jersey Gov.	Needham, MA
+D	42	Deval Patrick	72	former Massachusetts Gov.	Chicago, IL	2020
+D	43	Abigail Spanberger	49	Governor of Virginia	Red Bank, NJ
+D	44	Andy Kim	46	Senator, New Jersey	Boston, MA
+D	45	Chris Coons	65	Senator, Delaware	Greenwich, CT
+D	46	Mitch Landrieu	66	former Mayor of New Orleans	New Orleans, LA
+D	47	Michelle Lujan Grisham	66	Governor, New Mexico	Los Alamos, NM
+D	48	Jason Crow	47	U.S. Rep, Colorado	Madison, WI
+D	49	Don Lemon	60	News anchor	Baton Rouge, LA
+D	50	Stephen A. Smith	59	Television personality	Bronx, NY
+D	51	Mark Cuban	68	Businessman/personality	Pittsburgh, PA
+D	52	Bernie Sanders	85	Senator, Vermont	Brooklyn, NY	2016, 2020
+D	53	Catherine Cortez Masto	64	Senator, Nevada	Las Vegas, NV
+D	54	Debbie Stabenow	78	former Senator, Michigan	Gladwin, MI
+D	55	Eric Adams	68	former mayor, New York City	Brooklyn, NY
+D	56	Eric Swalwell	48	U.S. Rep, California	Sac City, IA	2020
+D	57	Hakeem Jeffries	58	U.S. Rep, New York	Brooklyn, NY
+D	58	Gina McCarthy	74	former White House adviser	Boston, MA
+D	59	Andrew Yang	53	Entrepreneur	Schenectady, NY	2020
+D	60	Adam Schiff	66	Senator, California	Framingham, MA
+D	61	Sherrod Brown	73	former Senator, Ohio	Mansfield, OH
+D	62	Jeff Jackson	44	North Carolina AG	Miami, FL
+D	63	Jamie Raskin	63	U.S. Rep, Maryland	Washington, DC
+D	64	Katie Porter	52	former U.S. Rep, California	Fort Dodge, IA
+R	1	Donald Trump	80	President	New York, NY	2000, 2016, 2020, 2024
+R	2	JD Vance	42	Vice President	Middletown, OH
+R	3	Marco Rubio	55	Sec. of State, National Security Advisor	Miami, FL	2016
+R	4	Ted Cruz	55	Senator, Texas	Calgary, AB	2016
+R	5	Ron DeSantis	48	Governor of Florida	Jacksonville, FL	2024
+R	6	Donald Trump Jr.	48	Businessman	New York, NY
+R	7	Tucker Carlson	57	Media personality	San Francisco, CA
+R	8	Pete Hegseth	46	Secretary of Defense	Minneapolis, MN
+R	9	John Kennedy	74	Senator, Louisiana	Centreville, MS
+R	10	Sarah Huckabee Sanders	44	Governor, Arkansas	Hope, AR
+R	11	Brian Kemp	62	Governor, Georgia	Athens, GA
+R	12	Thomas Massie	55	U.S. Rep, Kentucky	Huntington, WV
+R	13	Ivanka Trump	44	Businesswoman, former advisor	New York, NY
+R	14	Robert F. Kennedy Jr.	72	Secretary of Health and Human Services	Washington, DC
+R	15	Rand Paul	63	Senator, Kentucky	Pittsburgh, PA	2016
+R	16	Don Bacon	63	U.S. Rep, Nebraska	Momence, IL
+R	17	Glenn Youngkin	45	former Governor of Virginia	Richmond, VA
+R	18	Chris Christie	64	former Governor of New Jersey	Newark, NJ	2016, 2024
+R	19	Josh Hawley	46	Senator, Missouri	Springdale, AR
+R	20	Marjorie Taylor Greene	52	Businesswoman; former U.S. rep, Georgia	Milledgeville, GA
+R	21	Katie Britt	44	Senator, Alabama	Enterprise, AL
+R	22	Tulsi Gabbard	45	former National Intelligence Director	Leloaloa, AS	2020
+R	23	Nikki Haley	54	former Governor of South Carolina	Bamberg, SC	2024
+R	24	Vivek Ramaswamy	41	Entrepreneur	Cincinnati, OH	2024
+R	25	Byron Donalds	47	U.S. Rep, Florida	Brooklyn, NY
+R	26	Elise Stefanik	42	U.S. Rep, New York	Albany, NY
+R	27	Elon Musk	55	Businessman	Pretoria, SA
+R	28	Kristi Noem	54	former Secretary of Homeland Security	Watertown, SD
+R	29	Mike Pence	67	former Vice President	Columbus, IN	2024
+R	30	Doug Burgum	70	Secretary of the Interior	Arthur, ND	2024
+D		James Talarico
+D		Abdul El-Sayed
+D		Michelle Obama
+D		Chelsea Clinton
+D		Jon Stewart
+R		Joe Kent
+R		Tom Cotton
+R		John McEntee
+R		Tim Scott
+R		Steve Bannon
+R		Greg Abbott
+R		Mike Pompeo
+R		Rick Scott
+R		Spencer Cox
+R		Lee Zeldin

@@ -1,0 +1,30 @@
+name: collect
+
+on:
+  schedule:
+    - cron: "17 * * * *" # off the top of the hour, when GitHub is busiest and may drop runs
+  workflow_dispatch:
+    inputs:
+      tasks:
+        description: "Comma-separated tasks, or all. Blank follows the schedule."
+        required: false
+        default: ""
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: node collect/run.mjs
+        env:
+          INGEST_URL: https://pres28.audrze.workers.dev
+          INGEST_KEY: ${{ secrets.INGEST_KEY }}
+          TASKS: ${{ inputs.tasks }}

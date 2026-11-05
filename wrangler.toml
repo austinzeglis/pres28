@@ -1,0 +1,9 @@
+name = "pres28"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pres28"
+database_id = "8ff4f23d-2eec-4494-b432-27e75c52b175"
