@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildMatcher, fold, slug } from "./names.mjs";
+import { parseWikiPolls } from "./wikipolls.mjs";
 import { WEIGHTS, attentionShares, cleanPolls, marketShares, pollShares, rankParty } from "./score.mjs";
 
 const { INGEST_URL, INGEST_KEY } = process.env;
@@ -224,7 +225,7 @@ async function taskFeeds() {
   const failed = [];
   await pool(feeds, 30, async (feed) => {
     try {
-      const xml = await getText(feed.url, { timeout: 8000, tries: 1, headers: { "user-agent": "Mozilla/5.0 pres28-collector/1.0" } });
+      const xml = await getText(feed.url, { timeout: 8000, tries: 1 });
       for (const raw of parseFeed(xml)) {
         if (!recent(raw, 3)) continue;
         const it = toItem(raw, "feed", feed.name);
@@ -244,7 +245,7 @@ const GENERAL_QUERIES = ['"2028" presidential run', '"2028" Democratic primary',
 
 async function googleNews(query) {
   const u = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`;
-  return parseFeed(await getText(u, { timeout: 12000, tries: 2, headers: { "user-agent": "Mozilla/5.0 pres28-collector/1.0" } }));
+  return parseFeed(await getText(u, { timeout: 12000, tries: 2 }));
 }
 
 async function taskGoogleNews() {
@@ -328,7 +329,7 @@ async function taskPeople() {
 }
 
 async function taskPolls() {
-  const all = await getJson("https://api.votehub.com/polls", { timeout: 40000, headers: { "user-agent": "Mozilla/5.0 pres28-collector/1.0" } });
+  const all = await getJson("https://api.votehub.com/polls", { timeout: 40000 });
   const rows = all
     .filter((p) => p.poll_type === "presidential-primary" && /^2028 /.test(p.subject ?? ""))
     .map((p) => ({
@@ -339,6 +340,22 @@ async function taskPolls() {
   if (!rows.length) throw new Error("no 2028 primary polls in the VoteHub response");
   await send("polls", rows);
   return { rows: rows.length };
+}
+
+async function taskWikiPolls() {
+  const rows = [];
+  let skipped = 0;
+  for (const [page, party] of [["Democratic", "D"], ["Republican", "R"]]) {
+    const u = `https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=Nationwide_opinion_polling_for_the_2028_${page}_Party_presidential_primaries`;
+    const data = await getJson(u, { timeout: 30000, tries: 3 });
+    const parsed = parseWikiPolls(data.parse.wikitext["*"], party);
+    // A format change would show up here, before bad rows reach the score.
+    if (parsed.polls.length < 50) throw new Error(`only ${parsed.polls.length} ${page} polls parsed`);
+    skipped += parsed.skipped;
+    rows.push(...parsed.polls.map((p) => ({ ...p, created: today, answers: JSON.stringify(p.answers) })));
+  }
+  await send("polls", rows);
+  return { rows: rows.length, note: `newest ${rows.map((r) => r.end_date).sort().at(-1)}, ${skipped} rows skipped` };
 }
 
 const compact = (iso) => iso.slice(0, 10).replaceAll("-", "");
@@ -611,7 +628,7 @@ async function taskRescore() {
         },
         polls: polls
           .filter((x) => x.party === p.party)
-          .map((x) => ({ pollster: x.pollster, end: x.end, pct: x.raw[p.id] ?? null, n: x.n, url: x.url, discounted: x.discounted, field: Object.keys(x.raw).length }))
+          .map((x) => ({ pollster: x.pollster, end: x.end, pct: x.raw[p.id] ?? null, n: x.n, url: x.url, source: x.source, discounted: x.discounted, field: Object.keys(x.raw).length }))
           .reverse(),
       }),
     });
@@ -669,6 +686,7 @@ const TASKS = {
   youtube: taskYouTube,
   people: taskPeople,
   polls: taskPolls,
+  wikipolls: taskWikiPolls,
   wikipedia: taskWikipedia,
   fec: taskFec,
   backfill: taskBackfill,
@@ -681,9 +699,8 @@ function chosen() {
   if (asked === "all") return Object.keys(TASKS);
   if (asked) return asked.split(",").map((s) => s.trim());
   const list = ["polymarket", "kalshi", "feeds", "gnews", "bluesky", "youtube"];
-  if (hour === 6) list.push("people", "polls", "wikipedia", "fec");
-  if (hour === 6 || hour === 18) list.push("backfill");
-  if (hour === 6) list.push("rescore");
+  if (hour === 6) list.push("people", "wikipedia", "fec");
+  if (hour === 6 || hour === 18) list.push("polls", "wikipolls", "backfill", "rescore");
   list.push("board");
   return list;
 }

@@ -23,6 +23,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .top h1 { margin: 0; font: 600 26px/1 var(--mono); letter-spacing: -0.02em; }
 .top .blend, .top .when { font: 400 11.5px var(--mono); color: var(--ink2); }
 .top .when { margin-left: auto; }
+.credit { text-decoration: underline; text-underline-offset: 2px; }
 
 /* Home */
 .home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 350px; align-items: start; }

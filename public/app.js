@@ -146,6 +146,7 @@ function drawHome() {
       <a href="/"><h1>2028</h1></a>
       <span class="blend">Mkts ${w.markets * 100} · Polls ${w.polls * 100} · Attention ${w.attention * 100}</span>
       <span class="blend">+ added</span>
+      <span class="blend">Polls: VoteHub, <a class="credit" href="https://en.wikipedia.org/wiki/Nationwide_opinion_polling_for_the_2028_Democratic_Party_presidential_primaries" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA)</span>
       <span class="when">${stamp(b.updated)}</span>
     </header>
     <main class="home">
@@ -397,7 +398,7 @@ function drawPerson(row) {
           <section class="section"><h3>Wikipedia views</h3><div class="chart" id="c-wiki"></div></section>
           <section class="section"><h3>Stories per day</h3><div class="chart" id="c-news"></div></section>
         </div>
-        <section class="section"><h3>Polls</h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
+        <section class="section"><h3>Polls <span class="right" style="font-weight:400;color:var(--ink2)">VoteHub, Wikipedia (CC BY-SA)</span></h3><div class="scroll"><table><thead><tr><th>Ended</th><th>Pollster</th><th class="r">%</th><th class="r">Sample</th><th class="r">Names</th></tr></thead><tbody>
           ${offered.length ? offered.map((x) => `<tr><td class="mono">${esc(x.end)}</td><td>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.pollster)}</a>` : esc(x.pollster)}${x.discounted ? " *" : ""}</td><td class="r mono">${x.pct.toFixed(1)}</td><td class="r mono">${x.n || "–"}</td><td class="r mono">${x.field}</td></tr>`).join("") : `<tr><td colspan="5" class="none">None</td></tr>`}
         </tbody></table></div></section>
       </div>

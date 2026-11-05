@@ -9,6 +9,18 @@ const SAME_PERSON = {
   "donald-j-trump-jr": "donald-trump-jr",
   "john-n-kennedy": "john-kennedy",
   "dwayne-the-rock-johnson": "dwayne-johnson",
+  "steven-bannon": "steve-bannon",
+  "tim-waltz": "tim-walz",
+  "rahm-emanual": "rahm-emanuel",
+  "phill-murphy": "phil-murphy",
+  "gregg-abbott": "greg-abbott",
+  "s-huckabee-sanders": "sarah-huckabee-sanders",
+  "sarah-sanders": "sarah-huckabee-sanders",
+  "marjorie-greene": "marjorie-taylor-greene",
+  "rfk-jr": "robert-f-kennedy-jr",
+  "aoc": "alexandria-ocasio-cortez",
+  "youngkin": "glenn-youngkin",
+  "noem": "kristi-noem",
 };
 
 export function slug(name) {

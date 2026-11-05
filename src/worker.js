@@ -5,7 +5,7 @@
 const TABLES = {
   people: { verb: "REPLACE", cols: ["id", "name", "party", "on_list", "data"] },
   obs: { verb: "REPLACE", cols: ["person", "source", "ts", "value", "volume"] },
-  polls: { verb: "IGNORE", cols: ["id", "source", "subject", "pollster", "start_date", "end_date", "population", "sample_size", "url", "partisan", "internal", "created", "answers"] },
+  polls: { verb: "REPLACE", cols: ["id", "source", "subject", "pollster", "start_date", "end_date", "population", "sample_size", "url", "partisan", "internal", "created", "answers"] },
   items: { verb: "IGNORE", cols: ["id", "kind", "source", "title", "url", "published", "seen", "people", "text"] },
   filings: { verb: "REPLACE", cols: ["id", "name", "party", "first_file", "has_funds", "person", "seen"] },
   runs: { verb: "REPLACE", cols: ["ts", "source", "ok", "rows_sent", "note"] },

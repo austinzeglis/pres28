@@ -5,7 +5,8 @@ export const WEIGHTS = { markets: 0.45, polls: 0.45, attention: 0.1 };
 
 const DAY = 864e5;
 const days = (a, b) => (new Date(b) - new Date(a)) / DAY;
-const NOT_A_PERSON = /^(other|others|someone else|undecided|unsure|not sure|none|no one|nobody|don.?t know|dk|refused|would not vote|wouldn.?t vote|no answer|another candidate|skipped)\b/i;
+const ZERO_READS_AS = 0.25;
+const NOT_A_PERSON = /^(others?|someone|somebody|some other|another|undecided|unsure|not sure|none|no one|nobody|neither|don.?t know|dk|refused|prefer not|would not|wouldn.?t|i would|no answer|skipped|write.?in)\b/i;
 
 // ---------- polls ----------
 
@@ -15,9 +16,12 @@ export function cleanPolls(rows) {
   const best = new Map();
   for (const r of rows) {
     const answers = (typeof r.answers === "string" ? JSON.parse(r.answers) : r.answers)
-      .filter((a) => !NOT_A_PERSON.test(a.choice) && a.pct > 0);
+      // A lone surname can't be pinned on anyone unless it's a known alias, which has a hyphen by then.
+      .filter((a) => !NOT_A_PERSON.test(a.choice) && a.pct >= 0 && slug(a.choice).includes("-"));
     if (answers.length < 2) continue;
-    const total = answers.reduce((n, a) => n + a.pct, 0);
+    // Offered and at 0% is real information, and it needs a value above zero to fit.
+    const floored = (a) => Math.max(a.pct, ZERO_READS_AS);
+    const total = answers.reduce((n, a) => n + floored(a), 0);
     const poll = {
       pollster: r.pollster,
       end: r.end_date,
@@ -26,15 +30,40 @@ export function cleanPolls(rows) {
       population: r.population,
       discounted: Boolean(r.partisan || r.internal),
       url: r.url,
+      source: r.source ?? "votehub",
       raw: Object.fromEntries(answers.map((a) => [slug(a.choice), a.pct])),
-      shares: Object.fromEntries(answers.map((a) => [slug(a.choice), a.pct / total])),
+      shares: Object.fromEntries(answers.map((a) => [slug(a.choice), floored(a) / total])),
     };
     const key = `${poll.party}|${poll.pollster}|${poll.end}`;
     const held = best.get(key);
-    const size = (p) => Object.keys(p.shares).length * 1e6 + p.n;
-    if (!held || size(poll) > size(held)) best.set(key, poll);
+    if (!held || widerThan(poll, held)) best.set(key, poll);
   }
-  return [...best.values()].sort((a, b) => (a.end < b.end ? -1 : 1));
+  return mergeAcrossSources([...best.values()]).sort((a, b) => (a.end < b.end ? -1 : 1));
+}
+
+const widerThan = (a, b) =>
+  Object.keys(a.shares).length * 1e6 + a.n > Object.keys(b.shares).length * 1e6 + b.n;
+
+const firstWord = (name) => name.toLowerCase().replace(/^the\s+/, "").split(/[^a-z0-9]+/)[0];
+
+// Two sources write the same poll differently ("Harvard Harris", "Harvard CAPS/Harris",
+// or a sponsor's name). It's the same poll if it ended within a day and either the
+// pollster's first word matches or at least four shared names read within a point.
+function samePoll(a, b) {
+  if (a.party !== b.party || Math.abs(days(a.end, b.end)) > 1) return false;
+  if (firstWord(a.pollster) === firstWord(b.pollster)) return true;
+  const shared = Object.keys(a.raw).filter((i) => i in b.raw);
+  return shared.length >= 4 && shared.every((i) => Math.abs(a.raw[i] - b.raw[i]) <= 1);
+}
+
+function mergeAcrossSources(polls) {
+  const kept = [];
+  for (const poll of polls) {
+    const at = kept.findIndex((k) => samePoll(k, poll));
+    if (at < 0) kept.push(poll);
+    else if (widerThan(poll, kept[at])) kept[at] = poll;
+  }
+  return kept;
 }
 
 function pollWeight(p, day) {
