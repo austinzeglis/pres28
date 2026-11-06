@@ -2,7 +2,7 @@ name: collect
 
 on:
   schedule:
-    - cron: "23 * * * *" # off the top of the hour, when GitHub is busiest and may drop runs
+    - cron: "11 * * * *" # off the top of the hour, when GitHub is busiest and may drop runs
   workflow_dispatch:
     inputs:
       tasks:

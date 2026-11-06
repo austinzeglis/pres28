@@ -3,7 +3,7 @@ name: schedule-probe
 # Temporary: tests whether GitHub's scheduler fires for this repo at all.
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/10 * * * *"
 
 permissions:
   contents: read
